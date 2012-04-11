@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,8 +13,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -29,11 +28,13 @@ public final class WelcomeDialog extends JDialog {
 	private static final long serialVersionUID = -4848738704932153111L;
 
 	private static final Font TITLE_FONT = new Font("SansSerif", Font.BOLD, 14);
+	private static final String DOC_PAGE_URL = "http://cytoscape.github.com/kgmlreader/";
+	
 
-	private static final String DESCRIPTION_TEXT = "<html><body>KGMLReader Plugin is a file reader for KEGG XML format (KGML).  To import"
-			+ " KGML file, select <br /><ul><li>File-->Import-->Network</li></ul>"
+	private static final String DESCRIPTION_TEXT = "<html><body>KGMLReader Plugin is a file reader for KEGG XML format (KGML).  " +
+			"To import KGML file, select <br /><ul><li>File-->Import-->Network</li></ul>"
 			+ "<p>For more information, please visit " +
-			"<a href='https://github.com/kozo2/kgmlreader/wiki'>KGMLReader Plugin web site</a></p></body></html>";
+			"<a href='"+ DOC_PAGE_URL + "'>KGMLReader Plugin web site</a></p></body></html>";
 
 	private JLabel titleLabel;
 
@@ -58,9 +59,10 @@ public final class WelcomeDialog extends JDialog {
 	private void initComponents() {
 		this.setTitle("Welcome to KGML Reader Plugin");
 
-		titleLabel = new JLabel("Welcome to KEGG Pathway Reader");
+		titleLabel = new JLabel("Welcome to KEGG Pathway XML File Reader Plugin!");
 		titleLabel.setFont(TITLE_FONT);
-		titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		titleLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 
 		JPanel southPanel = new JPanel();
 		southPanel.setLayout(new BorderLayout());
@@ -85,7 +87,7 @@ public final class WelcomeDialog extends JDialog {
 		description = new JEditorPane();
 		description.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		description.setBackground(Color.white);
-		description.setPreferredSize(new Dimension(400, 200));
+		description.setPreferredSize(new Dimension(450, 200));
 		description.setEditable(false);
 		description.setContentType("text/html"); // javax.swing.text.html.HTMLEditorKit
 		description.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
