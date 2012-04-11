@@ -53,7 +53,7 @@ public class KGMLReaderPlugin extends CytoscapePlugin {
 	
 
 	private void addMenu() {
-		final JMenu menu = new JMenu("KEGG Pathway XML (KGML) File Reader");
+		final JMenu menu = new JMenu("KEGG Pathway XML (KGML) File Reader Options");
 		final JMenu optionMenu = new JMenu("Options");
 
 		Cytoscape.getDesktop().getCyMenus().getMenuBar().getMenu("Plugins").add(menu);

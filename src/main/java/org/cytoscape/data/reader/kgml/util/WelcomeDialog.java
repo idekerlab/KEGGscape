@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,7 +14,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 import org.cytoscape.data.reader.kgml.KGMLReaderPlugin;
 
@@ -25,9 +29,11 @@ public final class WelcomeDialog extends JDialog {
 	private static final long serialVersionUID = -4848738704932153111L;
 
 	private static final Font TITLE_FONT = new Font("SansSerif", Font.BOLD, 14);
-	
-	private static final String DESCRIPTION_TEXT = "KGMLReader Plugin is a file reader for KEGG XML format (KGML).";
-	
+
+	private static final String DESCRIPTION_TEXT = "<html><body>KGMLReader Plugin is a file reader for KEGG XML format (KGML).  To import"
+			+ " KGML file, select <br /><ul><li>File-->Import-->Network</li></ul>"
+			+ "<p>For more information, please visit " +
+			"<a href='https://github.com/kozo2/kgmlreader/wiki'>KGMLReader Plugin web site</a></p></body></html>";
 
 	private JLabel titleLabel;
 
@@ -36,10 +42,9 @@ public final class WelcomeDialog extends JDialog {
 	private JButton closeButton;
 
 	private JCheckBox doNotShowAgainCheckBox;
-	
-	
+
 	public static final WelcomeDialog DIALOG = new WelcomeDialog();
-	
+
 	public static void showDialog() {
 		DIALOG.setLocationRelativeTo(Cytoscape.getDesktop());
 		DIALOG.setVisible(true);
@@ -57,7 +62,6 @@ public final class WelcomeDialog extends JDialog {
 		titleLabel.setFont(TITLE_FONT);
 		titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		
 		JPanel southPanel = new JPanel();
 		southPanel.setLayout(new BorderLayout());
 		doNotShowAgainCheckBox = new JCheckBox();
@@ -74,15 +78,24 @@ public final class WelcomeDialog extends JDialog {
 				setVisible(false);
 			}
 		});
-		
+
 		southPanel.add(doNotShowAgainCheckBox, BorderLayout.NORTH);
 		southPanel.add(closeButton, BorderLayout.SOUTH);
 
 		description = new JEditorPane();
-		description.setBorder(BorderFactory.createTitledBorder("How to use KGML Reader Plugin"));
+		description.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		description.setBackground(Color.white);
-		description.setPreferredSize(new Dimension(400, 400));
+		description.setPreferredSize(new Dimension(400, 200));
 		description.setEditable(false);
+		description.setContentType("text/html"); // javax.swing.text.html.HTMLEditorKit
+		description.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+		description.addHyperlinkListener(new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+					cytoscape.util.OpenBrowser.openURL(e.getURL().toString());
+			}
+		});
 		description.setText(DESCRIPTION_TEXT);
 
 		this.setLayout(new BorderLayout());
@@ -90,6 +103,5 @@ public final class WelcomeDialog extends JDialog {
 		this.add(description, BorderLayout.CENTER);
 		this.add(southPanel, BorderLayout.SOUTH);
 		pack();
-
 	}
 }
