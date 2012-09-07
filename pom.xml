@@ -132,5 +132,10 @@
 			<version>2.8.2</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.6.3</version>
+		</dependency>
 	</dependencies>
 </project>
