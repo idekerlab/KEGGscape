@@ -376,7 +376,9 @@ public class PathwayMapper {
 							edgeAttr.setAttribute(edge.getIdentifier(), KEGG_NAME, rea_entry.getName());
 							edgeAttr.setAttribute(edge.getIdentifier(), KEGG_REACTION, rea_entry.getReaction());
 							edgeAttr.setAttribute(edge.getIdentifier(), KEGG_TYPE, rea_entry.getType());
-							edgeAttr.setAttribute(edge.getIdentifier(), KEGG_LINK, rea_entry.getLink());
+							if (rea_entry.getLink() != null) {
+								edgeAttr.setAttribute(edge.getIdentifier(), KEGG_LINK, rea_entry.getLink());
+							}
 							edgeAttr.setAttribute(edge.getIdentifier(), KEGG_COLOR, grap.getFgcolor());
 						}
 					}
