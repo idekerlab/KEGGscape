@@ -17,3 +17,9 @@ the file format to represent KEGG Pathway data files in XML.
 This is one of the Google Summer of Code 2010 projects.
 
 Cytoscape 3 version will be available near future (see kgmlreader3 project).
+
+##Release Notes
+======================
+0.15.1 (03/28/2013)
+
+* fixed import of globalmap ec01100
