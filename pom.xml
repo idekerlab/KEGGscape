@@ -4,7 +4,7 @@
 	<groupId>org.cytoscape</groupId>
 	<artifactId>kgmlreader</artifactId>
 	<packaging>jar</packaging>
-	<version>0.15-SNAPSHOT</version>
+	<version>0.15.1-SNAPSHOT</version>
 	<name>KGML Reader</name>
 
 	<build>
