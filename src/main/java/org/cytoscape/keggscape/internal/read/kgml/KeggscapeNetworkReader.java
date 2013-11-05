@@ -22,6 +22,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	private Pathway pathway;
 	private CyNetwork network = null;
 	private final InputStream is;
+	private KGMLMapper mapper;
 	
 	public KeggscapeNetworkReader(InputStream is, CyNetworkViewFactory cyNetworkViewFactory,
 			CyNetworkFactory cyNetworkFactory, CyNetworkManager cyNetworkManager,
@@ -52,6 +53,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		try {
 			final JAXBContext jaxbContext = JAXBContext.newInstance(PACKAGE_NAME, this.getClass().getClassLoader());
 			final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			pathway = (Pathway) unmarshaller.unmarshal(is);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IOException("Could not unmarshall KGML file");
@@ -62,6 +64,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		}
 		
 		// TODO Auto-generated method stub
+		mapper = new KGMLMapper(pathway);
 
 	}
 
