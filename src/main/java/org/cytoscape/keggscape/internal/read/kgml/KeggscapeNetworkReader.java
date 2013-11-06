@@ -20,7 +20,6 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	
 	private static final String PACKAGE_NAME = "org.cytoscape.data.reader.kgml.generated";
 	private Pathway pathway;
-	private CyNetwork network = null;
 	private final InputStream is;
 	private KGMLMapper mapper;
 	
@@ -37,14 +36,6 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	}
 	
 	@Override
-	public CyNetwork[] getNetworks() {
-		
-		CyNetwork[] result = new CyNetwork[1];
-		result[0] = network;
-		return result;
-	}
-	
-	@Override
 	public CyNetworkView buildCyNetworkView(CyNetwork network) {
 		final CyNetworkView view = cyNetworkViewFactory.createNetworkView(network);
 
@@ -56,6 +47,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
 		pathway = null;
+        final CyNetwork networks = cyNetworkFactory.createNetwork();	
 		
 		try {
 			final JAXBContext jaxbContext = JAXBContext.newInstance(PACKAGE_NAME, this.getClass().getClassLoader());
@@ -71,8 +63,10 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		}
 		
 		// TODO Auto-generated method stub
-		mapper = new KGMLMapper(pathway);
-
+		//mapper = new KGMLMapper(pathway);
+		
+		this.networks = new CyNetwork[1];
+	
 	}
 
 }
