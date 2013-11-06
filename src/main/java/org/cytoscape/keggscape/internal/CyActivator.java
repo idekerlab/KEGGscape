@@ -2,9 +2,20 @@ package org.cytoscape.keggscape.internal;
 
 import java.util.Properties;
 
+import static org.cytoscape.work.ServiceProperties.ID;
+
 import org.cytoscape.service.util.AbstractCyActivator;
+import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.work.ServiceProperties;
 import org.cytoscape.work.TaskFactory;
+import org.cytoscape.io.BasicCyFileFilter;
+import org.cytoscape.io.DataCategory;
+import org.cytoscape.io.read.InputStreamTaskFactory;
+import org.cytoscape.io.util.StreamUtil;
+import org.cytoscape.keggscape.internal.read.kgml.KeggscapeNetworkReaderFactory;
+import org.cytoscape.model.CyNetworkFactory;
+import org.cytoscape.model.CyNetworkManager;
+import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -38,26 +49,48 @@ public class CyActivator extends AbstractCyActivator {
 	 * environment. You use {@code BundleContext} to import services or ask OSGi
 	 * about the status of some service.
 	 */
+	public CyActivator() {
+		super();
+	}
+
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(BundleContext bc) throws Exception {
+
+		// importing services
+		final StreamUtil streamUtil = getService(bc, StreamUtil.class);
+		final CyNetworkViewFactory cyNetworkViewFactory = getService(bc, CyNetworkViewFactory.class);
+		final CyNetworkFactory cyNetworkFactory = getService(bc, CyNetworkFactory.class);
+		final CyNetworkManager cyNetworkManager = getService(bc, CyNetworkManager.class);
+		final CyRootNetworkManager cyRootNetworkManager = getService(bc, CyRootNetworkManager.class);
+		
+		// readers
+		final BasicCyFileFilter keggscapeReaderFilter = new BasicCyFileFilter(new String[] { "xml" },
+				new String[] { "application/xml" }, "KGML format", DataCategory.NETWORK, streamUtil);
+		final KeggscapeNetworkReaderFactory kgmlReaderFactory = new KeggscapeNetworkReaderFactory(
+				keggscapeReaderFilter, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager);
+		final Properties keggscapeNetworkReaderFactoryProps = new Properties();
+
+
 		// Configure the service properties first.
-		Properties properties = new Properties();
+//		Properties properties = new Properties();
 
 		// Our task should be exposed in the "Apps" menu...
-		properties.put(ServiceProperties.PREFERRED_MENU,
-			ServiceProperties.APPS_MENU);
+//		properties.put(ServiceProperties.PREFERRED_MENU,
+//			ServiceProperties.APPS_MENU);
 
 		// ... as a sub menu item called "Say Hello".
-		properties.put(ServiceProperties.TITLE, "KEGGscape");
+//		properties.put(ServiceProperties.TITLE, "KEGGscape");
 
 		// Our menu item should only be enabled if at least one network
 		// view exists.
-		properties.put(ServiceProperties.ENABLE_FOR, "always");
+//		properties.put(ServiceProperties.ENABLE_FOR, "always");
 
-		registerService(context,
-			new KeggscapeTaskFactory(), // Implementation
-			TaskFactory.class, // Interface
-			properties); // Service properties
+		keggscapeNetworkReaderFactoryProps.put(ID, "keggscapeNetworkReaderFactory");
+
+		registerService(bc, kgmlReaderFactory, InputStreamTaskFactory.class, keggscapeNetworkReaderFactoryProps);
+			//new KeggscapeTaskFactory(), // Implementation
+//			TaskFactory.class, // Interface
+//			properties); // Service properties
 	}
 }
 
