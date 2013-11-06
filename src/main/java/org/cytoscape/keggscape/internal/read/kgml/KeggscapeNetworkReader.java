@@ -47,7 +47,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
 		pathway = null;
-        final CyNetwork networks = cyNetworkFactory.createNetwork();	
+        final CyNetwork network = cyNetworkFactory.createNetwork();	
 		
 		try {
 			final JAXBContext jaxbContext = JAXBContext.newInstance(PACKAGE_NAME, this.getClass().getClassLoader());
@@ -66,6 +66,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		//mapper = new KGMLMapper(pathway);
 		
 		this.networks = new CyNetwork[1];
+		this.networks[0] = network;
 	
 	}
 
