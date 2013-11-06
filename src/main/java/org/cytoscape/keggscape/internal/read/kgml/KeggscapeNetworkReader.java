@@ -37,6 +37,14 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	}
 	
 	@Override
+	public CyNetwork[] getNetworks() {
+		
+		CyNetwork[] result = new CyNetwork[1];
+		result[0] = network;
+		return result;
+	}
+	
+	@Override
 	public CyNetworkView buildCyNetworkView(CyNetwork network) {
 		final CyNetworkView view = cyNetworkViewFactory.createNetworkView(network);
 
@@ -47,7 +55,6 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
-		InputStream is = null;
 		pathway = null;
 		
 		try {
@@ -56,7 +63,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 			pathway = (Pathway) unmarshaller.unmarshal(is);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new IOException("Could not unmarshall KGML file");
+			//throw new IOException("Could not unmarshall KGML file");
 		} finally {
 			if (is != null) {
 				is.close();
