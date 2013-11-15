@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<properties>
 		<cytoscape.api.version>3.1.0-SNAPSHOT</cytoscape.api.version>
-		<maven-compiler-plugin.version>2.0.2</maven-compiler-plugin.version>
-		<maven-bundle-plugin.version>2.3.4</maven-bundle-plugin.version>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-bundle-plugin.version>2.4.0</maven-bundle-plugin.version>
 		<osgi.api.version>4.2.0</osgi.api.version>
 		<bundle.symbolicName>org.cytoscape.keggscape</bundle.symbolicName>
 		<bundle.namespaece>org.cytoscape.keggscape</bundle.namespaece>
@@ -15,24 +15,22 @@
 	<artifactId>keggscape</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>${bundle.name}</name>
+
 	<packaging>bundle</packaging>
 
 	<build>
 		<!-- Cytoscape requires Java 1.6 -->
 		<plugins>
 			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-compiler-plugin</artifactId>
-			    <version>${maven-compiler-plugin.version}</version>
-			    <configuration>
-			    	<!--
-			    	These options indicate the source code is Java
-			    	1.6-compliant and the resulting class files
-			    	should be Java 1.6-compatible.
-			    	-->
-			        <source>1.6</source>
-			        <target>1.6</target>
-			    </configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<!-- These options indicate the source code is Java 1.6-compliant and 
+						the resulting class files should be Java 1.6-compatible. -->
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -42,15 +40,11 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-                        <Bundle-SymbolicName>org.cytoscape.keggscape</Bundle-SymbolicName>
+						<!-- TODO: Embed dependencies -->
+						<Bundle-SymbolicName>org.cytoscape.keggscape</Bundle-SymbolicName>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						
-						<!--
-						This tells the bundle plugin which packages should not
-						be exported.
-						-->
+						<!-- This tells the bundle plugin which packages should not be exported. -->
 						<Private-Package>org.cytoscape.keggscape.internal.*</Private-Package>
-						
 						<Bundle-Activator>org.cytoscape.keggscape.internal.CyActivator</Bundle-Activator>
 					</instructions>
 				</configuration>
@@ -84,20 +78,37 @@
 	</repositories>
 
 	<dependencies>
+
+		<!-- Cytoscape API dependencies -->
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>service-api</artifactId>
 			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>work-api</artifactId>
 			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>model-api</artifactId>
 			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>io-api</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>viewmodel-api</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Logger -->
@@ -105,29 +116,30 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.6.6</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 			<version>${osgi.api.version}</version>
+			<scope>provided</scope>
 		</dependency>
-
-		<!-- Cytoscape Dependencies -->
 
 		<!-- 3rd party libraries -->
 
 		<!-- Testing -->
-
 		<dependency>
-			<groupId>org.cytoscape</groupId>
-			<artifactId>io-api</artifactId>
-			<version>${cytoscape.api.version}</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.cytoscape</groupId>
-			<artifactId>viewmodel-api</artifactId>
-			<version>${cytoscape.api.version}</version>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
