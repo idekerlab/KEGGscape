@@ -2,7 +2,8 @@ package org.cytoscape.keggscape.internal.read.kgml;
 
 import java.util.List;
 
-import org.cytoscape.data.reader.kgml.generated.*;
+import org.cytoscape.keggscape.internal.generated.Entry;
+import org.cytoscape.keggscape.internal.generated.Pathway;
 
 public class KGMLMapper {
 	

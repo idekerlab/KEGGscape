@@ -19,8 +19,31 @@
 	<packaging>bundle</packaging>
 
 	<build>
-		<!-- Cytoscape requires Java 1.6 -->
 		<plugins>
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.8.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<extension>true</extension>
+							<schemaLanguage>DTD</schemaLanguage>
+							<schemaIncludes>
+								<schemaInclude>*.dtd</schemaInclude>
+							</schemaIncludes>
+							<bindingIncldes>
+								<bindingInclde>*.jaxb</bindingInclde>
+							</bindingIncldes>
+							<generateDirectory>${basedir}/src/main/java</generateDirectory>
+							<generatePackage>org.cytoscape.keggscape.internal.generated</generatePackage>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

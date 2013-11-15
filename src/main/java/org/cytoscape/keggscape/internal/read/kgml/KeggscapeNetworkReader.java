@@ -1,12 +1,12 @@
 package org.cytoscape.keggscape.internal.read.kgml;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.cytoscape.io.read.AbstractCyNetworkReader;
+import org.cytoscape.keggscape.internal.generated.Pathway;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
@@ -14,7 +14,6 @@ import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.work.TaskMonitor;
-import org.cytoscape.data.reader.kgml.generated.*;
 
 public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	

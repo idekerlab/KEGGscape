@@ -4,3 +4,5 @@
 target/
 .DS_Store
 src/main/java/META-INF/
+src/main/java/org/cytoscape/keggscape/internal/generated
+
