@@ -61,11 +61,11 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 			}
 		}
 		
-		// TODO Auto-generated method stub
-		//mapper = new KGMLMapper(pathway);
-		
 		this.networks = new CyNetwork[1];
 		this.networks[0] = network;
+		
+		// TODO Auto-generated method stub
+		mapper = new KGMLMapper(pathway, network);		
 	
 	}
 
