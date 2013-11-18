@@ -17,7 +17,7 @@ import org.cytoscape.work.TaskMonitor;
 
 public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	
-	private static final String PACKAGE_NAME = "org.cytoscape.data.reader.kgml.generated";
+	private static final String PACKAGE_NAME = "org.cytoscape.keggscape.internal.generated";
 	private Pathway pathway;
 	private final InputStream is;
 	private KGMLMapper mapper;
