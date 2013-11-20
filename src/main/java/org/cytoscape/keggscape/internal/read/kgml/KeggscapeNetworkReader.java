@@ -66,6 +66,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		
 		// TODO Auto-generated method stub
 		mapper = new KGMLMapper(pathway, network);		
+		mapper.doMapping();
 	
 	}
 
