@@ -9,7 +9,10 @@ import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.keggscape.internal.generated.Entry;
 import org.cytoscape.keggscape.internal.generated.Pathway;
+import org.cytoscape.keggscape.internal.generated.Product;
+import org.cytoscape.keggscape.internal.generated.Reaction;
 import org.cytoscape.keggscape.internal.generated.Relation;
+import org.cytoscape.keggscape.internal.generated.Substrate;
 
 public class KGMLMapper {
 	
@@ -28,6 +31,7 @@ public class KGMLMapper {
 	public void doMapping() {
 		mapEntries();
 		mapRelations();
+		mapReactions();
 	}
 	
 	private void mapEntries() {
@@ -48,5 +52,23 @@ public class KGMLMapper {
 			final CyNode targetNode = nodeMap.get(relation.getEntry2());
 			final CyEdge newEdge = network.addEdge(sourceNode, targetNode, true);
 		} 
+	}
+	
+	private void mapReactions() {
+		final List<Reaction> reactions = pathway.getReaction();
+		System.out.println(reactions.size());
+		for (Reaction reaction : reactions) {
+			final CyNode reactionNode = nodeMap.get(reaction.getId());
+			final List<Substrate> substrates = reaction.getSubstrate();
+			for (final Substrate substrate : substrates) {
+				final CyNode sourceNode = nodeMap.get(substrate.getId());
+				final CyEdge newEdge = network.addEdge(sourceNode, reactionNode, true);
+			}
+			final List<Product> products = reaction.getProduct();
+			for (final Product product : products) {
+				final CyNode targetNode = nodeMap.get(product.getId());
+				final CyEdge newEdge = network.addEdge(reactionNode, targetNode, true);
+			}
+		}
 	}
 }
