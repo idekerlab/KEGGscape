@@ -1,6 +1,7 @@
 package org.cytoscape.keggscape.internal.read.kgml;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -10,9 +11,11 @@ import org.cytoscape.keggscape.internal.generated.Pathway;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
+import org.cytoscape.model.CyNode;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.work.TaskMonitor;
 
 public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
@@ -40,6 +43,14 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 
 		// TODO Apply (X,Y) to the nodes
 		
+		final Map<CyNode, Double[]> positionMap = mapper.getNodePosition();
+		
+		for (CyNode node : positionMap.keySet()) {
+			final Double[] position = positionMap.get(node);
+			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_X_LOCATION, position[0]);
+			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_Y_LOCATION, position[1]);
+		}
+
 		return view;
 	}
 

@@ -8,6 +8,7 @@ import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.keggscape.internal.generated.Entry;
+import org.cytoscape.keggscape.internal.generated.Graphics;
 import org.cytoscape.keggscape.internal.generated.Pathway;
 import org.cytoscape.keggscape.internal.generated.Product;
 import org.cytoscape.keggscape.internal.generated.Reaction;
@@ -19,6 +20,7 @@ public class KGMLMapper {
 	private final Pathway pathway;
 	private final CyNetwork network;
 	private final String pathwayName;
+	private Map<CyNode, Double[]> positionMap;
 	
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
 	
@@ -26,6 +28,7 @@ public class KGMLMapper {
 		this.pathway = pathway;
 		this.network = network;
 		this.pathwayName = pathway.getName();
+		this.positionMap = new HashMap<CyNode, Double[]>();
 	}
 	
 	public void doMapping() {
@@ -41,6 +44,18 @@ public class KGMLMapper {
 			CyNode cyNode = network.addNode();
 			network.getRow(cyNode).set(CyNetwork.NAME, entry.getId());
 			nodeMap.put(entry.getId(), cyNode);
+			
+			final Double[] positionArray = new Double[2];
+			System.out.println(entry.getGraphics().get(0).getX());
+			positionArray[0] = Double.valueOf(entry.getGraphics().get(0).getX());
+			positionArray[1] = Double.valueOf(entry.getGraphics().get(0).getY());
+			System.out.println(entry.getId());
+			System.out.println(positionArray[0]);
+			System.out.println(positionArray[1]);
+			
+			positionMap.put(cyNode, positionArray);
+			System.out.println(positionMap.get(cyNode)[0]);
+
 		}
 	}
 	
@@ -71,4 +86,9 @@ public class KGMLMapper {
 			}
 		}
 	}
+	
+	protected Map<CyNode, Double[]> getNodePosition() {
+		return this.positionMap;
+	}
+	
 }
