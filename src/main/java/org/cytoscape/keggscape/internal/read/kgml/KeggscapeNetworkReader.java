@@ -49,8 +49,10 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 			final Double[] position = positionMap.get(node);
 			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_X_LOCATION, position[0]);
 			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_Y_LOCATION, position[1]);
-			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_WIDTH, position[2]);
-			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_HEIGHT, position[3]);
+//			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_WIDTH, position[2]);
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, position[2]);
+//			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_HEIGHT, position[3]);
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, position[3]);
 		}
 
 		return view;
