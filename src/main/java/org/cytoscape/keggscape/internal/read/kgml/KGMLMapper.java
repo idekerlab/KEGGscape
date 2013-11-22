@@ -45,13 +45,16 @@ public class KGMLMapper {
 			network.getRow(cyNode).set(CyNetwork.NAME, entry.getId());
 			nodeMap.put(entry.getId(), cyNode);
 			
-			final String[] graphicArray = new String[5];
+			final String[] graphicArray = new String[7];
 //			System.out.println(entry.getGraphics().get(0).getX());
 			graphicArray[0] = entry.getGraphics().get(0).getX();
 			graphicArray[1] = entry.getGraphics().get(0).getY();
 			graphicArray[2] = entry.getGraphics().get(0).getWidth();
 			graphicArray[3] = entry.getGraphics().get(0).getHeight();
 			graphicArray[4] = entry.getGraphics().get(0).getName();
+			graphicArray[5] = entry.getGraphics().get(0).getFgcolor();
+			graphicArray[6] = entry.getGraphics().get(0).getBgcolor();
+			
 			graphicMap.put(cyNode, graphicArray);
 			
 		}

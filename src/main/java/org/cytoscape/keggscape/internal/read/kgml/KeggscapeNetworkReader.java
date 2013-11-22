@@ -1,5 +1,6 @@
 package org.cytoscape.keggscape.internal.read.kgml;
 
+import java.awt.Color;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -46,12 +47,15 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		final Map<CyNode, String[]> graphicMap = mapper.getNodeGraphics();
 		
 		for (CyNode node : graphicMap.keySet()) {
-			final String[] position = graphicMap.get(node);
-			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_X_LOCATION, Double.valueOf(position[0]));
-			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_Y_LOCATION, Double.valueOf(position[1]));
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, Double.valueOf(position[2]));
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, Double.valueOf(position[3]));
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL, position[4]);
+			final String[] graphics = graphicMap.get(node);
+			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_X_LOCATION, Double.valueOf(graphics[0]));
+			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_Y_LOCATION, Double.valueOf(graphics[1]));
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, Double.valueOf(graphics[2]));
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, Double.valueOf(graphics[3]));
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL, graphics[4]);
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_COLOR, Color.decode(graphics[5]));
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, Color.decode(graphics[6]));
+//			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_LABEL_COLOR, graphics[5]);
 		}
 		
 		return view;
