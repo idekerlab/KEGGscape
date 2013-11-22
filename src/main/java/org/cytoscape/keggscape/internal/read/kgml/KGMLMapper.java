@@ -20,7 +20,7 @@ public class KGMLMapper {
 	private final Pathway pathway;
 	private final CyNetwork network;
 	private final String pathwayName;
-	private Map<CyNode, Double[]> positionMap;
+	private Map<CyNode, String[]> graphicMap;
 	
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
 	
@@ -28,7 +28,7 @@ public class KGMLMapper {
 		this.pathway = pathway;
 		this.network = network;
 		this.pathwayName = pathway.getName();
-		this.positionMap = new HashMap<CyNode, Double[]>();
+		this.graphicMap = new HashMap<CyNode, String[]>();
 	}
 	
 	public void doMapping() {
@@ -45,13 +45,14 @@ public class KGMLMapper {
 			network.getRow(cyNode).set(CyNetwork.NAME, entry.getId());
 			nodeMap.put(entry.getId(), cyNode);
 			
-			final Double[] positionArray = new Double[4];
+			final String[] graphicArray = new String[5];
 //			System.out.println(entry.getGraphics().get(0).getX());
-			positionArray[0] = Double.valueOf(entry.getGraphics().get(0).getX());
-			positionArray[1] = Double.valueOf(entry.getGraphics().get(0).getY());
-			positionArray[2] = Double.valueOf(entry.getGraphics().get(0).getWidth());
-			positionArray[3] = Double.valueOf(entry.getGraphics().get(0).getHeight());
-			positionMap.put(cyNode, positionArray);
+			graphicArray[0] = entry.getGraphics().get(0).getX();
+			graphicArray[1] = entry.getGraphics().get(0).getY();
+			graphicArray[2] = entry.getGraphics().get(0).getWidth();
+			graphicArray[3] = entry.getGraphics().get(0).getHeight();
+			graphicArray[4] = entry.getGraphics().get(0).getName();
+			graphicMap.put(cyNode, graphicArray);
 			
 		}
 	}
@@ -84,8 +85,8 @@ public class KGMLMapper {
 		}
 	}
 	
-	protected Map<CyNode, Double[]> getNodePosition() {
-		return this.positionMap;
+	protected Map<CyNode, String[]> getNodeGraphics() {
+		return this.graphicMap;
 	}
 		
 }

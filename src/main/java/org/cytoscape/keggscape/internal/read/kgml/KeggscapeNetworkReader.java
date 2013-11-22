@@ -43,18 +43,17 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 
 		// TODO Apply (X,Y) to the nodes
 		
-		final Map<CyNode, Double[]> positionMap = mapper.getNodePosition();		
+		final Map<CyNode, String[]> graphicMap = mapper.getNodeGraphics();
 		
-		for (CyNode node : positionMap.keySet()) {
-			final Double[] position = positionMap.get(node);
-			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_X_LOCATION, position[0]);
-			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_Y_LOCATION, position[1]);
-//			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_WIDTH, position[2]);
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, position[2]);
-//			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_HEIGHT, position[3]);
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, position[3]);
+		for (CyNode node : graphicMap.keySet()) {
+			final String[] position = graphicMap.get(node);
+			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_X_LOCATION, Double.valueOf(position[0]));
+			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_Y_LOCATION, Double.valueOf(position[1]));
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, Double.valueOf(position[2]));
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, Double.valueOf(position[3]));
+			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL, position[4]);
 		}
-
+		
 		return view;
 	}
 
