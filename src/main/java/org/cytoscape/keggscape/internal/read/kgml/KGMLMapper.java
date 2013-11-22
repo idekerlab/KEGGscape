@@ -39,23 +39,20 @@ public class KGMLMapper {
 	
 	private void mapEntries() {
 		final List<Entry> entries = pathway.getEntry();
-		System.out.println(entries.size());
+//		System.out.println(entries.size());
 		for (final Entry entry : entries) {
 			CyNode cyNode = network.addNode();
 			network.getRow(cyNode).set(CyNetwork.NAME, entry.getId());
 			nodeMap.put(entry.getId(), cyNode);
 			
-			final Double[] positionArray = new Double[2];
-			System.out.println(entry.getGraphics().get(0).getX());
+			final Double[] positionArray = new Double[4];
+//			System.out.println(entry.getGraphics().get(0).getX());
 			positionArray[0] = Double.valueOf(entry.getGraphics().get(0).getX());
 			positionArray[1] = Double.valueOf(entry.getGraphics().get(0).getY());
-			System.out.println(entry.getId());
-			System.out.println(positionArray[0]);
-			System.out.println(positionArray[1]);
-			
+			positionArray[2] = Double.valueOf(entry.getGraphics().get(0).getWidth());
+			positionArray[3] = Double.valueOf(entry.getGraphics().get(0).getHeight());
 			positionMap.put(cyNode, positionArray);
-			System.out.println(positionMap.get(cyNode)[0]);
-
+			
 		}
 	}
 	
@@ -90,5 +87,5 @@ public class KGMLMapper {
 	protected Map<CyNode, Double[]> getNodePosition() {
 		return this.positionMap;
 	}
-	
+		
 }
