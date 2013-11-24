@@ -35,6 +35,8 @@ public class KGMLMapper {
 	private static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
 	private static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
 
+	private static final String KEGG_EDGE_TYPE = "KEGG_EDGE_TYPE";
+
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
 	
 	public KGMLMapper(final Pathway pathway, final CyNetwork network) {
@@ -48,10 +50,16 @@ public class KGMLMapper {
 	public void doMapping() {
 		createKeggNodeTable();
 		mapEntries();
+		createKeggEdgeTable();
 		mapRelations();
 		mapReactions();
 	}
 	
+	private void createKeggEdgeTable() {
+		// TODO Auto-generated method stub
+		network.getDefaultEdgeTable().createColumn(KEGG_EDGE_TYPE, String.class, true);
+	}
+
 	private void createKeggNodeTable() {
 		// TODO Auto-generated method stub
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_X, String.class, true);
@@ -88,6 +96,7 @@ public class KGMLMapper {
 			final CyNode sourceNode = nodeMap.get(relation.getEntry1());
 			final CyNode targetNode = nodeMap.get(relation.getEntry2());
 			final CyEdge newEdge = network.addEdge(sourceNode, targetNode, true);
+			network.getRow(newEdge).set(KEGG_EDGE_TYPE, relation.getType());
 		} 
 	}
 	
