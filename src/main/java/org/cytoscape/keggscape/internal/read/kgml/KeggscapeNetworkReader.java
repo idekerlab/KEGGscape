@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.cytoscape.io.read.AbstractCyNetworkReader;
+import org.cytoscape.keggscape.internal.KGMLVisualStyleBuilder;
 import org.cytoscape.keggscape.internal.generated.Pathway;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkFactory;
@@ -17,6 +18,10 @@ import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
+import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
+import org.cytoscape.view.vizmap.VisualMappingManager;
+import org.cytoscape.view.vizmap.VisualStyle;
+import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.work.TaskMonitor;
 
 public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
@@ -26,9 +31,13 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	private final InputStream is;
 	private KGMLMapper mapper;
 	
+	private final VisualMappingManager vmm;
+	private final KGMLVisualStyleBuilder vsBuilder;
+	
 	public KeggscapeNetworkReader(InputStream is, CyNetworkViewFactory cyNetworkViewFactory,
 			CyNetworkFactory cyNetworkFactory, CyNetworkManager cyNetworkManager,
-			CyRootNetworkManager cyRootNetworkManager) {
+			CyRootNetworkManager cyRootNetworkManager, final KGMLVisualStyleBuilder vsBuilder,
+			final VisualMappingManager vmm) {
 		super(is, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager);
 		
 		if (is == null) {
@@ -36,6 +45,9 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		}
 		
 		this.is = is;
+		this.vmm = vmm;
+		this.vsBuilder = vsBuilder;
+
 	}
 	
 	@Override
@@ -43,20 +55,6 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		final CyNetworkView view = cyNetworkViewFactory.createNetworkView(network);
 
 		// TODO Apply (X,Y) to the nodes
-		
-		final Map<CyNode, String[]> graphicMap = mapper.getNodeGraphics();
-		
-		for (CyNode node : graphicMap.keySet()) {
-			final String[] graphics = graphicMap.get(node);
-			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_X_LOCATION, Double.valueOf(graphics[0]));
-			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_Y_LOCATION, Double.valueOf(graphics[1]));
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, Double.valueOf(graphics[2]));
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, Double.valueOf(graphics[3]));
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL, graphics[4]);
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_COLOR, Color.decode(graphics[5]));
-			view.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, Color.decode(graphics[6]));
-//			view.getNodeView(node).setVisualProperty(BasicVisualLexicon.NODE_LABEL_COLOR, graphics[5]);
-		}
 		
 		return view;
 	}
@@ -85,6 +83,20 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		// TODO Auto-generated method stub
 		mapper = new KGMLMapper(pathway, network);		
 		mapper.doMapping();
+		
+		// Check Visual Style exists or not
+		VisualStyle keggStyle = null;
+		for (VisualStyle style : vmm.getAllVisualStyles()) {
+			if (style.getTitle().equals(KGMLVisualStyleBuilder.DEF_VS_NAME)) {
+				keggStyle = style;
+				break;
+			}
+		}
+		if (keggStyle == null) {
+			keggStyle = vsBuilder.getVisualStyle();
+			vmm.addVisualStyle(keggStyle);
+		}
+		vmm.setCurrentVisualStyle(keggStyle);
 	
 	}
 

@@ -14,49 +14,70 @@ import org.cytoscape.keggscape.internal.generated.Product;
 import org.cytoscape.keggscape.internal.generated.Reaction;
 import org.cytoscape.keggscape.internal.generated.Relation;
 import org.cytoscape.keggscape.internal.generated.Substrate;
+import org.cytoscape.view.presentation.property.BasicVisualLexicon;
+import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
+import org.cytoscape.view.vizmap.VisualStyle;
+import org.cytoscape.view.vizmap.VisualStyleFactory;
+import org.cytoscape.view.vizmap.internal.mappings.PassthroughMappingFactory;
+import org.cytoscape.view.vizmap.mappings.PassthroughMapping;
 
 public class KGMLMapper {
 	
 	private final Pathway pathway;
 	private final CyNetwork network;
 	private final String pathwayName;
-	private Map<CyNode, String[]> graphicMap;
 	
+	private static final String KEGG_NODE_X = "KEGG_NODE_X";
+	private static final String KEGG_NODE_Y = "KEGG_NODE_Y";
+	private static final String KEGG_NODE_WIDTH = "KEGG_NODE_WIDTH";
+	private static final String KEGG_NODE_HEIGHT = "KEGG_NODE_HEIGHT";
+	private static final String KEGG_NODE_LABEL = "KEGG_NODE_LABEL";
+	private static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
+	private static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
+
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
 	
 	public KGMLMapper(final Pathway pathway, final CyNetwork network) {
 		this.pathway = pathway;
 		this.network = network;
+
 		this.pathwayName = pathway.getName();
-		this.graphicMap = new HashMap<CyNode, String[]>();
+		
 	}
 	
 	public void doMapping() {
+		createKeggNodeTable();
 		mapEntries();
 		mapRelations();
 		mapReactions();
 	}
 	
+	private void createKeggNodeTable() {
+		// TODO Auto-generated method stub
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_X, String.class, true);
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_Y, String.class, true);
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_WIDTH, String.class, true);
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_HEIGHT, String.class, true);
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL, String.class, true);
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL_COLOR, String.class, true);
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_FILL_COLOR, String.class, true);
+	}
+
 	private void mapEntries() {
 		final List<Entry> entries = pathway.getEntry();
 //		System.out.println(entries.size());
+		
 		for (final Entry entry : entries) {
 			CyNode cyNode = network.addNode();
 			network.getRow(cyNode).set(CyNetwork.NAME, entry.getId());
+			network.getRow(cyNode).set(KEGG_NODE_X, entry.getGraphics().get(0).getX());
+			network.getRow(cyNode).set(KEGG_NODE_Y, entry.getGraphics().get(0).getY());
+			network.getRow(cyNode).set(KEGG_NODE_WIDTH, entry.getGraphics().get(0).getWidth());
+			network.getRow(cyNode).set(KEGG_NODE_HEIGHT, entry.getGraphics().get(0).getHeight());
+			network.getRow(cyNode).set(KEGG_NODE_LABEL, entry.getGraphics().get(0).getName());
+			network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, entry.getGraphics().get(0).getFgcolor());
+			network.getRow(cyNode).set(KEGG_NODE_FILL_COLOR, entry.getGraphics().get(0).getBgcolor());
 			nodeMap.put(entry.getId(), cyNode);
-			
-			final String[] graphicArray = new String[7];
-//			System.out.println(entry.getGraphics().get(0).getX());
-			graphicArray[0] = entry.getGraphics().get(0).getX();
-			graphicArray[1] = entry.getGraphics().get(0).getY();
-			graphicArray[2] = entry.getGraphics().get(0).getWidth();
-			graphicArray[3] = entry.getGraphics().get(0).getHeight();
-			graphicArray[4] = entry.getGraphics().get(0).getName();
-			graphicArray[5] = entry.getGraphics().get(0).getFgcolor();
-			graphicArray[6] = entry.getGraphics().get(0).getBgcolor();
-			
-			graphicMap.put(cyNode, graphicArray);
-			
 		}
 	}
 	
@@ -88,8 +109,4 @@ public class KGMLMapper {
 		}
 	}
 	
-	protected Map<CyNode, String[]> getNodeGraphics() {
-		return this.graphicMap;
-	}
-		
 }
