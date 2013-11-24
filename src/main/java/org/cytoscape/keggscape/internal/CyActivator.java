@@ -6,6 +6,9 @@ import static org.cytoscape.work.ServiceProperties.ID;
 
 import org.cytoscape.service.util.AbstractCyActivator;
 import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
+import org.cytoscape.view.vizmap.VisualMappingManager;
+import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.work.ServiceProperties;
 import org.cytoscape.work.TaskFactory;
 import org.cytoscape.io.BasicCyFileFilter;
@@ -63,11 +66,21 @@ public class CyActivator extends AbstractCyActivator {
 		final CyNetworkManager cyNetworkManager = getService(bc, CyNetworkManager.class);
 		final CyRootNetworkManager cyRootNetworkManager = getService(bc, CyRootNetworkManager.class);
 		
+		VisualStyleFactory vsFactoryServiceRef = getService(bc, VisualStyleFactory.class); 
+		VisualMappingFunctionFactory passthroughMappingFactoryRef = getService(bc, VisualMappingFunctionFactory.class,
+				"(mapping.type=passthrough)");
+		
+		KGMLVisualStyleBuilder vsBuilder = new KGMLVisualStyleBuilder(vsFactoryServiceRef,
+				passthroughMappingFactoryRef);
+		
+		VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
+		
 		// readers
 		final BasicCyFileFilter keggscapeReaderFilter = new BasicCyFileFilter(new String[] { "xml" },
 				new String[] { "application/xml" }, "KGML format", DataCategory.NETWORK, streamUtil);
 		final KeggscapeNetworkReaderFactory kgmlReaderFactory = new KeggscapeNetworkReaderFactory(
-				keggscapeReaderFilter, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager);
+				keggscapeReaderFilter, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager,
+				vsBuilder, vmm);
 		final Properties keggscapeNetworkReaderFactoryProps = new Properties();
 
 
