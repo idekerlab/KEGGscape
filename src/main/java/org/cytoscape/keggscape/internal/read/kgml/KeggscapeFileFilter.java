@@ -28,7 +28,17 @@ public class KeggscapeFileFilter extends BasicCyFileFilter {
 	
 	@Override
 	public boolean accepts(final InputStream stream, final DataCategory category) {
-		return super.accepts(stream, category);
+		if(super.accepts(stream, category)) {
+			return true;
+		} else {
+			final String header = getHeader(stream, 3);
+			
+			if(header.contains("kegg")) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	@Override
