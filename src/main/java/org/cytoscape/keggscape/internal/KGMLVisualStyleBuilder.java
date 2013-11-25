@@ -3,9 +3,12 @@ package org.cytoscape.keggscape.internal;
 import java.awt.Paint;
 
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
+import org.cytoscape.view.presentation.property.LineTypeVisualProperty;
+import org.cytoscape.view.presentation.property.values.LineType;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualStyle;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
+import org.cytoscape.view.vizmap.mappings.DiscreteMapping;
 import org.cytoscape.view.vizmap.mappings.PassthroughMapping;
 
 public class KGMLVisualStyleBuilder {
@@ -14,6 +17,7 @@ public class KGMLVisualStyleBuilder {
 	public static final String DEF_VS_NAME = "KEGG Style";
 	
 	private final VisualStyleFactory vsFactory;
+	private final VisualMappingFunctionFactory discreteMappingFactory;
 	private final VisualMappingFunctionFactory passthroughMappingFactory;
 	
 	private static final String KEGG_NODE_X = "KEGG_NODE_X";
@@ -23,10 +27,14 @@ public class KGMLVisualStyleBuilder {
 	private static final String KEGG_NODE_LABEL = "KEGG_NODE_LABEL";
 	private static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
 	private static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
+	
+	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 
 	public KGMLVisualStyleBuilder(final VisualStyleFactory vsFactory,
+			final VisualMappingFunctionFactory discreteMappingFactory,
 			final VisualMappingFunctionFactory passthroughMappingFactory) {
 		this.vsFactory = vsFactory;
+		this.discreteMappingFactory = discreteMappingFactory;
 		this.passthroughMappingFactory = passthroughMappingFactory;
 	} 
 	
@@ -56,6 +64,10 @@ public class KGMLVisualStyleBuilder {
 		defStyle.addVisualMappingFunction(nodelabelPassthrough);
 		defStyle.addVisualMappingFunction(nodelabelcolorPassthrough);
 		defStyle.addVisualMappingFunction(nodefillcolorPassthrough);
+		
+		final DiscreteMapping<String, LineType> edgelinetypeMapping = (DiscreteMapping<String, LineType>) discreteMappingFactory
+				.createVisualMappingFunction(KEGG_RELATION_TYPE, String.class, BasicVisualLexicon.EDGE_LINE_TYPE);
+		edgelinetypeMapping.putMapValue("maplink", LineTypeVisualProperty.LONG_DASH);
 		
 		return defStyle;
 	}

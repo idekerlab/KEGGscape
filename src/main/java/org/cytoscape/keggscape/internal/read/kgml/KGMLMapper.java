@@ -35,7 +35,8 @@ public class KGMLMapper {
 	private static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
 	private static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
 
-	private static final String KEGG_EDGE_TYPE = "KEGG_EDGE_TYPE";
+	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
+	private static final String KEGG_REACTION_TYPE = "KEGG_REACTION_TYPE";
 
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
 	
@@ -57,7 +58,8 @@ public class KGMLMapper {
 	
 	private void createKeggEdgeTable() {
 		// TODO Auto-generated method stub
-		network.getDefaultEdgeTable().createColumn(KEGG_EDGE_TYPE, String.class, true);
+		network.getDefaultEdgeTable().createColumn(KEGG_RELATION_TYPE, String.class, true);
+		network.getDefaultEdgeTable().createColumn(KEGG_REACTION_TYPE, String.class, true);
 	}
 
 	private void createKeggNodeTable() {
@@ -96,7 +98,7 @@ public class KGMLMapper {
 			final CyNode sourceNode = nodeMap.get(relation.getEntry1());
 			final CyNode targetNode = nodeMap.get(relation.getEntry2());
 			final CyEdge newEdge = network.addEdge(sourceNode, targetNode, true);
-			network.getRow(newEdge).set(KEGG_EDGE_TYPE, relation.getType());
+			network.getRow(newEdge).set(KEGG_RELATION_TYPE, relation.getType());
 		} 
 	}
 	
@@ -109,11 +111,13 @@ public class KGMLMapper {
 			for (final Substrate substrate : substrates) {
 				final CyNode sourceNode = nodeMap.get(substrate.getId());
 				final CyEdge newEdge = network.addEdge(sourceNode, reactionNode, true);
+				network.getRow(newEdge).set(KEGG_REACTION_TYPE, reaction.getType());
 			}
 			final List<Product> products = reaction.getProduct();
 			for (final Product product : products) {
 				final CyNode targetNode = nodeMap.get(product.getId());
 				final CyEdge newEdge = network.addEdge(reactionNode, targetNode, true);
+				network.getRow(newEdge).set(KEGG_REACTION_TYPE, reaction.getType());
 			}
 		}
 	}
