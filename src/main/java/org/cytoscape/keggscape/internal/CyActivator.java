@@ -69,9 +69,11 @@ public class CyActivator extends AbstractCyActivator {
 		VisualStyleFactory vsFactoryServiceRef = getService(bc, VisualStyleFactory.class); 
 		VisualMappingFunctionFactory passthroughMappingFactoryRef = getService(bc, VisualMappingFunctionFactory.class,
 				"(mapping.type=passthrough)");
+		VisualMappingFunctionFactory discreteMappingFactoryRef = getService(bc, VisualMappingFunctionFactory.class,
+				"(mapping.type=discrete");
 		
 		KGMLVisualStyleBuilder vsBuilder = new KGMLVisualStyleBuilder(vsFactoryServiceRef,
-				passthroughMappingFactoryRef);
+				discreteMappingFactoryRef, passthroughMappingFactoryRef);
 		
 		VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
 		
