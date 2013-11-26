@@ -12,9 +12,11 @@ import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.work.ServiceProperties;
 import org.cytoscape.work.TaskFactory;
 import org.cytoscape.io.BasicCyFileFilter;
+import org.cytoscape.io.CyFileFilter;
 import org.cytoscape.io.DataCategory;
 import org.cytoscape.io.read.InputStreamTaskFactory;
 import org.cytoscape.io.util.StreamUtil;
+import org.cytoscape.keggscape.internal.read.kgml.KeggscapeFileFilter;
 import org.cytoscape.keggscape.internal.read.kgml.KeggscapeNetworkReaderFactory;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
@@ -70,7 +72,7 @@ public class CyActivator extends AbstractCyActivator {
 		VisualMappingFunctionFactory passthroughMappingFactoryRef = getService(bc, VisualMappingFunctionFactory.class,
 				"(mapping.type=passthrough)");
 		VisualMappingFunctionFactory discreteMappingFactoryRef = getService(bc, VisualMappingFunctionFactory.class,
-				"(mapping.type=discrete");
+				"(mapping.type=discrete)");
 		
 		KGMLVisualStyleBuilder vsBuilder = new KGMLVisualStyleBuilder(vsFactoryServiceRef,
 				discreteMappingFactoryRef, passthroughMappingFactoryRef);
@@ -78,8 +80,8 @@ public class CyActivator extends AbstractCyActivator {
 		VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
 		
 		// readers
-		final BasicCyFileFilter keggscapeReaderFilter = new BasicCyFileFilter(new String[] { "xml" },
-				new String[] { "application/xml" }, "KGML format", DataCategory.NETWORK, streamUtil);
+		final CyFileFilter keggscapeReaderFilter = new KeggscapeFileFilter(new String[] { "xml", "kgml"},
+				new String[] { "application/xml" }, "KEGG XML Files (KGML)", DataCategory.NETWORK, streamUtil);
 		final KeggscapeNetworkReaderFactory kgmlReaderFactory = new KeggscapeNetworkReaderFactory(
 				keggscapeReaderFilter, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager,
 				vsBuilder, vmm);

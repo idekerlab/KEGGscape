@@ -69,6 +69,8 @@ public class KGMLVisualStyleBuilder {
 				.createVisualMappingFunction(KEGG_RELATION_TYPE, String.class, BasicVisualLexicon.EDGE_LINE_TYPE);
 		edgelinetypeMapping.putMapValue("maplink", LineTypeVisualProperty.LONG_DASH);
 		
+		defStyle.addVisualMappingFunction(edgelinetypeMapping);
+		
 		return defStyle;
 	}
 
