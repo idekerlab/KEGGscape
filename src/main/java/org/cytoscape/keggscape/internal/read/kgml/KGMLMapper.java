@@ -34,6 +34,9 @@ public class KGMLMapper {
 	private static final String KEGG_NODE_LABEL = "KEGG_NODE_LABEL";
 	private static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
 	private static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
+	private static final String KEGG_NODE_REACTIONID = "KEGG_NODE_REACTIONID";
+	
+	private static final String KEGG_NODE_TYPE = "KEGG_NODE_TYPE";
 
 	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 	private static final String KEGG_REACTION_TYPE = "KEGG_REACTION_TYPE";
@@ -71,6 +74,9 @@ public class KGMLMapper {
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL, String.class, true);
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL_COLOR, String.class, true);
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_FILL_COLOR, String.class, true);
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_REACTIONID, String.class, true);
+		
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_TYPE, String.class, true);
 	}
 
 	private void mapEntries() {
@@ -80,6 +86,8 @@ public class KGMLMapper {
 		for (final Entry entry : entries) {
 			CyNode cyNode = network.addNode();
 			network.getRow(cyNode).set(CyNetwork.NAME, entry.getId());
+			network.getRow(cyNode).set(KEGG_NODE_REACTIONID, entry.getReaction());
+
 			network.getRow(cyNode).set(KEGG_NODE_X, entry.getGraphics().get(0).getX());
 			network.getRow(cyNode).set(KEGG_NODE_Y, entry.getGraphics().get(0).getY());
 			network.getRow(cyNode).set(KEGG_NODE_WIDTH, entry.getGraphics().get(0).getWidth());
@@ -87,6 +95,8 @@ public class KGMLMapper {
 			network.getRow(cyNode).set(KEGG_NODE_LABEL, entry.getGraphics().get(0).getName());
 			network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, entry.getGraphics().get(0).getFgcolor());
 			network.getRow(cyNode).set(KEGG_NODE_FILL_COLOR, entry.getGraphics().get(0).getBgcolor());
+			
+			network.getRow(cyNode).set(KEGG_NODE_TYPE, entry.getGraphics().get(0).getType());
 			nodeMap.put(entry.getId(), cyNode);
 		}
 	}

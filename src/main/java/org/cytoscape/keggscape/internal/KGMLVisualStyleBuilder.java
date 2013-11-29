@@ -4,7 +4,9 @@ import java.awt.Paint;
 
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.presentation.property.LineTypeVisualProperty;
+import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
 import org.cytoscape.view.presentation.property.values.LineType;
+import org.cytoscape.view.presentation.property.values.NodeShape;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualStyle;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
@@ -29,6 +31,7 @@ public class KGMLVisualStyleBuilder {
 	private static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
 	
 	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
+	private static final String KEGG_NODE_TYPE = "KEGG_NODE_TYPE";
 
 	public KGMLVisualStyleBuilder(final VisualStyleFactory vsFactory,
 			final VisualMappingFunctionFactory discreteMappingFactory,
@@ -69,7 +72,14 @@ public class KGMLVisualStyleBuilder {
 				.createVisualMappingFunction(KEGG_RELATION_TYPE, String.class, BasicVisualLexicon.EDGE_LINE_TYPE);
 		edgelinetypeMapping.putMapValue("maplink", LineTypeVisualProperty.LONG_DASH);
 		
+		final DiscreteMapping<String, NodeShape> nodetypeMapping = (DiscreteMapping<String, NodeShape>) discreteMappingFactory
+				.createVisualMappingFunction(KEGG_NODE_TYPE, String.class, BasicVisualLexicon.NODE_SHAPE);
+		nodetypeMapping.putMapValue("rectangle", NodeShapeVisualProperty.RECTANGLE);
+		nodetypeMapping.putMapValue("roundrectangle", NodeShapeVisualProperty.ROUND_RECTANGLE);
+		nodetypeMapping.putMapValue("circle", NodeShapeVisualProperty.ELLIPSE);
+		
 		defStyle.addVisualMappingFunction(edgelinetypeMapping);
+		defStyle.addVisualMappingFunction(nodetypeMapping);
 		
 		return defStyle;
 	}
