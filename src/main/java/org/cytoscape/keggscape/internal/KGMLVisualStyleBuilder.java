@@ -1,6 +1,7 @@
 package org.cytoscape.keggscape.internal;
 
 import java.awt.Paint;
+import java.util.Set;
 
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.presentation.property.LineTypeVisualProperty;
@@ -8,6 +9,7 @@ import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
 import org.cytoscape.view.presentation.property.values.LineType;
 import org.cytoscape.view.presentation.property.values.NodeShape;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
+import org.cytoscape.view.vizmap.VisualPropertyDependency;
 import org.cytoscape.view.vizmap.VisualStyle;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.view.vizmap.mappings.DiscreteMapping;
@@ -44,6 +46,15 @@ public class KGMLVisualStyleBuilder {
 	public VisualStyle getVisualStyle() {
 		
 		final VisualStyle defStyle = vsFactory.createVisualStyle(DEF_VS_NAME);
+		final Set<VisualPropertyDependency<?>> deps = defStyle.getAllVisualPropertyDependencies();
+		// handle locked values
+		for (VisualPropertyDependency<?> dep : deps) {
+			if (dep.getIdString().equals("nodeSizeLocked")) {
+				if (dep.isDependencyEnabled()) {
+					dep.setDependency(false);
+				}
+			}
+		}
 		
 		final PassthroughMapping<String, Double> nodexPassthrough = (PassthroughMapping<String, Double>) passthroughMappingFactory
 				.createVisualMappingFunction(KEGG_NODE_X, String.class, BasicVisualLexicon.NODE_X_LOCATION);
