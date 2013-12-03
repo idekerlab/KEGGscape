@@ -55,8 +55,12 @@ public class KGMLMapper {
 		createKeggNodeTable();
 		mapEntries();
 		createKeggEdgeTable();
-		mapRelations();
-		mapReactions();
+		if (pathway.getNumber().equals("01100")) {
+			mapGlobalReactions();
+		} else {
+            mapRelations();
+            mapReactions();
+		}
 	}
 	
 	private void createKeggEdgeTable() {
@@ -78,6 +82,7 @@ public class KGMLMapper {
 		
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_TYPE, String.class, true);
 	}
+	
 
 	private void mapEntries() {
 		final List<Entry> entries = pathway.getEntry();
@@ -128,6 +133,21 @@ public class KGMLMapper {
 				final CyNode targetNode = nodeMap.get(product.getId());
 				final CyEdge newEdge = network.addEdge(reactionNode, targetNode, true);
 				network.getRow(newEdge).set(KEGG_REACTION_TYPE, reaction.getType());
+			}
+		}
+	}
+	
+	private void mapGlobalReactions() {
+		final List<Reaction> reactions = pathway.getReaction();
+		for (Reaction reaction : reactions) {
+			final List<Substrate> substrates = reaction.getSubstrate();
+			final List<Product> products = reaction.getProduct();
+			for (Substrate substrate : substrates) {
+				final CyNode substrateNode = nodeMap.get(substrate.getId());
+				for (Product product : products) {
+					final CyNode productNode = nodeMap.get(product.getId());
+					final CyEdge newEdge = network.addEdge(substrateNode, productNode, true);
+				}
 			}
 		}
 	}
