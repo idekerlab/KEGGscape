@@ -33,7 +33,8 @@ public class KGMLVisualStyleBuilder {
 	private static final String KEGG_NODE_LABEL = "KEGG_NODE_LABEL";
 	private static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
 	private static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
-	
+	private static final String KEGG_NODE_LABEL_LIST_FIRST = "KEGG_NODE_LABEL_LIST_FIRST";
+
 	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 	private static final String KEGG_NODE_TYPE = "KEGG_NODE_TYPE";
 
@@ -72,7 +73,7 @@ public class KGMLVisualStyleBuilder {
 		final PassthroughMapping<String, Double> nodeheightPassthrough = (PassthroughMapping<String, Double>) passthroughMappingFactory
 				.createVisualMappingFunction(KEGG_NODE_HEIGHT, String.class, BasicVisualLexicon.NODE_HEIGHT);
 		final PassthroughMapping<String, String> nodelabelPassthrough = (PassthroughMapping<String, String>) passthroughMappingFactory
-				.createVisualMappingFunction(KEGG_NODE_LABEL, String.class, BasicVisualLexicon.NODE_LABEL);
+				.createVisualMappingFunction(KEGG_NODE_LABEL_LIST_FIRST, String.class, BasicVisualLexicon.NODE_LABEL);
 		final PassthroughMapping<String, Paint> nodelabelcolorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
 				.createVisualMappingFunction(KEGG_NODE_LABEL_COLOR, String.class, BasicVisualLexicon.NODE_LABEL_COLOR);
 		final PassthroughMapping<String, Paint> nodefillcolorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory

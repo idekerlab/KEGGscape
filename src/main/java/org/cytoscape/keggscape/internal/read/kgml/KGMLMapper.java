@@ -23,13 +23,17 @@ public class KGMLMapper {
 	
 	private final Pathway pathway;
 	private final CyNetwork network;
-	private final String pathwayName;
 	
+	private static final String KEGG_PATHWAY_ID = "KEGG_PATHWAY_ID";
+	private static final String KEGG_PATHWAY_IMAGE = "KEGG_PATHWAY_IMAGE";
+	private static final String KEGG_PATHWAY_LINK = "KEGG_PATHWAY_LINK";
+
 	private static final String KEGG_NODE_X = "KEGG_NODE_X";
 	private static final String KEGG_NODE_Y = "KEGG_NODE_Y";
 	private static final String KEGG_NODE_WIDTH = "KEGG_NODE_WIDTH";
 	private static final String KEGG_NODE_HEIGHT = "KEGG_NODE_HEIGHT";
 	private static final String KEGG_NODE_LABEL = "KEGG_NODE_LABEL";
+	private static final String KEGG_NODE_LABEL_LIST_FIRST = "KEGG_NODE_LABEL_LIST_FIRST";
 	private static final String KEGG_NODE_LABEL_LIST = "KEGG_NODE_LABEL_LIST";
 	private static final String KEGG_ID = "KEGG_ID";
 	private static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
@@ -83,7 +87,7 @@ public class KGMLMapper {
 		this.pathway = pathway;
 		this.network = network;
 
-		this.pathwayName = pathway.getName();
+		mapPathwayMetadata(pathway, network);
 		
 	}
 	
@@ -112,6 +116,7 @@ public class KGMLMapper {
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_WIDTH, String.class, true);
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_HEIGHT, String.class, true);
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL, String.class, true);
+		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL_LIST_FIRST, String.class, true);
 		network.getDefaultNodeTable().createListColumn(KEGG_NODE_LABEL_LIST, String.class, true);
 		network.getDefaultNodeTable().createListColumn(KEGG_ID, String.class, true);
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL_COLOR, String.class, true);
@@ -228,5 +233,26 @@ public class KGMLMapper {
 			idList.add(id);
 		}
 		row.set(columnName, idList);
+		if(ids.length != 0 && row.getTable().getColumn( columnName + "_FIRST") != null) {
+			row.set(columnName + "_FIRST", ids[0]);
+		}
+	}
+	
+	private final void mapPathwayMetadata(final Pathway pathway, final CyNetwork network) {
+		final String pathwayName = pathway.getName();
+		final String linkToKegg = pathway.getLink();
+		final String linkToImage = pathway.getImage();
+		final String pathwayTitle = pathway.getTitle();
+		
+		final CyRow networkRow = network.getRow(network);
+		networkRow.set(CyNetwork.NAME, pathwayTitle);
+		
+		network.getDefaultNetworkTable().createColumn(KEGG_PATHWAY_ID, String.class, true);
+		network.getDefaultNetworkTable().createColumn(KEGG_PATHWAY_IMAGE, String.class, true);
+		network.getDefaultNetworkTable().createColumn(KEGG_PATHWAY_LINK, String.class, true);
+
+		networkRow.set(KEGG_PATHWAY_LINK, linkToKegg);
+		networkRow.set(KEGG_PATHWAY_IMAGE, linkToImage);
+		networkRow.set(KEGG_PATHWAY_ID, pathwayName);
 	}
 }
