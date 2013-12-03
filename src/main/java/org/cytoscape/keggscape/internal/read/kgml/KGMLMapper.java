@@ -112,7 +112,7 @@ public class KGMLMapper {
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_WIDTH, String.class, true);
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_HEIGHT, String.class, true);
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL_LIST, String.class, true);
+		network.getDefaultNodeTable().createListColumn(KEGG_NODE_LABEL_LIST, String.class, true);
 		network.getDefaultNodeTable().createListColumn(KEGG_ID, String.class, true);
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL_COLOR, String.class, true);
 		network.getDefaultNodeTable().createColumn(KEGG_NODE_FILL_COLOR, String.class, true);
