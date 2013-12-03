@@ -34,6 +34,7 @@ public class KGMLVisualStyleBuilder {
 	private static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
 	private static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
 	private static final String KEGG_NODE_LABEL_LIST_FIRST = "KEGG_NODE_LABEL_LIST_FIRST";
+	private static final String KEGG_NODE_SHAPE = "KEGG_NODE_SHAPE";
 
 	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 	private static final String KEGG_NODE_TYPE = "KEGG_NODE_TYPE";
@@ -96,9 +97,10 @@ public class KGMLVisualStyleBuilder {
 		
 		final DiscreteMapping<String, NodeShape> nodetypeMapping = (DiscreteMapping<String, NodeShape>) discreteMappingFactory
 				.createVisualMappingFunction(KEGG_NODE_TYPE, String.class, BasicVisualLexicon.NODE_SHAPE);
-		nodetypeMapping.putMapValue("rectangle", NodeShapeVisualProperty.RECTANGLE);
-		nodetypeMapping.putMapValue("roundrectangle", NodeShapeVisualProperty.ROUND_RECTANGLE);
-		nodetypeMapping.putMapValue("circle", NodeShapeVisualProperty.ELLIPSE);
+		nodetypeMapping.putMapValue("ortholog", NodeShapeVisualProperty.RECTANGLE);
+		nodetypeMapping.putMapValue("gene", NodeShapeVisualProperty.RECTANGLE);
+		nodetypeMapping.putMapValue("map", NodeShapeVisualProperty.ROUND_RECTANGLE);
+		nodetypeMapping.putMapValue("compound", NodeShapeVisualProperty.ELLIPSE);
 		
 		defStyle.addVisualMappingFunction(edgelinetypeMapping);
 		defStyle.addVisualMappingFunction(nodetypeMapping);
@@ -110,6 +112,8 @@ public class KGMLVisualStyleBuilder {
 		// Defaults for nodes
 		style.setDefaultValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, 6);
 		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 2d);
+		style.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 200);
+		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 220);
 		
 		// Defaults for Edges
 		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_FONT_SIZE, 6);
