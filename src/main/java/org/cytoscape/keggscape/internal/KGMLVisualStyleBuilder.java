@@ -1,8 +1,10 @@
 package org.cytoscape.keggscape.internal;
 
+import java.awt.Color;
 import java.awt.Paint;
 import java.util.Set;
 
+import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.presentation.property.LineTypeVisualProperty;
 import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
@@ -44,17 +46,22 @@ public class KGMLVisualStyleBuilder {
 	} 
 	
 	public VisualStyle getVisualStyle() {
-		
 		final VisualStyle defStyle = vsFactory.createVisualStyle(DEF_VS_NAME);
 		final Set<VisualPropertyDependency<?>> deps = defStyle.getAllVisualPropertyDependencies();
+		
 		// handle locked values
 		for (VisualPropertyDependency<?> dep : deps) {
 			if (dep.getIdString().equals("nodeSizeLocked")) {
 				if (dep.isDependencyEnabled()) {
 					dep.setDependency(false);
 				}
+				if (dep.getIdString().equals("arrowColorMatchesEdge")) {
+					dep.setDependency(true);
+				}
 			}
 		}
+		
+		createDefaults(defStyle);
 		
 		final PassthroughMapping<String, Double> nodexPassthrough = (PassthroughMapping<String, Double>) passthroughMappingFactory
 				.createVisualMappingFunction(KEGG_NODE_X, String.class, BasicVisualLexicon.NODE_X_LOCATION);
@@ -70,6 +77,8 @@ public class KGMLVisualStyleBuilder {
 				.createVisualMappingFunction(KEGG_NODE_LABEL_COLOR, String.class, BasicVisualLexicon.NODE_LABEL_COLOR);
 		final PassthroughMapping<String, Paint> nodefillcolorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
 				.createVisualMappingFunction(KEGG_NODE_FILL_COLOR, String.class, BasicVisualLexicon.NODE_FILL_COLOR);
+		final PassthroughMapping<String, String> nodeTooltipPassthrough = (PassthroughMapping<String, String>) passthroughMappingFactory
+				.createVisualMappingFunction(KEGG_NODE_LABEL, String.class, BasicVisualLexicon.NODE_TOOLTIP);
 				
 		defStyle.addVisualMappingFunction(nodexPassthrough);
 		defStyle.addVisualMappingFunction(nodeyPassthrough);
@@ -95,4 +104,15 @@ public class KGMLVisualStyleBuilder {
 		return defStyle;
 	}
 
+	private final void createDefaults(final VisualStyle style) {
+		// Defaults for nodes
+		style.setDefaultValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, 6);
+		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 2d);
+		
+		// Defaults for Edges
+		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_FONT_SIZE, 6);
+		style.setDefaultValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.ARROW);
+		style.setDefaultValue(BasicVisualLexicon.EDGE_UNSELECTED_PAINT, Color.GRAY);
+		style.setDefaultValue(BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT, Color.GRAY);
+	}
 }
