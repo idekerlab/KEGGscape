@@ -1,5 +1,6 @@
 package org.cytoscape.keggscape.internal.read.kgml;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,42 @@ public class KGMLMapper {
 
 	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 	private static final String KEGG_REACTION_TYPE = "KEGG_REACTION_TYPE";
+	
+	final String[] lightBlueMap = { "Other types of O-glycan biosynthesis",
+			"Lipopolysaccharide biosynthesis",
+			"Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate",
+			"Glycosphingolipid biosynthesis - ganglio series",
+			"Glycosphingolipid biosynthesis - globo series",
+			"Glycosphingolipid biosynthesis - lacto and neolacto series",
+			"Glycosylphosphatidylinositol(GPI)-anchor biosynthesis",
+			"Glycosaminoglycan degradation",
+			"Various types of N-glycan biosynthesis",
+			"Glycosaminoglycan biosynthesis - keratan sulfate",
+			"Mucin type O-Glycan biosynthesis",
+			"N-Glycan biosynthesis",
+			"Glycosaminoglycan biosynthesis - heparan sulfate / heparin",
+			"Other glycan degradation"
+	};
+	final String[] lightBrownMap = { "Aminobenzoate degradation",
+			"Atrazine degradation",
+			"Benzoate degradation",
+			"Bisphenol degradation",
+			"Caprolactam degradation",
+			"Chlorocyclohexane and chlorobenzene degradation",
+			"DDT degradation",
+			"Dioxin degradation",
+			"Drug metabolism - cytochrome P450",
+			"Drug metabolism - other enzymes",
+			"Ethylbenzene degradation",
+			"Fluorobenzoate degradation",
+			"Metabolism of xenobiotics by cytochrome P450",
+			"Naphthalene degradation",
+			"Polycyclic aromatic hydrocarbon degradation",
+			"Steroid degradation",
+			"Styrene degradation",
+			"Toluene degradation",
+			"Xylene degradation"
+	};
 
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
 	
@@ -53,11 +90,12 @@ public class KGMLMapper {
 	
 	public void doMapping() {
 		createKeggNodeTable();
-		mapEntries();
 		createKeggEdgeTable();
 		if (pathway.getNumber().equals("01100")) {
+			mapGlobalEntries();
 			mapGlobalReactions();
 		} else {
+            mapEntries();
             mapRelations();
             mapReactions();
 		}
@@ -103,6 +141,35 @@ public class KGMLMapper {
 			
 			network.getRow(cyNode).set(KEGG_NODE_TYPE, entry.getGraphics().get(0).getType());
 			nodeMap.put(entry.getId(), cyNode);
+		}
+	}
+	
+	private void mapGlobalEntries() {
+		final List<Entry> entries = pathway.getEntry();
+		
+		for (final Entry entry : entries) {
+			CyNode cyNode = network.addNode();
+			network.getRow(cyNode).set(CyNetwork.NAME, entry.getId());
+
+			network.getRow(cyNode).set(KEGG_NODE_X, entry.getGraphics().get(0).getX());
+			network.getRow(cyNode).set(KEGG_NODE_Y, entry.getGraphics().get(0).getY());
+			network.getRow(cyNode).set(KEGG_NODE_WIDTH, entry.getGraphics().get(0).getWidth());
+			network.getRow(cyNode).set(KEGG_NODE_HEIGHT, entry.getGraphics().get(0).getHeight());
+			network.getRow(cyNode).set(KEGG_NODE_LABEL, entry.getGraphics().get(0).getName());
+			
+			if (entry.getType().equals("map") && Arrays.asList(lightBlueMap).contains(entry.getGraphics().get(0).getName())) {
+                network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, "#99CCFF");
+                network.getRow(cyNode).set(KEGG_NODE_FILL_COLOR, "#FFFFFF");
+			} else if (entry.getType().equals("map") && Arrays.asList(lightBrownMap).contains(entry.getGraphics().get(0).getName())) {
+                network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, "#DA8E82");
+                network.getRow(cyNode).set(KEGG_NODE_FILL_COLOR, "#FFFFFF");				
+			} else {
+                network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, entry.getGraphics().get(0).getFgcolor());
+                network.getRow(cyNode).set(KEGG_NODE_FILL_COLOR, entry.getGraphics().get(0).getBgcolor());
+			}
+			
+			network.getRow(cyNode).set(KEGG_NODE_TYPE, entry.getGraphics().get(0).getType());
+			nodeMap.put(entry.getId(), cyNode);			
 		}
 	}
 	
