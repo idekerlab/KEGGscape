@@ -55,9 +55,9 @@ public class KGMLVisualStyleBuilder {
 				if (dep.isDependencyEnabled()) {
 					dep.setDependency(false);
 				}
-				if (dep.getIdString().equals("arrowColorMatchesEdge")) {
-					dep.setDependency(true);
-				}
+			}
+			if (dep.getIdString().equals("arrowColorMatchesEdge")) {
+				dep.setDependency(true);
 			}
 		}
 		
@@ -85,6 +85,7 @@ public class KGMLVisualStyleBuilder {
 		defStyle.addVisualMappingFunction(nodewidthPassthrough);
 		defStyle.addVisualMappingFunction(nodeheightPassthrough);
 		defStyle.addVisualMappingFunction(nodelabelPassthrough);
+		defStyle.addVisualMappingFunction(nodeTooltipPassthrough);
 		defStyle.addVisualMappingFunction(nodelabelcolorPassthrough);
 		defStyle.addVisualMappingFunction(nodefillcolorPassthrough);
 		
