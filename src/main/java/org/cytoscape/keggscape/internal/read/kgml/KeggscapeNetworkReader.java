@@ -1,8 +1,6 @@
 package org.cytoscape.keggscape.internal.read.kgml;
 
-import java.awt.Color;
 import java.io.InputStream;
-import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -13,15 +11,11 @@ import org.cytoscape.keggscape.internal.generated.Pathway;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
-import org.cytoscape.model.CyNode;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
-import org.cytoscape.view.presentation.property.BasicVisualLexicon;
-import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
-import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.work.TaskMonitor;
 
 public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
@@ -80,20 +74,32 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		this.networks = new CyNetwork[1];
 		this.networks[0] = network;
 		
-		// TODO Auto-generated method stub
-		mapper = new KGMLMapper(pathway, network);		
+		mapper = new KGMLMapper(pathway, network);
 		mapper.doMapping();
 		
-		// Check Visual Style exists or not
+		final String pathwayID = mapper.getPathwayId();
+	
 		VisualStyle keggStyle = null;
+		String targetStyleName = KGMLVisualStyleBuilder.DEF_VS_NAME;
+
+		// Special case: Global Map
+		if(pathwayID.equals("01100")) {
+			targetStyleName = KGMLVisualStyleBuilder.GLOBAL_VS_NAME;
+		}	
+		
+		// Check Visual Style exists or not
 		for (VisualStyle style : vmm.getAllVisualStyles()) {
-			if (style.getTitle().equals(KGMLVisualStyleBuilder.DEF_VS_NAME)) {
+			if (style.getTitle().equals(targetStyleName)) {
 				keggStyle = style;
 				break;
 			}
 		}
 		if (keggStyle == null) {
-			keggStyle = vsBuilder.getVisualStyle();
+			if(pathwayID.equals("01100")) {
+				keggStyle = vsBuilder.getGlobalVisualStyle();
+			} else {
+				keggStyle = vsBuilder.getVisualStyle();
+			}
 			vmm.addVisualStyle(keggStyle);
 		}
 		vmm.setCurrentVisualStyle(keggStyle);

@@ -21,6 +21,7 @@ public class KGMLVisualStyleBuilder {
 	
 	// Default visual style name
 	public static final String DEF_VS_NAME = "KEGG Style";
+	public static final String GLOBAL_VS_NAME = "KEGG Global Map Style";
 	
 	private final VisualStyleFactory vsFactory;
 	private final VisualMappingFunctionFactory discreteMappingFactory;
@@ -38,6 +39,8 @@ public class KGMLVisualStyleBuilder {
 
 	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 	private static final String KEGG_NODE_TYPE = "KEGG_NODE_TYPE";
+
+	private static final String KEGG_EDGE_COLOR = "KEGG_EDGE_COLOR";
 
 	public KGMLVisualStyleBuilder(final VisualStyleFactory vsFactory,
 			final VisualMappingFunctionFactory discreteMappingFactory,
@@ -82,6 +85,7 @@ public class KGMLVisualStyleBuilder {
 		final PassthroughMapping<String, String> nodeTooltipPassthrough = (PassthroughMapping<String, String>) passthroughMappingFactory
 				.createVisualMappingFunction(KEGG_NODE_LABEL, String.class, BasicVisualLexicon.NODE_TOOLTIP);
 				
+		
 		defStyle.addVisualMappingFunction(nodexPassthrough);
 		defStyle.addVisualMappingFunction(nodeyPassthrough);
 		defStyle.addVisualMappingFunction(nodewidthPassthrough);
@@ -91,6 +95,7 @@ public class KGMLVisualStyleBuilder {
 		defStyle.addVisualMappingFunction(nodelabelcolorPassthrough);
 		defStyle.addVisualMappingFunction(nodefillcolorPassthrough);
 		
+
 		final DiscreteMapping<String, LineType> edgelinetypeMapping = (DiscreteMapping<String, LineType>) discreteMappingFactory
 				.createVisualMappingFunction(KEGG_RELATION_TYPE, String.class, BasicVisualLexicon.EDGE_LINE_TYPE);
 		edgelinetypeMapping.putMapValue("maplink", LineTypeVisualProperty.LONG_DASH);
@@ -110,15 +115,37 @@ public class KGMLVisualStyleBuilder {
 
 	private final void createDefaults(final VisualStyle style) {
 		// Defaults for nodes
-		style.setDefaultValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, 6);
+		style.setDefaultValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, 7);
 		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 2d);
 		style.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 200);
 		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 220);
 		
 		// Defaults for Edges
+		style.setDefaultValue(BasicVisualLexicon.EDGE_WIDTH, 1d);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_FONT_SIZE, 6);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.ARROW);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_UNSELECTED_PAINT, Color.GRAY);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT, Color.GRAY);
+	}
+
+	public VisualStyle getGlobalVisualStyle() {
+		final VisualStyle originalStyle = this.getVisualStyle();
+		originalStyle.setTitle(GLOBAL_VS_NAME);
+
+		final PassthroughMapping<String, Paint> edgeColorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
+				.createVisualMappingFunction(KEGG_EDGE_COLOR, String.class, BasicVisualLexicon.EDGE_UNSELECTED_PAINT);
+		final PassthroughMapping<String, Paint> edgeStrokeColorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
+				.createVisualMappingFunction(KEGG_EDGE_COLOR, String.class, BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
+		originalStyle.addVisualMappingFunction(edgeColorPassthrough);
+		originalStyle.addVisualMappingFunction(edgeStrokeColorPassthrough);
+
+		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 180);
+		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_TRANSPARENCY, 180);
+		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0d);
+		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_FILL_COLOR, new Color(204, 255, 255));
+		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_WIDTH, 5d);
+		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.NONE);
+		
+		return originalStyle;
 	}
 }
