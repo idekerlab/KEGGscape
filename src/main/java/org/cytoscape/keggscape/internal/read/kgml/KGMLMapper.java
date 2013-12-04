@@ -1,6 +1,5 @@
 package org.cytoscape.keggscape.internal.read.kgml;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,7 +54,8 @@ public class KGMLMapper {
 	private static final String KEGG_REACTION_TYPE = "KEGG_REACTION_TYPE";
 	private static final String KEGG_EDGE_COLOR = "KEGG_EDGE_COLOR";
 	
-	final String[] lightBlueMap = { "Other types of O-glycan biosynthesis",
+	final String[] lightBlueMap = {
+			"Other types of O-glycan biosynthesis",
 			"Lipopolysaccharide biosynthesis",
 			"Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate",
 			"Glycosphingolipid biosynthesis - ganglio series",
@@ -70,7 +70,8 @@ public class KGMLMapper {
 			"Glycosaminoglycan biosynthesis - heparan sulfate / heparin",
 			"Other glycan degradation"
 	};
-	final String[] lightBrownMap = { "Aminobenzoate degradation",
+	final String[] lightBrownMap = {
+			"Aminobenzoate degradation",
 			"Atrazine degradation",
 			"Benzoate degradation",
 			"Bisphenol degradation",
@@ -89,6 +90,34 @@ public class KGMLMapper {
 			"Styrene degradation",
 			"Toluene degradation",
 			"Xylene degradation"
+	};
+	final String[] blueMap = {
+			"Amino sugar and nucleotide sugar metabolism",
+			"Ascorbate and aldarate metabolism",
+			"Pentose and glucuronate interconversions",
+			"Glycolysis / Gluconeogenesis",
+			"Inositol phosphate metabolism",
+			"Propanoate metabolism",
+			"Pyruvate metabolism",
+			"Glyoxylate and dicarboxylate metabolism",
+			"Citrate cycle (TCA cycle)",
+			"Galactose metabolism",
+			"C5-Branched dibasic acid metabolism",
+			"Starch and sucrose metabolism",
+			"Pentose phosphate pathway",
+			"Fructose and mannose metabolism"
+	};
+	final String[] pinkMap = {
+			"Vitamin B6 metabolism",
+			"One carbon pool by folate",
+			"Riboflavin metabolism",
+			"Thiamine metabolism",
+			"Folate biosynthesis",
+			"Nicotinate and nicotinamide metabolism",
+			"Porphyrin and chlorophyll metabolism",
+			"Biotin metabolism",
+			"Ubiquinone and other terpenoid-quinone biosynthesis",
+			"Pantothenate and CoA biosynthesis"
 	};
 
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
@@ -179,6 +208,7 @@ public class KGMLMapper {
 			final CyNode cyNode = network.addNode();
 			final CyRow row = network.getRow(cyNode); 
 			basicNodeMapping(row, entry);
+			
 			if (entry.getType().equals("map")
 					&& Arrays.asList(lightBlueMap).contains(entry.getGraphics().get(0).getName())) {
 				network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, "#99CCFF");
@@ -187,11 +217,19 @@ public class KGMLMapper {
 					&& Arrays.asList(lightBrownMap).contains(entry.getGraphics().get(0).getName())) {
 				network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, "#DA8E82");
 				network.getRow(cyNode).set(KEGG_NODE_FILL_COLOR, "#FFFFFF");
+			} else if (entry.getType().equals("map")
+					&& Arrays.asList(blueMap).contains(entry.getGraphics().get(0).getName())) {
+				network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, "#8080F7");
+				network.getRow(cyNode).set(KEGG_NODE_FILL_COLOR, "#FFFFFF");
+			} else if (entry.getType().equals("map")
+					&& Arrays.asList(blueMap).contains(entry.getGraphics().get(0).getName())) {
+				network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, "#FFB3CC");
+				network.getRow(cyNode).set(KEGG_NODE_FILL_COLOR, "#FFFFFF");
 			} else {
 				network.getRow(cyNode).set(KEGG_NODE_LABEL_COLOR, entry.getGraphics().get(0).getFgcolor());
 				network.getRow(cyNode).set(KEGG_NODE_FILL_COLOR, entry.getGraphics().get(0).getBgcolor());
 			}
-			nodeMap.put(entry.getId(), cyNode);			
+			nodeMap.put(entry.getId(), cyNode);
 		}
 	}
 	
