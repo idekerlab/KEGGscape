@@ -1,5 +1,9 @@
 package org.cytoscape.keggscape.internal.read.kgml;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +21,9 @@ import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
 
 public class KGMLMapper {
 	private static final String NAME_DELIMITER = ", ";
@@ -121,6 +128,7 @@ public class KGMLMapper {
 	};
 
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
+	final Map<String, String> cpdNameMap = new HashMap<String, String>();
 	
 	public KGMLMapper(final Pathway pathway, final CyNetwork network) {
 		this.pathway = pathway;
@@ -130,19 +138,35 @@ public class KGMLMapper {
 		
 	}
 	
-	public void doMapping() {
+	public void doMapping() throws IOException {
 		createKeggNodeTable();
 		createKeggEdgeTable();
 		if (pathway.getNumber().equals("01100")) {
 			mapGlobalEntries();
 			mapGlobalReactions();
 		} else {
+			getCpdNames();
             mapEntries();
             mapRelations();
             mapReactions();
 		}
 	}
 	
+	public void getCpdNames() throws IOException {
+		InputStream is = ClassLoader.class.getResourceAsStream("compoundNames.txt");
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(is));
+		String inputLine;
+		while ((inputLine = in.readLine()) != null)
+		    System.out.println(inputLine);
+		in.close();
+		
+//		Client c = Client.create();
+//		WebResource r = c.resource("http://rest.kegg.jp/link/cpd/map".concat(pathway.getNumber()));
+//		String compounds = r.get(String.class);
+//		System.out.println(compounds);
+	}
+
 	private void createKeggEdgeTable() {
 		network.getDefaultEdgeTable().createColumn(KEGG_RELATION_TYPE, String.class, true);
 		network.getDefaultEdgeTable().createColumn(KEGG_REACTION_TYPE, String.class, true);
