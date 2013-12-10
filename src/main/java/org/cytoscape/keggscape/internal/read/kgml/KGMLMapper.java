@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,10 +23,10 @@ import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-
 public class KGMLMapper {
+	
+	private static final URL CPD_RESOURCE = KGMLMapper.class.getClassLoader().getResource("compoundNames.txt");
+	
 	private static final String NAME_DELIMITER = ", ";
 	private static final String ID_DELIMITER = " ";
 	
@@ -127,6 +128,20 @@ public class KGMLMapper {
 			"Pantothenate and CoA biosynthesis"
 	};
 
+	private static Map<String, String> CPD2NAME = new HashMap<String, String>();
+	static {
+		try {
+			final BufferedReader reader = new BufferedReader(new InputStreamReader(CPD_RESOURCE.openStream()));
+			String inputLine;
+			while ((inputLine = reader.readLine()) != null)
+				System.out.println(inputLine);
+			
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
 	final Map<String, String> cpdNameMap = new HashMap<String, String>();
 	
@@ -153,13 +168,6 @@ public class KGMLMapper {
 	}
 	
 	public void getCpdNames() throws IOException {
-		InputStream is = ClassLoader.class.getResourceAsStream("compoundNames.txt");
-		
-		BufferedReader in = new BufferedReader(new InputStreamReader(is));
-		String inputLine;
-		while ((inputLine = in.readLine()) != null)
-		    System.out.println(inputLine);
-		in.close();
 		
 //		Client c = Client.create();
 //		WebResource r = c.resource("http://rest.kegg.jp/link/cpd/map".concat(pathway.getNumber()));
