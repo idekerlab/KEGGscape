@@ -61,6 +61,7 @@ public class KGMLMapper {
 	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 	private static final String KEGG_REACTION_TYPE = "KEGG_REACTION_TYPE";
 	private static final String KEGG_EDGE_COLOR = "KEGG_EDGE_COLOR";
+
 	
 	final String[] lightBlueMap = {
 			"Other types of O-glycan biosynthesis",
@@ -133,9 +134,12 @@ public class KGMLMapper {
 		try {
 			final BufferedReader reader = new BufferedReader(new InputStreamReader(CPD_RESOURCE.openStream()));
 			String inputLine;
-			while ((inputLine = reader.readLine()) != null)
-				System.out.println(inputLine);
-			
+			while ((inputLine = reader.readLine()) != null) {
+				String[] columns = inputLine.split("\t");
+				String cid = columns[0];
+				String cname = columns[1].split("; ")[0];
+				CPD2NAME.put(cid, cname);
+			}
 			reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -226,6 +230,8 @@ public class KGMLMapper {
 				row.set(KEGG_NODE_FILL_COLOR, TITLE_COLOR);
 			} else if(entry.getType().equals("map")) {
 				row.set(KEGG_NODE_FILL_COLOR, MAP_COLOR);
+			} else if(entry.getType().equals("compound")) {
+				row.set(KEGG_NODE_LABEL_LIST_FIRST, CPD2NAME.get(row.get(KEGG_ID, List.class).get(0)));
 			} else {
 				row.set(KEGG_NODE_FILL_COLOR, fillColor);
 			}
