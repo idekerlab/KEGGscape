@@ -1,5 +1,10 @@
 package org.cytoscape.keggscape.internal.read.kgml;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,6 +24,9 @@ import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 
 public class KGMLMapper {
+	
+	private static final URL CPD_RESOURCE = KGMLMapper.class.getClassLoader().getResource("compoundNames.txt");
+	
 	private static final String NAME_DELIMITER = ", ";
 	private static final String ID_DELIMITER = " ";
 	
@@ -53,6 +61,7 @@ public class KGMLMapper {
 	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 	private static final String KEGG_REACTION_TYPE = "KEGG_REACTION_TYPE";
 	private static final String KEGG_EDGE_COLOR = "KEGG_EDGE_COLOR";
+
 	
 	final String[] lightBlueMap = {
 			"Other types of O-glycan biosynthesis",
@@ -120,7 +129,25 @@ public class KGMLMapper {
 			"Pantothenate and CoA biosynthesis"
 	};
 
+	private static Map<String, String> CPD2NAME = new HashMap<String, String>();
+	static {
+		try {
+			final BufferedReader reader = new BufferedReader(new InputStreamReader(CPD_RESOURCE.openStream()));
+			String inputLine;
+			while ((inputLine = reader.readLine()) != null) {
+				String[] columns = inputLine.split("\t");
+				String cid = columns[0];
+				String cname = columns[1].split("; ")[0];
+				CPD2NAME.put(cid, cname);
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
+	final Map<String, String> cpdNameMap = new HashMap<String, String>();
 	
 	public KGMLMapper(final Pathway pathway, final CyNetwork network) {
 		this.pathway = pathway;
@@ -130,19 +157,28 @@ public class KGMLMapper {
 		
 	}
 	
-	public void doMapping() {
+	public void doMapping() throws IOException {
 		createKeggNodeTable();
 		createKeggEdgeTable();
 		if (pathway.getNumber().equals("01100")) {
 			mapGlobalEntries();
 			mapGlobalReactions();
 		} else {
+			getCpdNames();
             mapEntries();
             mapRelations();
             mapReactions();
 		}
 	}
 	
+	public void getCpdNames() throws IOException {
+		
+//		Client c = Client.create();
+//		WebResource r = c.resource("http://rest.kegg.jp/link/cpd/map".concat(pathway.getNumber()));
+//		String compounds = r.get(String.class);
+//		System.out.println(compounds);
+	}
+
 	private void createKeggEdgeTable() {
 		network.getDefaultEdgeTable().createColumn(KEGG_RELATION_TYPE, String.class, true);
 		network.getDefaultEdgeTable().createColumn(KEGG_REACTION_TYPE, String.class, true);
@@ -194,6 +230,8 @@ public class KGMLMapper {
 				row.set(KEGG_NODE_FILL_COLOR, TITLE_COLOR);
 			} else if(entry.getType().equals("map")) {
 				row.set(KEGG_NODE_FILL_COLOR, MAP_COLOR);
+			} else if(entry.getType().equals("compound")) {
+				row.set(KEGG_NODE_LABEL_LIST_FIRST, CPD2NAME.get(row.get(KEGG_ID, List.class).get(0)));
 			} else {
 				row.set(KEGG_NODE_FILL_COLOR, fillColor);
 			}
