@@ -69,6 +69,9 @@
 						<!-- This tells the bundle plugin which packages should not be exported. -->
 						<Private-Package>org.cytoscape.keggscape.internal.*</Private-Package>
 						<Bundle-Activator>org.cytoscape.keggscape.internal.CyActivator</Bundle-Activator>
+						<Embed-Dependency>*;scope=!provided|test;groupId=!org.cytoscape</Embed-Dependency>
+						<Embed-Transitive>true</Embed-Transitive>
+						<Import-Package>*;resolution:=optional</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -133,7 +136,13 @@
 			<version>${cytoscape.api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>swing-application-api</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
 		<!-- Logger -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -150,6 +159,11 @@
 		</dependency>
 
 		<!-- 3rd party libraries -->
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>2.4.1</version>
+		</dependency>
 
 		<!-- Testing -->
 		<dependency>
@@ -164,18 +178,12 @@
 			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>1.18</version>
-		</dependency>
-		
+
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>vizmap-impl</artifactId>
 			<version>${cytoscape.api.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

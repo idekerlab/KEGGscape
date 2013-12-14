@@ -11,6 +11,7 @@ import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.work.ServiceProperties;
 import org.cytoscape.work.TaskFactory;
+import org.cytoscape.application.swing.CyAction;
 import org.cytoscape.io.BasicCyFileFilter;
 import org.cytoscape.io.CyFileFilter;
 import org.cytoscape.io.DataCategory;
@@ -18,6 +19,7 @@ import org.cytoscape.io.read.InputStreamTaskFactory;
 import org.cytoscape.io.util.StreamUtil;
 import org.cytoscape.keggscape.internal.read.kgml.KeggscapeFileFilter;
 import org.cytoscape.keggscape.internal.read.kgml.KeggscapeNetworkReaderFactory;
+import org.cytoscape.keggscape.internal.ui.ShowPathwaySelectorAction;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
@@ -108,6 +110,10 @@ public class CyActivator extends AbstractCyActivator {
 			//new KeggscapeTaskFactory(), // Implementation
 //			TaskFactory.class, // Interface
 //			properties); // Service properties
+		
+		final ShowPathwaySelectorAction showPathwaySelectorAction = new ShowPathwaySelectorAction();
+		registerService(bc, showPathwaySelectorAction, CyAction.class, new Properties());
+		
 	}
 }
 
