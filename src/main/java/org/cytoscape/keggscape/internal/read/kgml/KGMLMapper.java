@@ -232,6 +232,7 @@ public class KGMLMapper {
 				row.set(KEGG_NODE_FILL_COLOR, MAP_COLOR);
 			} else if(entry.getType().equals("compound")) {
 				row.set(KEGG_NODE_LABEL_LIST_FIRST, CPD2NAME.get(row.get(KEGG_ID, List.class).get(0)));
+				row.set(KEGG_NODE_FILL_COLOR, fillColor);
 			} else {
 				row.set(KEGG_NODE_FILL_COLOR, fillColor);
 			}
