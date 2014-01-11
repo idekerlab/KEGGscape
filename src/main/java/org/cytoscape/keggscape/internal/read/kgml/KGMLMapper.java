@@ -223,8 +223,19 @@ public class KGMLMapper {
 			final CyNode cyNode = network.addNode();
 			final CyRow row = network.getRow(cyNode); 
 			basicNodeMapping(row, entry);
-			row.set(KEGG_NODE_LABEL_COLOR, entry.getGraphics().get(0).getFgcolor());
-			final String fillColor = entry.getGraphics().get(0).getBgcolor();
+			
+			if (entry.getGraphics().get(0).getFgcolor().equals("none")) {
+				row.set(KEGG_NODE_LABEL_COLOR, "#000000");
+			} else {
+				row.set(KEGG_NODE_LABEL_COLOR, entry.getGraphics().get(0).getFgcolor());
+			}
+			
+			final String fillColor;
+			if (entry.getGraphics().get(0).getBgcolor().equals("none")) {
+				fillColor = "#FFFFFF";
+			} else {
+				fillColor = entry.getGraphics().get(0).getBgcolor();
+			}
 			
 			if(entry.getGraphics().get(0).getName().startsWith("TITLE")) {
 				row.set(KEGG_NODE_FILL_COLOR, TITLE_COLOR);
