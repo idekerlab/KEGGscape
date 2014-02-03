@@ -19,5 +19,3 @@ https://github.com/idekerlab/KEGGscape/releases
 next open this jar file from Cytoscape plugin manager.
 
 .. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/install.png
-           
-
