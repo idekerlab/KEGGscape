@@ -11,6 +11,7 @@ In contrast to KEGG web, you can edit the network and map your data as you like.
 
    install
    howtouse
+   pythonscripting
 
 
 index
