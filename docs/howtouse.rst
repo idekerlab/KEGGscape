@@ -28,5 +28,5 @@ and open eco00020.xml.
 
 .. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/import.png
 
-
+.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/tcacycle.png
 
