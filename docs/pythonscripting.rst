@@ -10,4 +10,10 @@ Here we show a sample of Python + KEGGscape.
 Importing all KEGG pathways of Escherichia coli K-12 MG1655
 ===========================================================
 
-foo
+First we download all Ecoli pathways following Python script
+(This does not require Cytoscape).
+
+The Python script
+
+Next we show a sample to import a kgml from Python script.
+
