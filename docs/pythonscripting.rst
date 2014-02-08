@@ -33,9 +33,8 @@ __ http://docs.python-requests.org/en/latest/
 
 Next we show a sample to import a kgml from Python script.
 To use Python from Cytoscape3, you need to download jython-standalone
-from `here`__ package.
+from `here`__ , and move the jython-standalone like this.
 
 __ http://www.jython.org/downloads.html
 
-
-
+.. image:: http://wiki.cytoscape.org/Cytoscape_3/UserManual/Scripting?action=AttachFile&do=get&target=python.png
