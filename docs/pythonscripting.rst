@@ -12,8 +12,10 @@ We import all Ecoli pathways to Cytoscape.
 Importing all KEGG pathways of Escherichia coli K-12 MG1655
 ===========================================================
 
-First we download all Ecoli pathways following Python script
-(This does not require Cytoscape).
+First we download all Ecoli pathways with the following Python script.
+This script use Python `request`__  package.
+
+__ http://docs.python-requests.org/en/latest/
 
 .. code-block:: python
    
@@ -30,4 +32,3 @@ First we download all Ecoli pathways following Python script
        f.close
 
 Next we show a sample to import a kgml from Python script.
-
