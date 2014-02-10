@@ -84,4 +84,4 @@ To run load_kegg.py, type (from Cytoscape3 OSGi shell)
 
    cytoscape:script python /ABS_PATH_TO_SCRIPT/load_kegg.py
 
-.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/batchimport.png
+.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/batchimport.PNG
