@@ -111,8 +111,8 @@ public class CyActivator extends AbstractCyActivator {
 //			TaskFactory.class, // Interface
 //			properties); // Service properties
 		
-		final ShowPathwaySelectorAction showPathwaySelectorAction = new ShowPathwaySelectorAction();
-		registerService(bc, showPathwaySelectorAction, CyAction.class, new Properties());
+//		final ShowPathwaySelectorAction showPathwaySelectorAction = new ShowPathwaySelectorAction();
+//		registerService(bc, showPathwaySelectorAction, CyAction.class, new Properties());
 		
 	}
 }
