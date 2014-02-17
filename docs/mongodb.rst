@@ -36,4 +36,7 @@ Finally we import these tables into mongodb. ::
 Merging tables with PyMongo
 ===========================
 
+We integrate the three table(network nodes, drug targets table, id conversion table).
+Here we append columns *drug target* and *drug* to Cytoscape's node table.
 
+.. code-block:: python
