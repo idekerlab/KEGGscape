@@ -85,5 +85,8 @@ Next we create fields.txt to export the new node table. ::
     
 and export node table as csv. ::
 
-    mongoexport --db keggscape --collection alanine_nodes --csv --fieldFile fields.txt --out new_node_table.csv
+    mongoexport --db keggscape --collection alanine_nodes --csv --fieldFile fields.txt --out new_alanine_nodes.csv
+
+import this new_alanine_nodes.csv into Cytoscape
+
 
