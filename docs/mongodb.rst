@@ -73,7 +73,7 @@ and export node table as csv. ::
 
     mongoexport --db keggscape --collection alanine_nodes --csv --fieldFile fields.txt --out alanine_drugs.csv
 
-import this new_alanine_nodes.csv into Cytoscape and highlight drug targets as below.
+import this alanine_drugs.csv into Cytoscape and highlight drug targets as below.
 
 .. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/import_drugtarget.png
 .. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/drugtarget_table.png
