@@ -58,4 +58,32 @@ Here we append columns *drug target* and *drug* to Cytoscape's node table.
             ids = conv_collection.find_one({"kegg_id": locus})
             drug = drug_collection.find_one({"UniProt ID": ids["uniprot_id"].replace("up:", "")})
             if drug != None:
-                node_collection.update({"_id": genes["_id"]}, {"$push": {"drug": drug["Drug IDs"], "target": locus}})
+                node_collection.update({"_id": genes["_id"]}, {"$push": {"drug_ids": drug["Drug IDs"], "target_id": drug["ID"], "target": locus}})
+
+Next we create fields.txt to export the new node table. ::
+
+    SUID
+    KEGG_ID
+    KEGG_NODE_FILL_COLOR
+    KEGG_NODE_HEIGHT
+    KEGG_NODE_LABEL
+    KEGG_NODE_LABEL_COLOR
+    KEGG_NODE_LABEL_LIST
+    KEGG_NODE_LABEL_LIST_FIRST
+    KEGG_NODE_REACTIONID
+    KEGG_NODE_SHAPE
+    KEGG_NODE_TYPE
+    KEGG_NODE_WIDTH
+    KEGG_NODE_X
+    KEGG_NODE_Y
+    name
+    selected
+    shared name
+    drug_ids
+    target_id
+    target
+    
+and export node table as csv. ::
+
+    mongoexport --db keggscape --collection alanine_nodes --csv --fieldFile fields.txt --out new_node_table.csv
+
