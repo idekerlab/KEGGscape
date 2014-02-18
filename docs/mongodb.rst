@@ -40,3 +40,25 @@ We integrate the three table(network nodes, drug targets table, id conversion ta
 Here we append columns *drug target* and *drug* to Cytoscape's node table.
 
 .. code-block:: python
+
+    from pymongo import MongoClient
+    
+    client = MongoClient()
+    db = client['keggscape']
+    
+    node_collection = db['alanine_nodes']
+    drug_collection = db['all_target_ids_all']
+    conv_collection = db['conv_eco_uniprot']
+    
+    gene_table = node_collection.find({"KEGG_NODE_TYPE": "gene"})
+    
+    for genes in gene_table:
+        locuses = genes["KEGG_ID"].split("\r") #newline character depends
+        on your OS, I exported cytoscape table on Mac
+        for locus in locuses:
+            ids = conv_collection.find_one({"kegg_id": locus})
+            drug = drug_collection.find_one({"UniProt ID":
+    	ids["uniprot_id"].replace("up:", "")})
+            if drug != None:
+                node_collection.update({"_id": genes["_id"]}, {"$push":
+                {"drug": drug["Drug IDs"], "target": locus}})
