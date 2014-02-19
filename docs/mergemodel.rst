@@ -18,6 +18,4 @@ You can download iAF1260 reaction table from ModelSEED_.
 
 and import this table into MongoDB, like this. ::
 
-    mongoimport --db keggscape --collection iaf1260 --type tsv --file table.tsv
-
-
+    mongoimport --db keggscape --collection iaf1260 --type tsv --headerline --file table.tsv
