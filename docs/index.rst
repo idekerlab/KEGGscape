@@ -13,6 +13,7 @@ In contrast to KEGG web, you can edit the network and map your data as you like.
    howtouse
    pythonscripting
    drugtarget
+   mergemodel
 
 This work was supported by the National Bioscience Database Center(NBDC) program *Database Integration Coordination Program (Tool Prototype for Integrated Database Analysis)*
 
