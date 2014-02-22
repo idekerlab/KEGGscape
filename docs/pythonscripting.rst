@@ -17,10 +17,6 @@ This script needs Python `requests`__  package.
 
 __ http://docs.python-requests.org/en/latest/
 
-You will get all eco KGMLs like this.
-
-.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/get_all_eco_kgmls.png
-
 .. code-block:: python
    
    import requests
@@ -34,6 +30,10 @@ You will get all eco KGMLs like this.
        f = open(pathwayid + '.xml', 'w')
        f.write(kgml.content)
        f.close
+
+You will get all eco KGMLs like this.
+
+.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/get_all_eco_kgmls.png
 
 Next we show a sample to import a kgml from Python script.
 To use Python from Cytoscape3, you need to download jython-standalone
