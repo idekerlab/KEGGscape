@@ -13,9 +13,13 @@ Importing all KEGG pathways of Escherichia coli K-12 MG1655
 ===========================================================
 
 First we download all Ecoli pathways with the following Python script.
-This script use Python `requests`__  package.
+This script needs Python `requests`__  package.
 
 __ http://docs.python-requests.org/en/latest/
+
+You will get all eco KGMLs like this.
+
+.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/get_all_eco_kgmls.png
 
 .. code-block:: python
    
