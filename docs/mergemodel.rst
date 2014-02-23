@@ -15,7 +15,13 @@ You can download iAF1260 reaction table from ModelSEED_.
 
 .. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/download_seedmodel.png
 
-
 and import this table into MongoDB, like this. ::
 
     mongoimport --db keggscape --collection iaf1260 --type tsv --headerline --file table.tsv
+
+This Python script append column which enzyme genes differ between
+KEGG and iAF1260.
+
+.. code-block:: python
+
+    from pymongo import MongoClient
