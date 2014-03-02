@@ -60,3 +60,11 @@ KEGG and iAF1260.
                             node_collection.update({"_id": kegggene["_id"]}, {"$push": {"keggonly": " ".join(keggonly)}})
                         else:
                             node_collection.update({"_id": kegggene["_id"]}, {"$push": {"modelonly": " ".join(modelonly)}})
+
+And export galactose_node collection and reimport to Cytoscape. ::
+
+    mongoexport --db keggscape --collection galactose_nodes --csv --fieldFile genediff_fields.txt --out new_galactose_nodes.csv
+
+Here is the annotation difference between iAF1260 and KEGG
+
+.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/kegg_model_genediff.png
