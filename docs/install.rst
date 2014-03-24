@@ -7,15 +7,11 @@ Apache License, Version 2.0 and is available at GitHub.
 
 https://github.com/idekerlab/KEGGscape
 
-KEGGscape requires Cytoscape version 3.1-beta3 or later.
+KEGGscape requires Cytoscape version 3.1.
 First you need to download Cytoscape from
 
-http://chianti.ucsd.edu/cytoscape-3.1.0-beta3/
+http://cytoscape.org/download.html
 
-To install KEGGscape, download KEGGscape jar file from
+You can install KEGGscape with Cytoscape app manager.
 
-https://github.com/idekerlab/KEGGscape/releases
-
-next open this jar file from Cytoscape plugin manager.
-
-.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/install.png
+.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/appstore.png
