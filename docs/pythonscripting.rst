@@ -35,7 +35,7 @@ You will get all eco KGMLs like this.
 
 .. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/get_all_eco_kgmls.png
 
-Next we show a sample to import a kgml from Python script.
+Next we show a sample to batch-import kgmls from Python script.
 To use Python from Cytoscape3, you need to download jython-standalone
 from `here`__ , and move the jython-standalone like this.
 
