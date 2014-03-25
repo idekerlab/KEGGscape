@@ -1,5 +1,5 @@
 =======================================================
-Mapping genome scale metabolic model and KEGG pathway
+Mapping genome scale metabolic model on KEGG pathway
 =======================================================
 
 Here we show the other example of data integration.
