@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<properties>
-		<cytoscape.api.version>3.1.0-SNAPSHOT</cytoscape.api.version>
+		<cytoscape.api.version>3.1.0</cytoscape.api.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-bundle-plugin.version>2.4.0</maven-bundle-plugin.version>
 		<osgi.api.version>4.2.0</osgi.api.version>
@@ -83,13 +83,12 @@
 		<repository>
 			<id>cytoscape_snapshots</id>
 			<snapshots>
-				<enabled>true</enabled>
 			</snapshots>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
 			<name>Cytoscape Snapshots</name>
-			<url>http://cytoscape.wodaklab.org/nexus/content/repositories/snapshots/</url>
+			<url>http://code.cytoscape.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
 			<id>cytoscape_releases</id>
@@ -97,10 +96,9 @@
 				<enabled>false</enabled>
 			</snapshots>
 			<releases>
-				<enabled>true</enabled>
 			</releases>
 			<name>Cytoscape Releases</name>
-			<url>http://cytoscape.wodaklab.org/nexus/content/repositories/releases/</url>
+			<url>http://code.cytoscape.org/nexus/content/repositories/releases/</url>
 		</repository>
 	</repositories>
 
