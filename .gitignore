@@ -1,7 +1,8 @@
 .classpath
 .project
 .settings/
-src/main/java/org/cytoscape/data/reader/kgml/generated/
 target/
 .DS_Store
 src/main/java/META-INF/
+src/main/java/org/cytoscape/keggscape/internal/generated
+

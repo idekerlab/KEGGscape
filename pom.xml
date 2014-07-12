@@ -1,43 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<properties>
+		<cytoscape.api.version>3.1.0</cytoscape.api.version>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-bundle-plugin.version>2.4.0</maven-bundle-plugin.version>
+		<osgi.api.version>4.2.0</osgi.api.version>
+		<bundle.symbolicName>org.cytoscape.keggscape</bundle.symbolicName>
+		<bundle.namespaece>org.cytoscape.keggscape</bundle.namespaece>
+		<bundle.name>KEGGscape</bundle.name>
+	</properties>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cytoscape</groupId>
-	<artifactId>kgmlreader</artifactId>
-	<packaging>jar</packaging>
-	<version>0.15.1</version>
-	<name>KGML Reader</name>
+	<artifactId>keggscape</artifactId>
+	<version>0.5.2</version>
+	<name>${bundle.name}</name>
+
+	<packaging>bundle</packaging>
 
 	<build>
+	  <finalName>KEGGscape</finalName>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifestEntries>
-							<Cytoscape-Plugin>org.cytoscape.data.reader.kgml.KGMLReaderPlugin</Cytoscape-Plugin>
-						</manifestEntries>
-					</archive>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
-				<version>0.8.1</version>
+				<version>0.8.3</version>
 				<executions>
 					<execution>
 						<goals>
@@ -53,42 +40,55 @@
 								<bindingInclde>*.jaxb</bindingInclde>
 							</bindingIncldes>
 							<generateDirectory>${basedir}/src/main/java</generateDirectory>
-							<generatePackage>org.cytoscape.data.reader.kgml.generated</generatePackage>
+							<generatePackage>org.cytoscape.keggscape.internal.generated</generatePackage>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
-				<inherited>true</inherited>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
+					<!-- These options indicate the source code is Java 1.6-compliant and 
+						the resulting class files should be Java 1.6-compatible. -->
 					<source>1.6</source>
 					<target>1.6</target>
-					<optimize>true</optimize>
-					<showWarnings>true</showWarnings>
-					<compilerArguments>
-						<Xmaxwarns>10000</Xmaxwarns>
-						<Xmaxerrs>10000</Xmaxerrs>
-					</compilerArguments>
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>${maven-bundle-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<!-- TODO: Embed dependencies -->
+						<Bundle-SymbolicName>org.cytoscape.keggscape</Bundle-SymbolicName>
+						<Bundle-Version>${project.version}</Bundle-Version>
+						<!-- This tells the bundle plugin which packages should not be exported. -->
+						<Private-Package>org.cytoscape.keggscape.internal.*</Private-Package>
+						<Bundle-Activator>org.cytoscape.keggscape.internal.CyActivator</Bundle-Activator>
+						<Embed-Dependency>*;scope=!provided|test;groupId=!org.cytoscape</Embed-Dependency>
+						<Embed-Transitive>true</Embed-Transitive>
+						<Import-Package>*;resolution:=optional</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-	
+
 	<repositories>
 		<repository>
 			<id>cytoscape_snapshots</id>
 			<snapshots>
-				<enabled>true</enabled>
 			</snapshots>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
 			<name>Cytoscape Snapshots</name>
-			<url>http://cytoscape.wodaklab.org/nexus/content/repositories/snapshots/</url>
+			<url>http://code.cytoscape.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
 			<id>cytoscape_releases</id>
@@ -96,46 +96,93 @@
 				<enabled>false</enabled>
 			</snapshots>
 			<releases>
-				<enabled>true</enabled>
 			</releases>
 			<name>Cytoscape Releases</name>
-			<url>http://cytoscape.wodaklab.org/nexus/content/repositories/releases/</url>
+			<url>http://code.cytoscape.org/nexus/content/repositories/releases/</url>
 		</repository>
 	</repositories>
 
 	<dependencies>
+
+		<!-- Cytoscape API dependencies -->
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.1.3</version>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>service-api</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>4.1.4</version>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>work-api</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>model-api</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>io-api</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>viewmodel-api</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>swing-application-api</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Logger -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.6</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>${osgi.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- 3rd party libraries -->
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>2.4.1</version>
+		</dependency>
+
+		<!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>cytoscape</groupId>
-			<artifactId>application</artifactId>
-			<version>2.8.2</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>1.6.3</version>
+			<groupId>org.cytoscape</groupId>
+			<artifactId>vizmap-impl</artifactId>
+			<version>${cytoscape.api.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
