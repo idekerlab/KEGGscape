@@ -83,7 +83,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		String targetStyleName = KGMLVisualStyleBuilder.DEF_VS_NAME;
 
 		// Special case: Global Map
-		if(pathwayID.equals("01100")) {
+		if(pathwayID.equals("01100") || pathwayID.equals("01110")) {
 			targetStyleName = KGMLVisualStyleBuilder.GLOBAL_VS_NAME;
 		}	
 		
@@ -95,7 +95,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 			}
 		}
 		if (keggStyle == null) {
-			if(pathwayID.equals("01100")) {
+			if(pathwayID.equals("01100") || pathwayID.equals("01110")) {
 				keggStyle = vsBuilder.getGlobalVisualStyle();
 			} else {
 				keggStyle = vsBuilder.getVisualStyle();

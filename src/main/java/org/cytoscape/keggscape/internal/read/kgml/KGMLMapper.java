@@ -161,7 +161,7 @@ public class KGMLMapper {
 	public void doMapping() throws IOException {
 		createKeggNodeTable();
 		createKeggEdgeTable();
-		if (pathway.getNumber().equals("01100")) {
+		if (pathway.getNumber().equals("01100") || pathway.getNumber().equals("01110")) {
 			mapGlobalEntries();
 			mapGlobalReactions();
 		} else {
@@ -295,6 +295,7 @@ public class KGMLMapper {
 		final List<Relation> relations = pathway.getRelation();
 		System.out.println(relations.size());
 		for (final Relation relation : relations) {
+			// currently we pass groupnode...
 			if (!groupnodeIds.contains(relation.getEntry1()) && !groupnodeIds.contains(relation.getEntry2())) {
 				final CyNode sourceNode = nodeMap.get(relation.getEntry1());
 			    final CyNode targetNode = nodeMap.get(relation.getEntry2());
