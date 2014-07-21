@@ -18,5 +18,11 @@ cpdids.sort()
 output = open('compoundNames.txt', 'w')
 for ids in more_itertools.chunked(cpdids, 100):
     names = requests.get('http://rest.kegg.jp/list/' + '+'.join(ids))
-    output.write(names.content)
-output.close
+    for line in names.content.split("\n"):
+        foo = line.split("\t")
+        if len(foo) > 1:
+            cpdid = foo[0]
+            names = foo[1]
+            sorted_names = sorted(names.split("; "), key=len)
+            output.write(cpdid + "\t" + "; ".join(sorted_names) + "\n")
+output.close()
