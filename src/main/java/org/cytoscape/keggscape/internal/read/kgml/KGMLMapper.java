@@ -316,7 +316,6 @@ public class KGMLMapper {
 						for (Subtype subtype : relation.getSubtype()) {
 							final CyNode cpdNode = nodeMap.get(subtype
 									.getValue());
-							System.out.println(maplinkIds);
 
 							if (maplinkIds.contains(relation.getEntry1())) {
 								final CyNode pathwayNode = nodeMap.get(relation

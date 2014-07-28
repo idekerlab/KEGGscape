@@ -123,7 +123,7 @@ public class KGMLVisualStyleBuilder {
 		// Defaults for Edges
 		style.setDefaultValue(BasicVisualLexicon.EDGE_WIDTH, 1d);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_FONT_SIZE, 6);
-		style.setDefaultValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.ARROW);
+		style.setDefaultValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.NONE);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_UNSELECTED_PAINT, Color.GRAY);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT, Color.GRAY);
 	}
