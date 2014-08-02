@@ -64,6 +64,14 @@ public class KGMLMapper {
 	private static final String KEGG_REACTION_TYPE = "KEGG_REACTION_TYPE";
 	private static final String KEGG_EDGE_COLOR = "KEGG_EDGE_COLOR";
 
+	private static final String KEGG_EXPRESSION = "KEGG_EXPRESSION";
+	private static final String KEGG_INDIRECTEFFECT = "KEGG_INDIRECTEFFECT";
+	private static final String KEGG_BINDINGASSOCIATION = "KEGG_BINDINGASSOCIATION";
+	private static final String KEGG_ACTIVATION = "KEGG_ACTIVATION";
+	private static final String KEGG_INHIBITION = "KEGG_INHIBITION";
+	private static final String KEGG_PHOSPHORYLATION = "KEGG_PHOSPHORYLATION";
+	private static final String KEGG_DEPHOSPHORYLATION = "KEGG_DEPHOSPHORYLATION";
+
 	final String[] lightBlueMap = {
 			"Other types of O-glycan biosynthesis",
 			"Lipopolysaccharide biosynthesis",
@@ -170,6 +178,20 @@ public class KGMLMapper {
 		network.getDefaultEdgeTable().createColumn(KEGG_REACTION_TYPE,
 				String.class, true);
 		network.getDefaultEdgeTable().createColumn(KEGG_EDGE_COLOR,
+				String.class, true);
+		network.getDefaultEdgeTable().createColumn(KEGG_PHOSPHORYLATION,
+				String.class, true);
+		network.getDefaultEdgeTable().createColumn(KEGG_DEPHOSPHORYLATION,
+				String.class, true);
+		network.getDefaultEdgeTable().createColumn(KEGG_INHIBITION,
+				String.class, true);
+		network.getDefaultEdgeTable().createColumn(KEGG_EXPRESSION,
+				String.class, true);
+		network.getDefaultEdgeTable().createColumn(KEGG_INDIRECTEFFECT,
+				String.class, true);
+		network.getDefaultEdgeTable().createColumn(KEGG_ACTIVATION,
+				String.class, true);
+		network.getDefaultEdgeTable().createColumn(KEGG_BINDINGASSOCIATION,
 				String.class, true);
 	}
 
@@ -344,6 +366,45 @@ public class KGMLMapper {
 								targetNode, false);
 						network.getRow(newEdge).set(KEGG_RELATION_TYPE,
 								relation.getType());
+						if (relation.getType().equals("PPrel")) {
+							for (Subtype subtype : relation.getSubtype()) {
+								if (subtype.getName().equals("inhibition")) {
+									network.getRow(newEdge)
+											.set(KEGG_INHIBITION,
+													subtype.getValue());
+								} else if (subtype.getName().equals(
+										"phosphorylation")) {
+									network.getRow(newEdge).set(
+											KEGG_PHOSPHORYLATION,
+											subtype.getValue());
+								} else if (subtype.getName().equals(
+										"dephosphorylation")) {
+									network.getRow(newEdge).set(
+											KEGG_DEPHOSPHORYLATION,
+											subtype.getValue());
+								} else if (subtype.getName().equals(
+										"indirect effect")) {
+									network.getRow(newEdge).set(
+											KEGG_INDIRECTEFFECT,
+											subtype.getValue());
+								} else if (subtype.getName().equals(
+										"activation")) {
+									network.getRow(newEdge)
+											.set(KEGG_ACTIVATION,
+													subtype.getValue());
+								} else if (subtype.getName().equals(
+										"binding/association")) {
+									network.getRow(newEdge).set(
+											KEGG_BINDINGASSOCIATION,
+											subtype.getValue());
+								} else if (subtype.getName().equals(
+										"expression")) {
+									network.getRow(newEdge)
+											.set(KEGG_EXPRESSION,
+													subtype.getValue());
+								}
+							}
+						}
 					}
 				}
 			}
