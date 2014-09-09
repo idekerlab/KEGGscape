@@ -243,42 +243,45 @@ public class KGMLMapper {
 		final List<Entry> entries = pathway.getEntry();
 
 		for (final Entry entry : entries) {
-			if (entry.getName().equals("undefined")) {
-				groupnodeIds.add(entry.getId());
-			} else {
-				if (entry.getType().equals("map")) {
-					maplinkIds.add(entry.getId());
-				}
-				final CyNode cyNode = network.addNode();
-				final CyRow row = network.getRow(cyNode);
-				basicNodeMapping(row, entry);
-
-				if (entry.getGraphics().get(0).getFgcolor().equals("none")) {
-					row.set(KEGG_NODE_LABEL_COLOR, "#000000");
+			if (!entry.getName().equals("path:map09020")) {
+				if (entry.getName().equals("undefined")) {
+					groupnodeIds.add(entry.getId());
 				} else {
-					row.set(KEGG_NODE_LABEL_COLOR, entry.getGraphics().get(0)
-							.getFgcolor());
-				}
+					if (entry.getType().equals("map")) {
+						maplinkIds.add(entry.getId());
+					}
+					final CyNode cyNode = network.addNode();
+					final CyRow row = network.getRow(cyNode);
+					basicNodeMapping(row, entry);
 
-				final String fillColor;
-				if (entry.getGraphics().get(0).getBgcolor().equals("none")) {
-					fillColor = "#FFFFFF";
-				} else {
-					fillColor = entry.getGraphics().get(0).getBgcolor();
-				}
+					if (entry.getGraphics().get(0).getFgcolor().equals("none")) {
+						row.set(KEGG_NODE_LABEL_COLOR, "#000000");
+					} else {
+						row.set(KEGG_NODE_LABEL_COLOR,
+								entry.getGraphics().get(0).getFgcolor());
+					}
 
-				if (entry.getGraphics().get(0).getName().startsWith("TITLE")) {
-					row.set(KEGG_NODE_FILL_COLOR, TITLE_COLOR);
-				} else if (entry.getType().equals("map")) {
-					row.set(KEGG_NODE_FILL_COLOR, MAP_COLOR);
-				} else if (entry.getType().equals("compound")) {
-					row.set(KEGG_NODE_LABEL_LIST_FIRST,
-							CPD2NAME.get(row.get(KEGG_ID, List.class).get(0)));
-					row.set(KEGG_NODE_FILL_COLOR, fillColor);
-				} else {
-					row.set(KEGG_NODE_FILL_COLOR, fillColor);
+					final String fillColor;
+					if (entry.getGraphics().get(0).getBgcolor().equals("none")) {
+						fillColor = "#FFFFFF";
+					} else {
+						fillColor = entry.getGraphics().get(0).getBgcolor();
+					}
+
+					if (entry.getGraphics().get(0).getName()
+							.startsWith("TITLE")) {
+						row.set(KEGG_NODE_FILL_COLOR, TITLE_COLOR);
+					} else if (entry.getType().equals("map")) {
+						row.set(KEGG_NODE_FILL_COLOR, MAP_COLOR);
+					} else if (entry.getType().equals("compound")) {
+						row.set(KEGG_NODE_LABEL_LIST_FIRST, CPD2NAME.get(row
+								.get(KEGG_ID, List.class).get(0)));
+						row.set(KEGG_NODE_FILL_COLOR, fillColor);
+					} else {
+						row.set(KEGG_NODE_FILL_COLOR, fillColor);
+					}
+					nodeMap.put(entry.getId(), cyNode);
 				}
-				nodeMap.put(entry.getId(), cyNode);
 			}
 		}
 	}
