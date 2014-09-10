@@ -1,28 +1,23 @@
 package org.cytoscape.keggscape.internal;
 
-import java.util.Properties;
-
 import static org.cytoscape.work.ServiceProperties.ID;
 
-import org.cytoscape.service.util.AbstractCyActivator;
-import org.cytoscape.view.model.CyNetworkViewFactory;
-import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
-import org.cytoscape.view.vizmap.VisualMappingManager;
-import org.cytoscape.view.vizmap.VisualStyleFactory;
-import org.cytoscape.work.ServiceProperties;
-import org.cytoscape.work.TaskFactory;
-import org.cytoscape.application.swing.CyAction;
-import org.cytoscape.io.BasicCyFileFilter;
+import java.util.Properties;
+
 import org.cytoscape.io.CyFileFilter;
 import org.cytoscape.io.DataCategory;
 import org.cytoscape.io.read.InputStreamTaskFactory;
 import org.cytoscape.io.util.StreamUtil;
 import org.cytoscape.keggscape.internal.read.kgml.KeggscapeFileFilter;
 import org.cytoscape.keggscape.internal.read.kgml.KeggscapeNetworkReaderFactory;
-import org.cytoscape.keggscape.internal.ui.ShowPathwaySelectorAction;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
+import org.cytoscape.service.util.AbstractCyActivator;
+import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
+import org.cytoscape.view.vizmap.VisualMappingManager;
+import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.osgi.framework.BundleContext;
 
 /**

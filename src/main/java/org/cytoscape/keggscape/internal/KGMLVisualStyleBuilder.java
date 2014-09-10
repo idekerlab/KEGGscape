@@ -35,7 +35,6 @@ public class KGMLVisualStyleBuilder {
 	private static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
 	private static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
 	private static final String KEGG_NODE_LABEL_LIST_FIRST = "KEGG_NODE_LABEL_LIST_FIRST";
-	private static final String KEGG_NODE_SHAPE = "KEGG_NODE_SHAPE";
 
 	private static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 	private static final String KEGG_NODE_TYPE = "KEGG_NODE_TYPE";

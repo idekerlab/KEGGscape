@@ -46,7 +46,6 @@ public class PathwaySelectorDialog extends JDialog {
 		final String[] entries = list.split("\\n");
 
 		for(String sp:entries) {
-			System.out.println(sp);
 			speciesBox.addItem(sp);
 		}
 	}

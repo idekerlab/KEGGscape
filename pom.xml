@@ -13,13 +13,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cytoscape</groupId>
 	<artifactId>keggscape</artifactId>
-	<version>0.5.6</version>
+	<version>0.6.0</version>
 	<name>${bundle.name}</name>
 
 	<packaging>bundle</packaging>
 
 	<build>
-	  <finalName>KEGGscape</finalName>
+		<finalName>KEGGscape</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
@@ -141,7 +141,7 @@
 			<version>${cytoscape.api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- Logger -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

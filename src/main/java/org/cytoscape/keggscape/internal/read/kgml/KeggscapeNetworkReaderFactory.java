@@ -8,25 +8,22 @@ import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.view.model.CyNetworkViewFactory;
-import org.cytoscape.work.TaskIterator;
-import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
-import org.cytoscape.view.vizmap.VisualStyleFactory;
+import org.cytoscape.work.TaskIterator;
 
 public class KeggscapeNetworkReaderFactory extends AbstractReaderFactory {
-	
+
 	private final CyNetworkManager cyNetworkManager;
 	private final CyRootNetworkManager cyRootNetworkManager;
-	
+
 	private final KGMLVisualStyleBuilder vsBuilder;
 	private final VisualMappingManager vmm;
-	
+
 	public KeggscapeNetworkReaderFactory(final CyFileFilter filter, final CyNetworkViewFactory cyNetworkViewFactory,
 			final CyNetworkFactory cyNetworkFactory, final CyNetworkManager cyNetworkManager,
-			final CyRootNetworkManager cyRootNetworkManager, KGMLVisualStyleBuilder vsBuilder,
-			VisualMappingManager vmm) {
+			final CyRootNetworkManager cyRootNetworkManager, KGMLVisualStyleBuilder vsBuilder, VisualMappingManager vmm) {
 		super(filter, cyNetworkViewFactory, cyNetworkFactory);
-		
+
 		this.cyNetworkManager = cyNetworkManager;
 		this.cyRootNetworkManager = cyRootNetworkManager;
 		this.vsBuilder = vsBuilder;
@@ -34,10 +31,8 @@ public class KeggscapeNetworkReaderFactory extends AbstractReaderFactory {
 	}
 
 	@Override
-	public TaskIterator createTaskIterator(InputStream is, String inputName) {
-		// TODO Auto-generated method stub
-		return new TaskIterator(new KeggscapeNetworkReader(is, cyNetworkViewFactory, cyNetworkFactory,
+	public TaskIterator createTaskIterator(InputStream is, String collectionName) {
+		return new TaskIterator(new KeggscapeNetworkReader(collectionName, is, cyNetworkViewFactory, cyNetworkFactory,
 				cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm));
 	}
-
 }

@@ -1,13 +1,12 @@
 package org.cytoscape.data.reader.kgml.test;
 
-import org.cytoscape.keggscape.internal.read.kgml.KeggscapeNetworkReader;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class KGMLReaderTest {
 	
-	private KeggscapeNetworkReader reader1;
+//	private KeggscapeNetworkReader reader1;
 
 	@Before
 	public void setUp() throws Exception {
