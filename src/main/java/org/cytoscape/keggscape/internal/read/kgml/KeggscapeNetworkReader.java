@@ -79,6 +79,11 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
+		if(taskMonitor != null) {
+			taskMonitor.setTitle("Loading KEGG Pathway");
+			taskMonitor.setStatusMessage("Loading KEGG Pathway file in KGML format...");
+			taskMonitor.setProgress(-1.0);
+		}
 		pathway = null;
 		
 		if(collectionName != null) {
@@ -145,6 +150,10 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		}
 		vmm.setCurrentVisualStyle(keggStyle);
 
+		if(taskMonitor != null) {
+			taskMonitor.setStatusMessage("KEGG Pathway successfully loaded.");
+			taskMonitor.setProgress(1.0);
+		}
 	}
 
 }

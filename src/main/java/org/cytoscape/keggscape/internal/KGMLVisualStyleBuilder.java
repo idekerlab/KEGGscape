@@ -1,10 +1,13 @@
 package org.cytoscape.keggscape.internal;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Paint;
 import java.util.Set;
 
 import org.cytoscape.keggscape.internal.read.kgml.KGMLMapper;
+import org.cytoscape.view.model.VisualLexicon;
+import org.cytoscape.view.model.VisualProperty;
 import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.presentation.property.LineTypeVisualProperty;
@@ -12,7 +15,9 @@ import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
 import org.cytoscape.view.presentation.property.values.ArrowShape;
 import org.cytoscape.view.presentation.property.values.LineType;
 import org.cytoscape.view.presentation.property.values.NodeShape;
+import org.cytoscape.view.vizmap.VisualMappingFunction;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
+import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualPropertyDependency;
 import org.cytoscape.view.vizmap.VisualStyle;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
@@ -28,13 +33,15 @@ public class KGMLVisualStyleBuilder {
 	private final VisualStyleFactory vsFactory;
 	private final VisualMappingFunctionFactory discreteMappingFactory;
 	private final VisualMappingFunctionFactory passthroughMappingFactory;
+	private final Set<VisualLexicon> lexicons; 
 
 	public KGMLVisualStyleBuilder(final VisualStyleFactory vsFactory,
 			final VisualMappingFunctionFactory discreteMappingFactory,
-			final VisualMappingFunctionFactory passthroughMappingFactory) {
+			final VisualMappingFunctionFactory passthroughMappingFactory, final VisualMappingManager vmm) {
 		this.vsFactory = vsFactory;
 		this.discreteMappingFactory = discreteMappingFactory;
 		this.passthroughMappingFactory = passthroughMappingFactory;
+		lexicons = vmm.getAllVisualLexicon();
 	}
 
 	public VisualStyle getVisualStyle() {
@@ -118,34 +125,80 @@ public class KGMLVisualStyleBuilder {
 		final DiscreteMapping<String, Double> nodeBorderMapping = (DiscreteMapping<String, Double>) discreteMappingFactory
 				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class,
 						BasicVisualLexicon.NODE_BORDER_WIDTH);
+		nodeBorderMapping.putMapValue("compound", 2d);
+		nodeBorderMapping.putMapValue("ortholog", 1d);
 		nodeBorderMapping.putMapValue("group", 5d);
+		
+		final DiscreteMapping<String, Integer> nodeLabelFontSizeMapping = (DiscreteMapping<String, Integer>) discreteMappingFactory
+				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class,
+						BasicVisualLexicon.NODE_LABEL_FONT_SIZE);
+		nodeLabelFontSizeMapping.putMapValue("compound", 6);
+		nodeLabelFontSizeMapping.putMapValue("ortholog", 9);
+		nodeLabelFontSizeMapping.putMapValue("group", 9);
+		nodeLabelFontSizeMapping.putMapValue("map", 9);
+		nodeLabelFontSizeMapping.putMapValue("gene", 9);
 
 		defStyle.addVisualMappingFunction(edgelinetypeMapping);
 		defStyle.addVisualMappingFunction(targetArrowShapeMapping);
 		
 		defStyle.addVisualMappingFunction(nodetypeMapping);
 		defStyle.addVisualMappingFunction(nodeBorderMapping);
-
+		defStyle.addVisualMappingFunction(nodeLabelFontSizeMapping);
+		
+		VisualMappingFunction<?, ?> labelPositionMap = createLabelPositionMapping(defStyle);
+		if(labelPositionMap != null) {
+			defStyle.addVisualMappingFunction(labelPositionMap);
+		}
 		return defStyle;
 	}
 
 	private final void createDefaults(final VisualStyle style) {
 		// Defaults for nodes
 		style.setDefaultValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, 8);
-		style.setDefaultValue(BasicVisualLexicon.NODE_LABEL_WIDTH, 80d);
-		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 1d);
-		style.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 230);
+		style.setDefaultValue(BasicVisualLexicon.NODE_LABEL_WIDTH, 110d);
+		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0d);
+		style.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 240);
 		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 255);
+		
+		Font nodeFont = new Font("HelveticaNeue", Font.PLAIN, 12);
+		style.setDefaultValue(BasicVisualLexicon.NODE_LABEL_FONT_FACE, nodeFont);
 
 		// Defaults for Edges
 		style.setDefaultValue(BasicVisualLexicon.EDGE_WIDTH, 1d);
-		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_FONT_SIZE, 14);
+		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_FONT_SIZE, 10);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_TRANSPARENCY, 255);
-		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_COLOR, Color.RED);
+		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_COLOR, new Color(0xdc143c, false));
 		style.setDefaultValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.NONE);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_UNSELECTED_PAINT, Color.DARK_GRAY);
 		style.setDefaultValue(BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT, Color.DARK_GRAY);
-		style.setDefaultValue(BasicVisualLexicon.EDGE_TRANSPARENCY, 200);
+		style.setDefaultValue(BasicVisualLexicon.EDGE_TRANSPARENCY, 180);
+
+		Font edgeFont = new Font("HelveticaNeue", Font.PLAIN, 12);
+		style.setDefaultValue(BasicVisualLexicon.EDGE_LABEL_FONT_FACE, edgeFont);
+		
+	}
+	private final VisualMappingFunction<?, ?> createLabelPositionMapping(final VisualStyle style) {
+		VisualProperty<?> labelPosition = null;
+		if(lexicons != null) {
+			for(VisualLexicon lex: lexicons) {
+				Set<VisualProperty<?>> vps = lex.getAllVisualProperties();
+				for(VisualProperty<?> vp:vps) {
+					if(vp.getIdString().equals("NODE_LABEL_POSITION")) {
+						labelPosition = vp;
+						break;
+					}
+				}
+			}
+			if(labelPosition != null) {
+				Object compoundLabelPosition = labelPosition.parseSerializableString("S,N,c,0.00,2.00");
+				@SuppressWarnings("unchecked")
+				final DiscreteMapping<String, Object> nodeLabelPositionMapping = (DiscreteMapping<String, Object>) discreteMappingFactory
+				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class, labelPosition);
+				nodeLabelPositionMapping.putMapValue("compound", compoundLabelPosition);
+				return nodeLabelPositionMapping;
+			}
+		}
+		return null;
 	}
 
 	public VisualStyle getGlobalVisualStyle() {

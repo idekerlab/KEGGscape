@@ -52,8 +52,8 @@ public class KGMLMapper {
 	private static final String ID_DELIMITER = " ";
 
 	// Default values
-	private static final String MAP_COLOR = "#6999AE";
-	private static final String TITLE_COLOR = "#32CCB6";
+	private static final String MAP_COLOR = "#89b9cE";
+	private static final String TITLE_COLOR = "#f5f5f5";
 	private static final String DEF_TEXT_COLOR = "#000000";
 	private static final String DEF_FILL_COLOR = "#FFFFFF";
 

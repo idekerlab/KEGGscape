@@ -74,6 +74,8 @@ public class CyActivator extends AbstractCyActivator {
 		final CyNetworkManager cyNetworkManager = getService(bc, CyNetworkManager.class);
 		final CyRootNetworkManager cyRootNetworkManager = getService(bc, CyRootNetworkManager.class);
 		final CyGroupFactory groupFactory = getService(bc, CyGroupFactory.class);
+		
+		final VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
 
 		LoadNetworkURLTaskFactory loadNetworkURLTaskFactory = getService(bc, LoadNetworkURLTaskFactory.class);
 		
@@ -84,9 +86,7 @@ public class CyActivator extends AbstractCyActivator {
 				"(mapping.type=discrete)");
 		
 		KGMLVisualStyleBuilder vsBuilder = new KGMLVisualStyleBuilder(vsFactoryServiceRef,
-				discreteMappingFactoryRef, passthroughMappingFactoryRef);
-		
-		VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
+				discreteMappingFactoryRef, passthroughMappingFactoryRef, vmm);
 		
 		// readers
 		final CyFileFilter keggscapeReaderFilter = new KeggscapeFileFilter(new String[] { "xml", "kgml"},
@@ -118,9 +118,9 @@ public class CyActivator extends AbstractCyActivator {
 		final ExpandPathwayContextMenuTaskFactory expandPathwayContextMenuTaskFactory = new ExpandPathwayContextMenuTaskFactory(loadNetworkURLTaskFactory);
 		final Properties nodeProp = new Properties();
 		nodeProp.setProperty("preferredTaskManager", "menu");
-		nodeProp.setProperty(PREFERRED_MENU, NODE_APPS_MENU);
-		nodeProp.setProperty(MENU_GRAVITY, "11.0");
-		nodeProp.setProperty(TITLE, "Load this KEGG pathway...");
+		nodeProp.setProperty(PREFERRED_MENU, "KEGGScape[1]");
+		nodeProp.setProperty(MENU_GRAVITY, "0.0");
+		nodeProp.setProperty(TITLE, "Expand selected KEGG pathway node...");
 		registerService(bc, expandPathwayContextMenuTaskFactory, NodeViewTaskFactory.class, nodeProp);
 			//new KeggscapeTaskFactory(), // Implementation
 //			TaskFactory.class, // Interface

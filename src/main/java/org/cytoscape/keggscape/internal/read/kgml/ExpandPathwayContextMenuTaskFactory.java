@@ -37,8 +37,7 @@ public class ExpandPathwayContextMenuTaskFactory extends AbstractNodeViewTaskFac
 		String mapID = idList.get(0);
 		// Get collection name
 		final CyNetwork network = netView.getModel();
-		final CyRootNetwork root = ((CySubNetwork)network).getRootNetwork();
-		String collectionName = root.getRow(root).get(CyNetwork.NAME, String.class);
+		final String pathwayName = network.getRow(nodeView.getModel()).get(KGMLMapper.KEGG_NODE_LABEL_LIST_FIRST, String.class);
 		
 		if (mapID == null)
 			throw new NullPointerException("Map ID is null.");
@@ -50,8 +49,7 @@ public class ExpandPathwayContextMenuTaskFactory extends AbstractNodeViewTaskFac
 			try {
 				resourceURL = new URL(urlString);
 				System.out.println("URL = " + resourceURL.toString());
-				System.out.println("collection = " + collectionName);
-				return new TaskIterator(new ExpandPathwayTask(loadNetworkURLTaskFactory, resourceURL));
+				return new TaskIterator(new ExpandPathwayTask(loadNetworkURLTaskFactory, resourceURL, pathwayName, mapID));
 			} catch (IOException e) {
 				throw new IllegalStateException("Could not open connection to KEGG REST API.", e);
 			}
