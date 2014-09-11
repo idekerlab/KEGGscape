@@ -13,7 +13,7 @@ import org.junit.Test;
 public class DiseasePathwayTest extends AbstractKeggReaderTest {
 
 	@Test
-	public void testMetabolicPathway() throws Exception {
+	public void testDiseasePathway() throws Exception {
 		final String collectionName = "KEGG Metabolic Pathways";
 		final String humanCancer = "src/test/resources/testData/kgml/non-metabolic/organisms/hsa/hsa05200.xml";
 
@@ -23,7 +23,7 @@ public class DiseasePathwayTest extends AbstractKeggReaderTest {
 		final List<CyNode> nodes = humanCancerNetwork.getNodeList();
 		final List<CyEdge> edges = humanCancerNetwork.getEdgeList();
 
-		assertEquals(251, nodes.size());
+		assertEquals(252, nodes.size());
 		assertEquals(181, edges.size());
 	}
 

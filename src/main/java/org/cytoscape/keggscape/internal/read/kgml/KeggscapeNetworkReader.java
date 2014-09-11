@@ -6,6 +6,7 @@ import java.io.InputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.cytoscape.group.CyGroupFactory;
 import org.cytoscape.io.read.AbstractCyNetworkReader;
 import org.cytoscape.keggscape.internal.KGMLVisualStyleBuilder;
 import org.cytoscape.keggscape.internal.generated.Pathway;
@@ -19,7 +20,9 @@ import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
+import org.cytoscape.work.ProvidesTitle;
 import org.cytoscape.work.TaskMonitor;
+import org.cytoscape.work.Tunable;
 import org.cytoscape.work.util.ListSingleSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +41,21 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 
 	private final VisualMappingManager vmm;
 	private final KGMLVisualStyleBuilder vsBuilder;
+	private final CyGroupFactory groupFactory;
+	
+	
+	@Tunable(description="Import pathway details from KEGG Database")
+	public boolean importFull = false;
+	
+	@ProvidesTitle
+	public String getTitle() {
+		return "Import KEGG Pathway";
+	}
 
 	public KeggscapeNetworkReader(final String collectionName, InputStream is, CyNetworkViewFactory cyNetworkViewFactory,
 			CyNetworkFactory cyNetworkFactory, CyNetworkManager cyNetworkManager,
 			CyRootNetworkManager cyRootNetworkManager, final KGMLVisualStyleBuilder vsBuilder,
-			final VisualMappingManager vmm) {
+			final VisualMappingManager vmm, final CyGroupFactory groupFactory) {
 		super(is, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager);
 
 		if (is == null) {
@@ -53,6 +66,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		this.collectionName = collectionName;
 		this.vmm = vmm;
 		this.vsBuilder = vsBuilder;
+		this.groupFactory = groupFactory;
 	}
 
 	@Override
@@ -69,9 +83,6 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		
 		if(collectionName != null) {
 			ListSingleSelection<String> rootList = getRootNetworkList();
-//			ListSingleSelection<String> targetColumnList = getTargetColumnList();
-			
-//			targetColumnList.setPossibleValues();
 			if(rootList.getPossibleValues().contains(collectionName)) {
 				// Collection already exists.
 				rootList.setSelectedValue(collectionName);
@@ -104,7 +115,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		this.networks = new CyNetwork[1];
 		this.networks[0] = network;
 
-		mapper = new KGMLMapper(pathway, network);
+		mapper = new KGMLMapper(pathway, network, groupFactory);
 		mapper.doMapping();
 
 		final String pathwayID = mapper.getPathwayId();

@@ -8,6 +8,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import org.cytoscape.ding.NetworkViewTestSupport;
+import org.cytoscape.group.CyGroupFactory;
+import org.cytoscape.group.CyGroupManager;
 import org.cytoscape.io.read.CyNetworkReader;
 import org.cytoscape.keggscape.internal.KGMLVisualStyleBuilder;
 import org.cytoscape.keggscape.internal.read.kgml.KeggscapeNetworkReader;
@@ -35,12 +37,14 @@ public abstract class AbstractKeggReaderTest {
 	private VisualMappingManager vmm;
 	private KGMLVisualStyleBuilder builder;
 	private TaskMonitor tm;
+	private CyGroupFactory groupFactory;
 
 	@Before
 	public void setUp() throws Exception {
 		this.tm = mock(TaskMonitor.class);
 		this.vmm = mock(VisualMappingManager.class);
 		this.builder = mock(KGMLVisualStyleBuilder.class);
+		this.groupFactory = mock(CyGroupFactory.class);
 	}
 
 	@After
@@ -50,7 +54,7 @@ public abstract class AbstractKeggReaderTest {
 	protected final CyNetworkView loadKGML(final String collectionName, final String fileName) throws Exception {
 		final InputStream is = new FileInputStream(fileName);
 		final CyNetworkReader reader = new KeggscapeNetworkReader(collectionName, is, viewFactory, networkFactory,
-				networkManager, rootNetworkManager, builder, vmm);
+				networkManager, rootNetworkManager, builder, vmm, groupFactory);
 		reader.run(tm);
 		is.close();
 		final CyNetwork[] networks = reader.getNetworks();

@@ -1,19 +1,28 @@
 package org.cytoscape.keggscape.internal;
 
 import static org.cytoscape.work.ServiceProperties.ID;
+import static org.cytoscape.work.ServiceProperties.MENU_GRAVITY;
+import static org.cytoscape.work.ServiceProperties.NODE_APPS_MENU;
+import static org.cytoscape.work.ServiceProperties.PREFERRED_MENU;
+import static org.cytoscape.work.ServiceProperties.TITLE;
 
 import java.util.Properties;
 
+import org.cytoscape.group.CyGroupFactory;
+import org.cytoscape.group.CyGroupManager;
 import org.cytoscape.io.CyFileFilter;
 import org.cytoscape.io.DataCategory;
 import org.cytoscape.io.read.InputStreamTaskFactory;
 import org.cytoscape.io.util.StreamUtil;
+import org.cytoscape.keggscape.internal.read.kgml.ExpandPathwayContextMenuTaskFactory;
 import org.cytoscape.keggscape.internal.read.kgml.KeggscapeFileFilter;
 import org.cytoscape.keggscape.internal.read.kgml.KeggscapeNetworkReaderFactory;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.service.util.AbstractCyActivator;
+import org.cytoscape.task.NodeViewTaskFactory;
+import org.cytoscape.task.read.LoadNetworkURLTaskFactory;
 import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
@@ -64,6 +73,9 @@ public class CyActivator extends AbstractCyActivator {
 		final CyNetworkFactory cyNetworkFactory = getService(bc, CyNetworkFactory.class);
 		final CyNetworkManager cyNetworkManager = getService(bc, CyNetworkManager.class);
 		final CyRootNetworkManager cyRootNetworkManager = getService(bc, CyRootNetworkManager.class);
+		final CyGroupFactory groupFactory = getService(bc, CyGroupFactory.class);
+
+		LoadNetworkURLTaskFactory loadNetworkURLTaskFactory = getService(bc, LoadNetworkURLTaskFactory.class);
 		
 		VisualStyleFactory vsFactoryServiceRef = getService(bc, VisualStyleFactory.class); 
 		VisualMappingFunctionFactory passthroughMappingFactoryRef = getService(bc, VisualMappingFunctionFactory.class,
@@ -81,7 +93,7 @@ public class CyActivator extends AbstractCyActivator {
 				new String[] { "application/xml" }, "KEGG XML Files (KGML)", DataCategory.NETWORK, streamUtil);
 		final KeggscapeNetworkReaderFactory kgmlReaderFactory = new KeggscapeNetworkReaderFactory(
 				keggscapeReaderFilter, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager,
-				vsBuilder, vmm);
+				vsBuilder, vmm, groupFactory);
 		final Properties keggscapeNetworkReaderFactoryProps = new Properties();
 
 
@@ -102,6 +114,14 @@ public class CyActivator extends AbstractCyActivator {
 		keggscapeNetworkReaderFactoryProps.put(ID, "keggscapeNetworkReaderFactory");
 
 		registerService(bc, kgmlReaderFactory, InputStreamTaskFactory.class, keggscapeNetworkReaderFactoryProps);
+		
+		final ExpandPathwayContextMenuTaskFactory expandPathwayContextMenuTaskFactory = new ExpandPathwayContextMenuTaskFactory(loadNetworkURLTaskFactory);
+		final Properties nodeProp = new Properties();
+		nodeProp.setProperty("preferredTaskManager", "menu");
+		nodeProp.setProperty(PREFERRED_MENU, NODE_APPS_MENU);
+		nodeProp.setProperty(MENU_GRAVITY, "11.0");
+		nodeProp.setProperty(TITLE, "Load this KEGG pathway...");
+		registerService(bc, expandPathwayContextMenuTaskFactory, NodeViewTaskFactory.class, nodeProp);
 			//new KeggscapeTaskFactory(), // Implementation
 //			TaskFactory.class, // Interface
 //			properties); // Service properties
