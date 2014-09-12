@@ -234,13 +234,67 @@ public class KGMLMapper {
 		if (graphics.getName() != null) {
 			mapIdList(graphics.getName(), NAME_DELIMITER, row, KEGG_NODE_LABEL_LIST);
 		}
-		row.set(KEGG_NODE_X, graphics.getX());
-		row.set(KEGG_NODE_Y, graphics.getY());
-		row.set(KEGG_NODE_WIDTH, graphics.getWidth());
-		row.set(KEGG_NODE_HEIGHT, graphics.getHeight());
-		row.set(KEGG_NODE_LABEL, graphics.getName());
-		row.set(KEGG_NODE_SHAPE, graphics.getType());
+		
+		final String type = graphics.getType();
+		if(type.equals("line")) {
+			lineMapper(row, graphics);
+		} else {
+			row.set(KEGG_NODE_X, graphics.getX());
+			row.set(KEGG_NODE_Y, graphics.getY());
+			row.set(KEGG_NODE_WIDTH, graphics.getWidth());
+			row.set(KEGG_NODE_HEIGHT, graphics.getHeight());
+			row.set(KEGG_NODE_LABEL, graphics.getName());
+			row.set(KEGG_NODE_SHAPE, graphics.getType());
+		}
+		
 	}
+	
+	private final void lineMapper(CyRow row, Graphics g) {
+		// This is ployline node.
+		final String coords = g.getCoords();
+		final String[] parts = coords.split(",");
+		
+
+		final List<String[]> coordList = new ArrayList<String[]>();
+		int partsLen = parts.length;
+		for(int i=0; i<partsLen; i = i+2) {
+			System.out.println("NUM=" + parts[i] + "---");
+			final String[] tuple = new String[2];
+			tuple[0] = parts[i];
+			tuple[1] = parts[i+1];
+			coordList.add(tuple);
+		}
+		
+		String[] first = coordList.get(0);
+		String[] last = coordList.get(coordList.size()-1);
+		
+		int x1 = Integer.parseInt(first[0]);
+		int y1 = Integer.parseInt(first[1]);
+		int x2 = Integer.parseInt(last[0]);
+		int y2 = Integer.parseInt(last[1]);
+		Integer centerX = null;
+		Integer centerY = null;
+		if(x1>x2) {
+			centerX = (x1-x2)/2 + x2;
+		} else {
+			centerX = (x2-x1)/2 + x1;
+		}
+		if(y1>y2) {
+			centerY = (y1-y2)/2 + y2;
+		} else {
+			centerY = (y2-y1)/2 + y1;
+		}
+		
+		
+			row.set(KEGG_NODE_X, centerX.toString());
+			row.set(KEGG_NODE_Y, centerY.toString());
+			row.set(KEGG_NODE_WIDTH, "2");
+			row.set(KEGG_NODE_HEIGHT, "2");
+			row.set(KEGG_NODE_LABEL, g.getName());
+			row.set(KEGG_NODE_SHAPE, "circle");
+		
+	}
+	
 
 	/**
 	 * Create group nodes.
