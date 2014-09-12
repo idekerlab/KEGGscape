@@ -159,6 +159,10 @@ public class KGMLVisualStyleBuilder {
 		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0d);
 		style.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 240);
 		style.setDefaultValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 255);
+		style.setDefaultValue(BasicVisualLexicon.NODE_SIZE, 70d);
+		style.setDefaultValue(BasicVisualLexicon.NODE_HEIGHT, 70d);
+		style.setDefaultValue(BasicVisualLexicon.NODE_WIDTH, 70d);
+		style.setDefaultValue(BasicVisualLexicon.NODE_FILL_COLOR, new Color(0x0066bb, false));
 		
 		Font nodeFont = new Font("HelveticaNeue", Font.PLAIN, 12);
 		style.setDefaultValue(BasicVisualLexicon.NODE_LABEL_FONT_FACE, nodeFont);

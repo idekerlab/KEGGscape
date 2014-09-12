@@ -11,14 +11,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.cytoscape.group.CyGroup;
 import org.cytoscape.group.CyGroupFactory;
-import org.cytoscape.group.CyGroupManager;
 import org.cytoscape.keggscape.internal.generated.Component;
 import org.cytoscape.keggscape.internal.generated.Entry;
 import org.cytoscape.keggscape.internal.generated.Graphics;
@@ -35,10 +32,6 @@ import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
 import org.cytoscape.model.subnetwork.CyRootNetwork;
 import org.cytoscape.model.subnetwork.CySubNetwork;
-import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
-import org.cytoscape.view.presentation.property.LineTypeVisualProperty;
-import org.cytoscape.view.presentation.property.values.ArrowShape;
-import org.cytoscape.view.presentation.property.values.LineType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,6 +70,8 @@ public class KGMLMapper {
 	public static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
 	public static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
 	public static final String KEGG_NODE_REACTIONID = "KEGG_NODE_REACTIONID";
+	
+	public static final String KEGG_DEFINITION = "KEGG_DEFINITION";
 
 	public static final String KEGG_NODE_TYPE = "KEGG_NODE_TYPE";
 	public static final String KEGG_NODE_SHAPE = "KEGG_NODE_SHAPE";

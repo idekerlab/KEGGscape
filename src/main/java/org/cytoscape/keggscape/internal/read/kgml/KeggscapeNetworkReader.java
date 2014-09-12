@@ -10,6 +10,7 @@ import org.cytoscape.group.CyGroupFactory;
 import org.cytoscape.io.read.AbstractCyNetworkReader;
 import org.cytoscape.keggscape.internal.KGMLVisualStyleBuilder;
 import org.cytoscape.keggscape.internal.generated.Pathway;
+import org.cytoscape.keggscape.internal.wsclient.MapExtraDataTask;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
@@ -28,11 +29,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(KeggscapeNetworkReader.class);
 
 	private static final String PACKAGE_NAME = "org.cytoscape.keggscape.internal.generated";
-	
+
 	private Pathway pathway;
 	private KGMLMapper mapper;
 
@@ -42,20 +43,19 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	private final VisualMappingManager vmm;
 	private final KGMLVisualStyleBuilder vsBuilder;
 	private final CyGroupFactory groupFactory;
-	
-	
-	@Tunable(description="Import pathway details from KEGG Database")
+
+	@Tunable(description = "Import pathway details from KEGG Database")
 	public boolean importFull = false;
-	
+
 	@ProvidesTitle
 	public String getTitle() {
 		return "Import KEGG Pathway";
 	}
 
-	public KeggscapeNetworkReader(final String collectionName, InputStream is, CyNetworkViewFactory cyNetworkViewFactory,
-			CyNetworkFactory cyNetworkFactory, CyNetworkManager cyNetworkManager,
-			CyRootNetworkManager cyRootNetworkManager, final KGMLVisualStyleBuilder vsBuilder,
-			final VisualMappingManager vmm, final CyGroupFactory groupFactory) {
+	public KeggscapeNetworkReader(final String collectionName, InputStream is,
+			CyNetworkViewFactory cyNetworkViewFactory, CyNetworkFactory cyNetworkFactory,
+			CyNetworkManager cyNetworkManager, CyRootNetworkManager cyRootNetworkManager,
+			final KGMLVisualStyleBuilder vsBuilder, final VisualMappingManager vmm, final CyGroupFactory groupFactory) {
 		super(is, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager);
 
 		if (is == null) {
@@ -79,21 +79,21 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
-		if(taskMonitor != null) {
+		if (taskMonitor != null) {
 			taskMonitor.setTitle("Loading KEGG Pathway");
 			taskMonitor.setStatusMessage("Loading KEGG Pathway file in KGML format...");
 			taskMonitor.setProgress(-1.0);
 		}
 		pathway = null;
-		
-		if(collectionName != null) {
+
+		if (collectionName != null) {
 			ListSingleSelection<String> rootList = getRootNetworkList();
-			if(rootList.getPossibleValues().contains(collectionName)) {
+			if (rootList.getPossibleValues().contains(collectionName)) {
 				// Collection already exists.
 				rootList.setSelectedValue(collectionName);
 			}
 		}
-		
+
 		CyRootNetwork rootNetwork = getRootNetwork();
 		final CyNetwork network;
 		if (rootNetwork != null) {
@@ -103,7 +103,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 			// Need to create new network with new root.
 			network = (CySubNetwork) cyNetworkFactory.createNetwork();
 		}
-		
+
 		try {
 			final JAXBContext jaxbContext = JAXBContext.newInstance(PACKAGE_NAME, this.getClass().getClassLoader());
 			final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -150,9 +150,17 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		}
 		vmm.setCurrentVisualStyle(keggStyle);
 
-		if(taskMonitor != null) {
+		if (taskMonitor != null) {
 			taskMonitor.setStatusMessage("KEGG Pathway successfully loaded.");
 			taskMonitor.setProgress(1.0);
+		}
+
+		if (importFull) {
+			insertTasksAfterCurrentTask(new MapExtraDataTask(network));
+			if (taskMonitor != null) {
+				taskMonitor.setStatusMessage("KEGG Loading more data from KEGG...");
+				taskMonitor.setProgress(-1.0);
+			}
 		}
 	}
 
