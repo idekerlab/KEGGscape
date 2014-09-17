@@ -9,7 +9,6 @@ import java.io.InputStream;
 
 import org.cytoscape.ding.NetworkViewTestSupport;
 import org.cytoscape.group.CyGroupFactory;
-import org.cytoscape.group.CyGroupManager;
 import org.cytoscape.io.read.CyNetworkReader;
 import org.cytoscape.keggscape.internal.KGMLVisualStyleBuilder;
 import org.cytoscape.keggscape.internal.read.kgml.KeggscapeNetworkReader;

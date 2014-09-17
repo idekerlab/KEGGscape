@@ -85,6 +85,10 @@ public class KGMLVisualStyleBuilder {
 		final PassthroughMapping<String, String> edgeLabelPassthrough = (PassthroughMapping<String, String>) passthroughMappingFactory
 				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_LABEL, String.class,
 						BasicVisualLexicon.EDGE_LABEL);
+		
+		final PassthroughMapping<String, Paint> edgeColorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
+				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_COLOR, String.class,
+						BasicVisualLexicon.EDGE_UNSELECTED_PAINT);
 
 		defStyle.addVisualMappingFunction(nodexPassthrough);
 		defStyle.addVisualMappingFunction(nodeyPassthrough);
@@ -96,6 +100,7 @@ public class KGMLVisualStyleBuilder {
 		defStyle.addVisualMappingFunction(nodefillcolorPassthrough);
 		
 		defStyle.addVisualMappingFunction(edgeLabelPassthrough);
+		defStyle.addVisualMappingFunction(edgeColorPassthrough);
 
 		final DiscreteMapping<String, LineType> edgelinetypeMapping = (DiscreteMapping<String, LineType>) discreteMappingFactory
 				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_SUBTYPES, String.class,
@@ -108,6 +113,7 @@ public class KGMLVisualStyleBuilder {
 		final DiscreteMapping<String, ArrowShape> targetArrowShapeMapping = (DiscreteMapping<String, ArrowShape>) discreteMappingFactory
 				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_SUBTYPES, String.class,
 						BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE);
+		targetArrowShapeMapping.putMapValue("irreversible", ArrowShapeVisualProperty.ARROW);
 		targetArrowShapeMapping.putMapValue("activation", ArrowShapeVisualProperty.ARROW);
 		targetArrowShapeMapping.putMapValue("inhibition", ArrowShapeVisualProperty.T);
 		targetArrowShapeMapping.putMapValue("expression", ArrowShapeVisualProperty.ARROW);
@@ -120,14 +126,19 @@ public class KGMLVisualStyleBuilder {
 		nodetypeMapping.putMapValue("gene", NodeShapeVisualProperty.RECTANGLE);
 		nodetypeMapping.putMapValue("map", NodeShapeVisualProperty.ROUND_RECTANGLE);
 		nodetypeMapping.putMapValue("compound", NodeShapeVisualProperty.ELLIPSE);
-		nodetypeMapping.putMapValue("group", NodeShapeVisualProperty.ROUND_RECTANGLE);
+		nodetypeMapping.putMapValue("group", NodeShapeVisualProperty.RECTANGLE);
 
 		final DiscreteMapping<String, Double> nodeBorderMapping = (DiscreteMapping<String, Double>) discreteMappingFactory
 				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class,
 						BasicVisualLexicon.NODE_BORDER_WIDTH);
 		nodeBorderMapping.putMapValue("compound", 2d);
 		nodeBorderMapping.putMapValue("ortholog", 1d);
-		nodeBorderMapping.putMapValue("group", 5d);
+		nodeBorderMapping.putMapValue("group", 1d);
+		
+		final DiscreteMapping<String, Integer> nodeTransparencyMapping = (DiscreteMapping<String, Integer>) discreteMappingFactory
+				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class,
+						BasicVisualLexicon.NODE_TRANSPARENCY);
+		nodeTransparencyMapping.putMapValue("group", 0);
 		
 		final DiscreteMapping<String, Integer> nodeLabelFontSizeMapping = (DiscreteMapping<String, Integer>) discreteMappingFactory
 				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class,
@@ -144,6 +155,7 @@ public class KGMLVisualStyleBuilder {
 		defStyle.addVisualMappingFunction(nodetypeMapping);
 		defStyle.addVisualMappingFunction(nodeBorderMapping);
 		defStyle.addVisualMappingFunction(nodeLabelFontSizeMapping);
+		defStyle.addVisualMappingFunction(nodeTransparencyMapping);
 		
 		VisualMappingFunction<?, ?> labelPositionMap = createLabelPositionMapping(defStyle);
 		if(labelPositionMap != null) {
@@ -217,12 +229,14 @@ public class KGMLVisualStyleBuilder {
 						BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
 		originalStyle.addVisualMappingFunction(edgeColorPassthrough);
 		originalStyle.addVisualMappingFunction(edgeStrokeColorPassthrough);
+		
+		originalStyle.removeVisualMappingFunction(BasicVisualLexicon.NODE_BORDER_WIDTH);
 
-		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 180);
+		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 230);
 		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_TRANSPARENCY, 180);
 		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0d);
-		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_FILL_COLOR, new Color(204, 255, 255));
-		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_WIDTH, 5d);
+		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_FILL_COLOR, Color.white);
+		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_WIDTH, 6d);
 		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.NONE);
 
 		return originalStyle;

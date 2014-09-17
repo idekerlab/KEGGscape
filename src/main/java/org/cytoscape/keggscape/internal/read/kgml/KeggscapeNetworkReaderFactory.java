@@ -3,7 +3,6 @@ package org.cytoscape.keggscape.internal.read.kgml;
 import java.io.InputStream;
 
 import org.cytoscape.group.CyGroupFactory;
-import org.cytoscape.group.CyGroupManager;
 import org.cytoscape.io.CyFileFilter;
 import org.cytoscape.keggscape.internal.KGMLVisualStyleBuilder;
 import org.cytoscape.model.CyNetworkFactory;
@@ -20,13 +19,13 @@ public class KeggscapeNetworkReaderFactory extends AbstractReaderFactory {
 
 	private final KGMLVisualStyleBuilder vsBuilder;
 	private final VisualMappingManager vmm;
-	
+
 	private final CyGroupFactory groupFactory;
 
 	public KeggscapeNetworkReaderFactory(final CyFileFilter filter, final CyNetworkViewFactory cyNetworkViewFactory,
 			final CyNetworkFactory cyNetworkFactory, final CyNetworkManager cyNetworkManager,
-			final CyRootNetworkManager cyRootNetworkManager, KGMLVisualStyleBuilder vsBuilder, VisualMappingManager vmm,
-			final CyGroupFactory groupFactory) {
+			final CyRootNetworkManager cyRootNetworkManager, KGMLVisualStyleBuilder vsBuilder,
+			VisualMappingManager vmm, final CyGroupFactory groupFactory) {
 		super(filter, cyNetworkViewFactory, cyNetworkFactory);
 
 		this.cyNetworkManager = cyNetworkManager;

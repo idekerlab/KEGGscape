@@ -23,8 +23,8 @@ public class DiseasePathwayTest extends AbstractKeggReaderTest {
 		final List<CyNode> nodes = humanCancerNetwork.getNodeList();
 		final List<CyEdge> edges = humanCancerNetwork.getEdgeList();
 
-		assertEquals(252, nodes.size());
-		assertEquals(181, edges.size());
+		assertEquals(265, nodes.size());
+		assertEquals(204, edges.size());
 	}
 
 }

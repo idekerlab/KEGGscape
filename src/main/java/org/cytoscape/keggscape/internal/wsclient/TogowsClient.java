@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.cytoscape.keggscape.internal.read.kgml.KEGGTags;
 import org.cytoscape.keggscape.internal.read.kgml.KGMLMapper;
 import org.cytoscape.model.CyColumn;
 import org.cytoscape.model.CyNetwork;
@@ -73,7 +74,7 @@ public class TogowsClient {
 		JsonNode diseases = rootNode.get(DISEASES);
 		JsonNode modules = rootNode.get(MODULES);
 		JsonNode genes = rootNode.get(GENES);
-		JsonNode compounds = rootNode.get("compounds");
+//		JsonNode compounds = rootNode.get("compounds");
 		System.out.println("id: " + id.textValue());
 		System.out.println("name: " + name.textValue());
 		System.out.println("desc: " + description.textValue());
@@ -112,7 +113,14 @@ public class TogowsClient {
 	private final void mapGenes(final JsonNode genes, CyNetwork network) {
 		final List<CyNode> nodes = network.getNodeList();
 		for(final CyNode node: nodes) {
-			final List<String> nameList = network.getRow(node).getList(KGMLMapper.KEGG_ID, String.class);
+			final CyRow row = network.getRow(node);
+			final String type = row.get(KGMLMapper.KEGG_NODE_TYPE, String.class);
+			if(type == null || type.equals(KEGGTags.GENE.getTag()) == false) {
+				continue;
+			}
+			
+			final List<String> nameList = row.getList(KGMLMapper.KEGG_ID, String.class);
+			
 			JsonNode gene = null;
 			for(final String name: nameList) {
 				final String originalId = name.split(":")[1];
@@ -126,9 +134,9 @@ public class TogowsClient {
 			
 			final String geneText = gene.textValue();
 			final String[] parts = geneText.split(";");
-			network.getRow(node).set(KGMLMapper.KEGG_DEFINITION, parts[1]);
+			row.set(KGMLMapper.KEGG_DEFINITION, parts[1]);
 			// Replace label
-			network.getRow(node).set(KGMLMapper.KEGG_NODE_LABEL_LIST_FIRST, parts[0]);
+			row.set(KGMLMapper.KEGG_NODE_LABEL_LIST_FIRST, parts[0]);
 		}
 	}
 	
