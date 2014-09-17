@@ -2,7 +2,7 @@ package org.cytoscape.keggscape.internal.read.kgml;
 
 public enum KEGGTags {
 	
-	COMPOUND("compound"), MAP("map"), GROUP("group"), GENE("gene");
+	COMPOUND("compound"), MAP("map"), GROUP("group"), GENE("gene"), LINE("line");
 	
 	private final String tag;
 	

@@ -14,7 +14,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.cytoscape.keggscape.internal.read.kgml.KEGGTags;
-import org.cytoscape.keggscape.internal.read.kgml.KGMLMapper;
+import org.cytoscape.keggscape.internal.read.kgml.KeggConstants;
 import org.cytoscape.model.CyColumn;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
@@ -98,7 +98,7 @@ public class TogowsClient {
 	
 	private final void createColumns(final CyNetwork network) {
 		network.getDefaultNetworkTable().createColumn(DESCRIPTION, String.class, false);
-		network.getDefaultNodeTable().createColumn(KGMLMapper.KEGG_DEFINITION, String.class, false);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_DEFINITION, String.class, false);
 
 		network.getDefaultNetworkTable().createListColumn(MODULES, String.class, false);
 		network.getDefaultNetworkTable().createListColumn(DISEASES, String.class, false);
@@ -114,12 +114,12 @@ public class TogowsClient {
 		final List<CyNode> nodes = network.getNodeList();
 		for(final CyNode node: nodes) {
 			final CyRow row = network.getRow(node);
-			final String type = row.get(KGMLMapper.KEGG_NODE_TYPE, String.class);
+			final String type = row.get(KeggConstants.KEGG_NODE_TYPE, String.class);
 			if(type == null || type.equals(KEGGTags.GENE.getTag()) == false) {
 				continue;
 			}
 			
-			final List<String> nameList = row.getList(KGMLMapper.KEGG_ID, String.class);
+			final List<String> nameList = row.getList(KeggConstants.KEGG_ID, String.class);
 			
 			JsonNode gene = null;
 			for(final String name: nameList) {
@@ -134,9 +134,9 @@ public class TogowsClient {
 			
 			final String geneText = gene.textValue();
 			final String[] parts = geneText.split(";");
-			row.set(KGMLMapper.KEGG_DEFINITION, parts[1]);
+			row.set(KeggConstants.KEGG_DEFINITION, parts[1]);
 			// Replace label
-			row.set(KGMLMapper.KEGG_NODE_LABEL_LIST_FIRST, parts[0]);
+			row.set(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST, parts[0]);
 		}
 	}
 	

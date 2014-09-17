@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 import org.cytoscape.group.CyGroupFactory;
 import org.cytoscape.io.CyFileFilter;
-import org.cytoscape.keggscape.internal.KGMLVisualStyleBuilder;
+import org.cytoscape.keggscape.internal.style.KGMLVisualStyleBuilder;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;

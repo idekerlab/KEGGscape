@@ -1,4 +1,4 @@
-package org.cytoscape.keggscape.internal.wsclient;
+package org.cytoscape.keggscape.internal.task;
 
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.task.AbstractNetworkTaskFactory;

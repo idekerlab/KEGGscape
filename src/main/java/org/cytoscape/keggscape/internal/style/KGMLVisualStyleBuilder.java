@@ -1,11 +1,13 @@
-package org.cytoscape.keggscape.internal;
+package org.cytoscape.keggscape.internal.style;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Paint;
 import java.util.Set;
 
-import org.cytoscape.keggscape.internal.read.kgml.KGMLMapper;
+import org.cytoscape.keggscape.internal.read.kgml.KEGGTags;
+import org.cytoscape.keggscape.internal.read.kgml.KeggConstants;
+import org.cytoscape.model.CyNetwork;
 import org.cytoscape.view.model.VisualLexicon;
 import org.cytoscape.view.model.VisualProperty;
 import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
@@ -63,31 +65,31 @@ public class KGMLVisualStyleBuilder {
 		createDefaults(defStyle);
 
 		final PassthroughMapping<String, Double> nodexPassthrough = (PassthroughMapping<String, Double>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_X, String.class, BasicVisualLexicon.NODE_X_LOCATION);
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_X, String.class, BasicVisualLexicon.NODE_X_LOCATION);
 		final PassthroughMapping<String, Double> nodeyPassthrough = (PassthroughMapping<String, Double>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_Y, String.class, BasicVisualLexicon.NODE_Y_LOCATION);
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_Y, String.class, BasicVisualLexicon.NODE_Y_LOCATION);
 		final PassthroughMapping<String, Double> nodewidthPassthrough = (PassthroughMapping<String, Double>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_WIDTH, String.class, BasicVisualLexicon.NODE_WIDTH);
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_WIDTH, String.class, BasicVisualLexicon.NODE_WIDTH);
 		final PassthroughMapping<String, Double> nodeheightPassthrough = (PassthroughMapping<String, Double>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_HEIGHT, String.class, BasicVisualLexicon.NODE_HEIGHT);
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_HEIGHT, String.class, BasicVisualLexicon.NODE_HEIGHT);
 		final PassthroughMapping<String, String> nodelabelPassthrough = (PassthroughMapping<String, String>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_LABEL_LIST_FIRST, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST, String.class,
 						BasicVisualLexicon.NODE_LABEL);
 		final PassthroughMapping<String, Paint> nodelabelcolorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_LABEL_COLOR, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_LABEL_COLOR, String.class,
 						BasicVisualLexicon.NODE_LABEL_COLOR);
 		final PassthroughMapping<String, Paint> nodefillcolorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_FILL_COLOR, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_FILL_COLOR, String.class,
 						BasicVisualLexicon.NODE_FILL_COLOR);
 		final PassthroughMapping<String, String> nodeTooltipPassthrough = (PassthroughMapping<String, String>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_LABEL, String.class, BasicVisualLexicon.NODE_TOOLTIP);
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_LABEL, String.class, BasicVisualLexicon.NODE_TOOLTIP);
 
 		final PassthroughMapping<String, String> edgeLabelPassthrough = (PassthroughMapping<String, String>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_LABEL, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_EDGE_LABEL, String.class,
 						BasicVisualLexicon.EDGE_LABEL);
 		
 		final PassthroughMapping<String, Paint> edgeColorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_COLOR, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_EDGE_COLOR, String.class,
 						BasicVisualLexicon.EDGE_UNSELECTED_PAINT);
 
 		defStyle.addVisualMappingFunction(nodexPassthrough);
@@ -103,7 +105,7 @@ public class KGMLVisualStyleBuilder {
 		defStyle.addVisualMappingFunction(edgeColorPassthrough);
 
 		final DiscreteMapping<String, LineType> edgelinetypeMapping = (DiscreteMapping<String, LineType>) discreteMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_SUBTYPES, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_EDGE_SUBTYPES, String.class,
 						BasicVisualLexicon.EDGE_LINE_TYPE);
 		edgelinetypeMapping.putMapValue("maplink", LineTypeVisualProperty.LONG_DASH);
 		edgelinetypeMapping.putMapValue("state change", LineTypeVisualProperty.DOT);
@@ -111,7 +113,7 @@ public class KGMLVisualStyleBuilder {
 		edgelinetypeMapping.putMapValue("indirect effect", LineTypeVisualProperty.LONG_DASH);
 		
 		final DiscreteMapping<String, ArrowShape> targetArrowShapeMapping = (DiscreteMapping<String, ArrowShape>) discreteMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_SUBTYPES, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_EDGE_SUBTYPES, String.class,
 						BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE);
 		targetArrowShapeMapping.putMapValue("irreversible", ArrowShapeVisualProperty.ARROW);
 		targetArrowShapeMapping.putMapValue("activation", ArrowShapeVisualProperty.ARROW);
@@ -121,7 +123,7 @@ public class KGMLVisualStyleBuilder {
 		targetArrowShapeMapping.putMapValue("indirect effect", ArrowShapeVisualProperty.HALF_TOP);
 		
 		final DiscreteMapping<String, NodeShape> nodetypeMapping = (DiscreteMapping<String, NodeShape>) discreteMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class, BasicVisualLexicon.NODE_SHAPE);
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_TYPE, String.class, BasicVisualLexicon.NODE_SHAPE);
 		nodetypeMapping.putMapValue("ortholog", NodeShapeVisualProperty.RECTANGLE);
 		nodetypeMapping.putMapValue("gene", NodeShapeVisualProperty.RECTANGLE);
 		nodetypeMapping.putMapValue("map", NodeShapeVisualProperty.ROUND_RECTANGLE);
@@ -129,19 +131,19 @@ public class KGMLVisualStyleBuilder {
 		nodetypeMapping.putMapValue("group", NodeShapeVisualProperty.RECTANGLE);
 
 		final DiscreteMapping<String, Double> nodeBorderMapping = (DiscreteMapping<String, Double>) discreteMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_TYPE, String.class,
 						BasicVisualLexicon.NODE_BORDER_WIDTH);
 		nodeBorderMapping.putMapValue("compound", 2d);
 		nodeBorderMapping.putMapValue("ortholog", 1d);
 		nodeBorderMapping.putMapValue("group", 1d);
 		
 		final DiscreteMapping<String, Integer> nodeTransparencyMapping = (DiscreteMapping<String, Integer>) discreteMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_TYPE, String.class,
 						BasicVisualLexicon.NODE_TRANSPARENCY);
 		nodeTransparencyMapping.putMapValue("group", 0);
 		
 		final DiscreteMapping<String, Integer> nodeLabelFontSizeMapping = (DiscreteMapping<String, Integer>) discreteMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_TYPE, String.class,
 						BasicVisualLexicon.NODE_LABEL_FONT_SIZE);
 		nodeLabelFontSizeMapping.putMapValue("compound", 6);
 		nodeLabelFontSizeMapping.putMapValue("ortholog", 9);
@@ -209,7 +211,7 @@ public class KGMLVisualStyleBuilder {
 				Object compoundLabelPosition = labelPosition.parseSerializableString("S,N,c,0.00,2.00");
 				@SuppressWarnings("unchecked")
 				final DiscreteMapping<String, Object> nodeLabelPositionMapping = (DiscreteMapping<String, Object>) discreteMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_NODE_TYPE, String.class, labelPosition);
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_TYPE, String.class, labelPosition);
 				nodeLabelPositionMapping.putMapValue("compound", compoundLabelPosition);
 				return nodeLabelPositionMapping;
 			}
@@ -218,25 +220,77 @@ public class KGMLVisualStyleBuilder {
 	}
 
 	public VisualStyle getGlobalVisualStyle() {
-		final VisualStyle originalStyle = this.getVisualStyle();
+		// First, create standard style.
+		final VisualStyle originalStyle = vsFactory.createVisualStyle(this.getVisualStyle());
 		originalStyle.setTitle(GLOBAL_VS_NAME);
+		final Set<VisualPropertyDependency<?>> deps = originalStyle.getAllVisualPropertyDependencies();
 
+		// handle locked values
+		for (VisualPropertyDependency<?> dep : deps) {
+			if (dep.getIdString().equals("nodeSizeLocked")) {
+				if (dep.isDependencyEnabled()) {
+					dep.setDependency(false);
+				}
+			}
+			if (dep.getIdString().equals("arrowColorMatchesEdge")) {
+				dep.setDependency(true);
+			}
+		}
+
+		// Then, update for Global Map.
+		originalStyle.removeVisualMappingFunction(BasicVisualLexicon.NODE_BORDER_WIDTH);
+		originalStyle.removeVisualMappingFunction(BasicVisualLexicon.NODE_LABEL_TRANSPARENCY);
+		originalStyle.removeVisualMappingFunction(BasicVisualLexicon.NODE_TRANSPARENCY);
+		
+		final DiscreteMapping<String, Integer> nodeTransparencyMapping = (DiscreteMapping<String, Integer>) discreteMappingFactory
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_TYPE, String.class,
+						BasicVisualLexicon.NODE_TRANSPARENCY);
+		nodeTransparencyMapping.putMapValue(KEGGTags.GROUP.getTag(), 0);
+		nodeTransparencyMapping.putMapValue(KEGGTags.MAP.getTag(), 100);
+		
+		final DiscreteMapping<String, Integer> nodeLabelTransparencyMapping = (DiscreteMapping<String, Integer>) discreteMappingFactory
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_TYPE, String.class,
+						BasicVisualLexicon.NODE_LABEL_TRANSPARENCY);
+		nodeLabelTransparencyMapping.putMapValue(KEGGTags.GROUP.getTag(), 0);
+		nodeLabelTransparencyMapping.putMapValue(KEGGTags.MAP.getTag(), 240);
+		
+		final PassthroughMapping<String, String> nodeTooltipPassthrough = (PassthroughMapping<String, String>) passthroughMappingFactory
+				.createVisualMappingFunction(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST, String.class,
+						BasicVisualLexicon.NODE_TOOLTIP);
+		
+		final PassthroughMapping<String, String> edgeTooltipPassthrough = (PassthroughMapping<String, String>) passthroughMappingFactory
+				.createVisualMappingFunction(CyNetwork.NAME, String.class,
+						BasicVisualLexicon.EDGE_TOOLTIP);
+		
 		final PassthroughMapping<String, Paint> edgeColorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_COLOR, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_EDGE_COLOR, String.class,
 						BasicVisualLexicon.EDGE_UNSELECTED_PAINT);
+		
 		final PassthroughMapping<String, Paint> edgeStrokeColorPassthrough = (PassthroughMapping<String, Paint>) passthroughMappingFactory
-				.createVisualMappingFunction(KGMLMapper.KEGG_EDGE_COLOR, String.class,
+				.createVisualMappingFunction(KeggConstants.KEGG_EDGE_COLOR, String.class,
 						BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
+		
+		DiscreteMapping<String, Integer> nodeFontSizeMapping = (DiscreteMapping<String, Integer>) originalStyle.getVisualMappingFunction(BasicVisualLexicon.NODE_LABEL_FONT_SIZE);
+		nodeFontSizeMapping.putMapValue(KEGGTags.MAP.getTag(), 14);
+		
+		originalStyle.addVisualMappingFunction(nodeTransparencyMapping);
+		originalStyle.addVisualMappingFunction(nodeLabelTransparencyMapping);
+		originalStyle.addVisualMappingFunction(nodeTooltipPassthrough);
+		
+		originalStyle.addVisualMappingFunction(edgeTooltipPassthrough);
 		originalStyle.addVisualMappingFunction(edgeColorPassthrough);
 		originalStyle.addVisualMappingFunction(edgeStrokeColorPassthrough);
 		
-		originalStyle.removeVisualMappingFunction(BasicVisualLexicon.NODE_BORDER_WIDTH);
 
-		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 230);
-		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_TRANSPARENCY, 180);
+		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, 240);
+		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_LABEL_TRANSPARENCY, 100);
+		
+		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_TRANSPARENCY, 200);
 		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0d);
+		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_LABEL_WIDTH, 150d);
 		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_FILL_COLOR, Color.white);
-		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_WIDTH, 6d);
+		originalStyle.setDefaultValue(BasicVisualLexicon.NODE_LABEL_COLOR, new Color(80, 80, 80));
+		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_WIDTH, 7d);
 		originalStyle.setDefaultValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.NONE);
 
 		return originalStyle;

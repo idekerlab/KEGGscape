@@ -8,9 +8,9 @@ import javax.xml.bind.Unmarshaller;
 
 import org.cytoscape.group.CyGroupFactory;
 import org.cytoscape.io.read.AbstractCyNetworkReader;
-import org.cytoscape.keggscape.internal.KGMLVisualStyleBuilder;
 import org.cytoscape.keggscape.internal.generated.Pathway;
-import org.cytoscape.keggscape.internal.wsclient.MapExtraDataTask;
+import org.cytoscape.keggscape.internal.style.KGMLVisualStyleBuilder;
+import org.cytoscape.keggscape.internal.task.MapExtraDataTask;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
@@ -43,6 +43,9 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	private final VisualMappingManager vmm;
 	private final KGMLVisualStyleBuilder vsBuilder;
 	private final CyGroupFactory groupFactory;
+	
+	private VisualStyle keggStyle = null;
+	
 
 	@Tunable(description = "Import pathway details from KEGG Database")
 	public boolean importFull = false;
@@ -70,11 +73,9 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	}
 
 	@Override
-	public CyNetworkView buildCyNetworkView(CyNetwork network) {
-		final CyNetworkView view = cyNetworkViewFactory.createNetworkView(network);
-
+	public CyNetworkView buildCyNetworkView(final CyNetwork network) {
+		return cyNetworkViewFactory.createNetworkView(network);
 		// TODO Apply (X,Y) to the nodes
-		return view;
 	}
 
 	@Override
@@ -84,6 +85,7 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 			taskMonitor.setStatusMessage("Loading KEGG Pathway file in KGML format...");
 			taskMonitor.setProgress(-1.0);
 		}
+		
 		pathway = null;
 
 		if (collectionName != null) {
@@ -125,31 +127,33 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 
 		final String pathwayID = mapper.getPathwayId();
 
-		VisualStyle keggStyle = null;
-		String targetStyleName = KGMLVisualStyleBuilder.DEF_VS_NAME;
-
-		// Special case: Global Map
-		if (pathwayID.equals("01100") || pathwayID.equals("01110")) {
+		final String targetStyleName;
+		if (KGMLMapper.GLOBAL_MAP_ID.contains(pathwayID)) {
 			targetStyleName = KGMLVisualStyleBuilder.GLOBAL_VS_NAME;
+		} else {
+			targetStyleName = KGMLVisualStyleBuilder.DEF_VS_NAME;
 		}
 
 		// Check Visual Style exists or not
-		for (VisualStyle style : vmm.getAllVisualStyles()) {
+		for (final VisualStyle style : vmm.getAllVisualStyles()) {
 			if (style.getTitle().equals(targetStyleName)) {
 				keggStyle = style;
 				break;
 			}
 		}
+		
 		if (keggStyle == null) {
-			if (pathwayID.equals("01100") || pathwayID.equals("01110")) {
+			// Need to create custom style.
+			if (KGMLMapper.GLOBAL_MAP_ID.contains(pathwayID)) {
 				keggStyle = vsBuilder.getGlobalVisualStyle();
 			} else {
 				keggStyle = vsBuilder.getVisualStyle();
 			}
 			vmm.addVisualStyle(keggStyle);
 		}
+		
 		vmm.setCurrentVisualStyle(keggStyle);
-
+		
 		if (taskMonitor != null) {
 			taskMonitor.setStatusMessage("KEGG Pathway successfully loaded.");
 			taskMonitor.setProgress(1.0);

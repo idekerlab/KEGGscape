@@ -41,8 +41,7 @@ public class KGMLMapper {
 
 	private static final Logger logger = LoggerFactory.getLogger(KGMLMapper.class);
 
-	private static final URL CPD_RESOURCE = KGMLMapper.class.getClassLoader().getResource("compoundNames.txt");
-
+	// Delimiters
 	private static final String NAME_DELIMITER = ", ";
 	private static final String ID_DELIMITER = " ";
 
@@ -51,74 +50,14 @@ public class KGMLMapper {
 	private static final String TITLE_COLOR = "#f5f5f5";
 	private static final String DEF_TEXT_COLOR = "#000000";
 	private static final String DEF_FILL_COLOR = "#FFFFFF";
-
-	private final Pathway pathway;
-	private String pathwayIdString = null;
-
-	private final CyNetwork network;
-
-	public static final String KEGG_PATHWAY_ID = "KEGG_PATHWAY_ID";
-	public static final String KEGG_PATHWAY_IMAGE = "KEGG_PATHWAY_IMAGE";
-	public static final String KEGG_PATHWAY_LINK = "KEGG_PATHWAY_LINK";
-
-	public static final String KEGG_NODE_X = "KEGG_NODE_X";
-	public static final String KEGG_NODE_Y = "KEGG_NODE_Y";
-	public static final String KEGG_NODE_WIDTH = "KEGG_NODE_WIDTH";
-	public static final String KEGG_NODE_HEIGHT = "KEGG_NODE_HEIGHT";
-	public static final String KEGG_NODE_LABEL = "KEGG_NODE_LABEL";
-	public static final String KEGG_NODE_LABEL_LIST_FIRST = "KEGG_NODE_LABEL_LIST_FIRST";
-	public static final String KEGG_NODE_LABEL_LIST = "KEGG_NODE_LABEL_LIST";
-	public static final String KEGG_ID = "KEGG_ID";
-	public static final String KEGG_NODE_LABEL_COLOR = "KEGG_NODE_LABEL_COLOR";
-	public static final String KEGG_NODE_FILL_COLOR = "KEGG_NODE_FILL_COLOR";
-	public static final String KEGG_NODE_REACTIONID = "KEGG_NODE_REACTIONID";
 	
-	public static final String KEGG_DEFINITION = "KEGG_DEFINITION";
+	private static final String EMPTY_COLOR_TAG = "none";
 
-	public static final String KEGG_NODE_TYPE = "KEGG_NODE_TYPE";
-	public static final String KEGG_NODE_SHAPE = "KEGG_NODE_SHAPE";
+	// For building groups
+	private final CyGroupFactory groupFactory;
 
-	public static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
-	public static final String KEGG_REACTION_TYPE = "KEGG_REACTION_TYPE";
-	public static final String KEGG_EDGE_COLOR = "KEGG_EDGE_COLOR";
-	public static final String KEGG_EDGE_SUBTYPES = "KEGG_EDGE_SUBTYPES";
-	public static final String KEGG_EDGE_LABEL = "KEGG_EDGE_LABEL";
-
-	public static final String KEGG_EXPRESSION = "KEGG_EXPRESSION";
-	public static final String KEGG_INDIRECTEFFECT = "KEGG_INDIRECTEFFECT";
-	public static final String KEGG_BINDINGASSOCIATION = "KEGG_BINDINGASSOCIATION";
-	public static final String KEGG_ACTIVATION = "KEGG_ACTIVATION";
-	public static final String KEGG_INHIBITION = "KEGG_INHIBITION";
-	public static final String KEGG_PHOSPHORYLATION = "KEGG_PHOSPHORYLATION";
-	public static final String KEGG_DEPHOSPHORYLATION = "KEGG_DEPHOSPHORYLATION";
-
-	final String[] lightBlueMap = { "Other types of O-glycan biosynthesis", "Lipopolysaccharide biosynthesis",
-			"Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate",
-			"Glycosphingolipid biosynthesis - ganglio series", "Glycosphingolipid biosynthesis - globo series",
-			"Glycosphingolipid biosynthesis - lacto and neolacto series",
-			"Glycosylphosphatidylinositol(GPI)-anchor biosynthesis", "Glycosaminoglycan degradation",
-			"Various types of N-glycan biosynthesis", "Glycosaminoglycan biosynthesis - keratan sulfate",
-			"Mucin type O-Glycan biosynthesis", "N-Glycan biosynthesis",
-			"Glycosaminoglycan biosynthesis - heparan sulfate / heparin", "Other glycan degradation" };
-	final String[] lightBrownMap = { "Aminobenzoate degradation", "Atrazine degradation", "Benzoate degradation",
-			"Bisphenol degradation", "Caprolactam degradation", "Chlorocyclohexane and chlorobenzene degradation",
-			"DDT degradation", "Dioxin degradation", "Drug metabolism - cytochrome P450",
-			"Drug metabolism - other enzymes", "Ethylbenzene degradation", "Fluorobenzoate degradation",
-			"Metabolism of xenobiotics by cytochrome P450", "Naphthalene degradation",
-			"Polycyclic aromatic hydrocarbon degradation", "Steroid degradation", "Styrene degradation",
-			"Toluene degradation", "Xylene degradation" };
-	final String[] blueMap = { "Amino sugar and nucleotide sugar metabolism", "Ascorbate and aldarate metabolism",
-			"Pentose and glucuronate interconversions", "Glycolysis / Gluconeogenesis",
-			"Inositol phosphate metabolism", "Propanoate metabolism", "Pyruvate metabolism",
-			"Glyoxylate and dicarboxylate metabolism", "Citrate cycle (TCA cycle)", "Galactose metabolism",
-			"C5-Branched dibasic acid metabolism", "Starch and sucrose metabolism", "Pentose phosphate pathway",
-			"Fructose and mannose metabolism" };
-	final String[] pinkMap = { "Vitamin B6 metabolism", "One carbon pool by folate", "Riboflavin metabolism",
-			"Thiamine metabolism", "Folate biosynthesis", "Nicotinate and nicotinamide metabolism",
-			"Porphyrin and chlorophyll metabolism", "Biotin metabolism",
-			"Ubiquinone and other terpenoid-quinone biosynthesis", "Pantothenate and CoA biosynthesis" };
-
-	private static Map<String, String> CPD2NAME = new HashMap<String, String>();
+	private static final Map<String, String> CPD2NAME = new HashMap<String, String>();
+	private static final URL CPD_RESOURCE = KGMLMapper.class.getClassLoader().getResource("compoundNames.txt");
 	
 	static {
 		try {
@@ -133,9 +72,11 @@ public class KGMLMapper {
 			reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error("Could not read compound name list.", e);
 		}
 	}
 	
+	// Convert relation type to KEGG style edge label.
 	private static final Map<String, String> EDGE_TYPE_TO_LABEL = new HashMap<String, String>();
 	
 	static {
@@ -148,40 +89,39 @@ public class KGMLMapper {
 		EDGE_TYPE_TO_LABEL.put("methylation","+m");
 		EDGE_TYPE_TO_LABEL.put("expression", "e");
 	}
-
-	final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
-	final Map<String, String> cpdNameMap = new HashMap<String, String>();
-	final List<String> groupnodeIds = new ArrayList<String>();
-	final List<String> maplinkIds = new ArrayList<String>();
 	
+	protected static final Set<String> GLOBAL_MAP_ID = new HashSet<String>();
+	static {
+		GLOBAL_MAP_ID.add("01100");
+		GLOBAL_MAP_ID.add("01110");
+	}
+
+	private final Map<String, CyNode> nodeMap = new HashMap<String, CyNode>();
+	private final List<String> maplinkIds = new ArrayList<String>();
 	private final Set<String> relationNames = new HashSet<String>();
 	private final Map<String, String> reactionColors = new HashMap<String, String>();
 
-	private final CyGroupFactory groupFactory;
-	
-	private boolean isGlobal = false;
+	private final Pathway pathway;
+	private final CyNetwork network;
 
 	public KGMLMapper(final Pathway pathway, final CyNetwork network, final CyGroupFactory groupFactory) {
 		this.pathway = pathway;
 		this.network = network;
 		this.groupFactory = groupFactory;
-		
-		logger.warn("$$$$$$$$$$$$$$$$$$$$$$$$$$ created");
-		
-		if(pathway.getNumber().equals("01100") || pathway.getNumber().equals("01110")) {
-			this.isGlobal = true;
-		}
-
-		mapPathwayMetadata(pathway, network);
 	}
 
+
 	public void doMapping() throws IOException {
-		// Test exists or not
-		if (network.getDefaultNodeTable().getColumn(KEGG_NODE_X) == null) {
+		mapNetworkTable(pathway, network);
+		
+		// Test columns exists or not
+		if (network.getDefaultNodeTable().getColumn(KeggConstants.KEGG_NODE_X) == null) {
 			createKeggNodeTable();
 			createKeggEdgeTable();
 		}
-		if (pathway.getNumber().equals("01100") || pathway.getNumber().equals("01110")) {
+		
+		if (GLOBAL_MAP_ID.contains(pathway.getNumber())) {
+			// This is a global pathway.  Needs special handling.
 			mapGlobalEntries();
 			mapGlobalReactions();
 		} else {
@@ -189,36 +129,36 @@ public class KGMLMapper {
 			mapRelations();
 			mapReactions();
 
-			// Add group information. This should be the last step since it
-			// requires
-			// both nodes and edges.
+			// This should be called here since it requires both nodes and edges.
 			mapGroups();
 			mapExtraRelations();
 		}
 	}
 
 	private void createKeggEdgeTable() {
-		network.getDefaultEdgeTable().createColumn(KEGG_RELATION_TYPE, String.class, true);
-		network.getDefaultEdgeTable().createColumn(KEGG_REACTION_TYPE, String.class, true);
-		network.getDefaultEdgeTable().createColumn(KEGG_EDGE_COLOR, String.class, true);
-		network.getDefaultEdgeTable().createListColumn(KEGG_EDGE_SUBTYPES, String.class, false);
-		network.getDefaultEdgeTable().createColumn(KEGG_EDGE_LABEL, String.class, false);
+		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_RELATION_TYPE, String.class, true);
+		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_REACTION_TYPE, String.class, true);
+		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_EDGE_COLOR, String.class, true);
+		network.getDefaultEdgeTable().createListColumn(KeggConstants.KEGG_EDGE_SUBTYPES, String.class, true);
+		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_EDGE_LABEL, String.class, true);
 	}
 
 	private void createKeggNodeTable() {
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_X, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_Y, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_WIDTH, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_HEIGHT, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL_LIST_FIRST, String.class, true);
-		network.getDefaultNodeTable().createListColumn(KEGG_NODE_LABEL_LIST, String.class, true);
-		network.getDefaultNodeTable().createListColumn(KEGG_ID, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_LABEL_COLOR, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_FILL_COLOR, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_REACTIONID, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_TYPE, String.class, true);
-		network.getDefaultNodeTable().createColumn(KEGG_NODE_SHAPE, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_X, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_Y, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_WIDTH, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_HEIGHT, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_LABEL, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST, String.class, true);
+		network.getDefaultNodeTable().createListColumn(KeggConstants.KEGG_NODE_LABEL_LIST, String.class, true);
+		network.getDefaultNodeTable().createListColumn(KeggConstants.KEGG_ID, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_LABEL_COLOR, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_FILL_COLOR, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_REACTIONID, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_TYPE, String.class, true);
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_NODE_SHAPE, String.class, true);
+		
+		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_LINK, String.class, true);
 	}
 
 	private final String getUniqueName(final Entry entry) {
@@ -228,11 +168,14 @@ public class KGMLMapper {
 	private final void basicNodeMapping(final CyRow row, final Entry entry) {
 		// Add Pathway ID as prefix.
 		row.set(CyNetwork.NAME, getUniqueName(entry));
+		row.set(KeggConstants.KEGG_NODE_REACTIONID, entry.getReaction());
+		row.set(KeggConstants.KEGG_NODE_TYPE, entry.getType());
+		
+		if(entry.getLink() != null) {
+			row.set(KeggConstants.KEGG_LINK, entry.getLink());
+		}
 
-		row.set(KEGG_NODE_REACTIONID, entry.getReaction());
-		row.set(KEGG_NODE_TYPE, entry.getType());
-
-		mapIdList(entry.getName(), ID_DELIMITER, row, KEGG_ID);
+		mapIdList(entry.getName(), ID_DELIMITER, row, KeggConstants.KEGG_ID);
 
 		final List<Graphics> graphicsList = entry.getGraphics();
 		if (graphicsList == null || graphicsList.isEmpty()) {
@@ -242,24 +185,30 @@ public class KGMLMapper {
 
 		final Graphics graphics = graphicsList.get(0);
 		if (graphics.getName() != null) {
-			mapIdList(graphics.getName(), NAME_DELIMITER, row, KEGG_NODE_LABEL_LIST);
+			mapIdList(graphics.getName(), NAME_DELIMITER, row, KeggConstants.KEGG_NODE_LABEL_LIST);
 		}
 		
 		final String type = graphics.getType();
-		if(type.equals("line")) {
+		if(type.equals(KEGGTags.LINE.getTag())) {
 			lineMapper(entry, row, graphics);
 		} else {
-			row.set(KEGG_NODE_X, graphics.getX());
-			row.set(KEGG_NODE_Y, graphics.getY());
-			row.set(KEGG_NODE_WIDTH, graphics.getWidth());
-			row.set(KEGG_NODE_HEIGHT, graphics.getHeight());
-			row.set(KEGG_NODE_LABEL, graphics.getName());
-			row.set(KEGG_NODE_SHAPE, graphics.getType());
+			row.set(KeggConstants.KEGG_NODE_X, graphics.getX());
+			row.set(KeggConstants.KEGG_NODE_Y, graphics.getY());
+			row.set(KeggConstants.KEGG_NODE_WIDTH, graphics.getWidth());
+			row.set(KeggConstants.KEGG_NODE_HEIGHT, graphics.getHeight());
+			row.set(KeggConstants.KEGG_NODE_LABEL, graphics.getName());
+			row.set(KeggConstants.KEGG_NODE_SHAPE, graphics.getType());
 		}
 	}
 	
-	private final void lineMapper(Entry entry, CyRow row, Graphics g) {
-		// This is ployline node.
+	/**
+	 * Handle polyline node.
+	 * 
+	 * @param entry
+	 * @param row
+	 * @param g
+	 */
+	private final void lineMapper(final Entry entry, final CyRow row, final Graphics g) {
 		final String coords = g.getCoords();
 		
 		final String lineColor = g.getFgcolor();
@@ -300,13 +249,15 @@ public class KGMLMapper {
 			centerY = (y2-y1)/2 + y1;
 		}
 		
-		row.set(KEGG_NODE_X, centerX.toString());
-		row.set(KEGG_NODE_Y, centerY.toString());
-		row.set(KEGG_NODE_WIDTH, "1");
-		row.set(KEGG_NODE_HEIGHT, "1");
-		row.set(KEGG_NODE_LABEL, g.getName());
-		row.set(KEGG_NODE_SHAPE, "circle");
+		row.set(KeggConstants.KEGG_NODE_X, centerX.toString());
+		row.set(KeggConstants.KEGG_NODE_Y, centerY.toString());
+		row.set(KeggConstants.KEGG_NODE_WIDTH, "1");
+		row.set(KeggConstants.KEGG_NODE_HEIGHT, "1");
+		row.set(KeggConstants.KEGG_NODE_LABEL, g.getName());
+		row.set(KeggConstants.KEGG_NODE_SHAPE, "circle");
 		
+		// Use label color for nodes
+		row.set(KeggConstants.KEGG_NODE_FILL_COLOR, g.getFgcolor());
 	}
 	
 
@@ -338,7 +289,7 @@ public class KGMLMapper {
 				if (member != null) {
 					nodes.add(member);
 					// Add to label
-					String label = network.getRow(member).get(KEGG_NODE_LABEL_LIST_FIRST, String.class);
+					String label = network.getRow(member).get(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST, String.class);
 					builder.append(label + ", ");
 				}
 			}
@@ -356,36 +307,36 @@ public class KGMLMapper {
 			combinedLabel = combinedLabel.substring(0,  combinedLabel.length()-2);
 			
 			groupRow.set(CyRootNetwork.SHARED_NAME, getUniqueName(entry));
-			groupRow.set(KEGG_NODE_LABEL_LIST_FIRST, combinedLabel);
+			groupRow.set(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST, combinedLabel);
 			final Graphics graphics = entry.getGraphics().get(0);
-			groupRow.set(KEGG_NODE_X, graphics.getX());
-			groupRow.set(KEGG_NODE_Y, graphics.getY());
-			groupRow.set(KEGG_NODE_WIDTH, graphics.getWidth());
-			groupRow.set(KEGG_NODE_HEIGHT, graphics.getHeight());
-			groupRow.set(KEGG_NODE_LABEL, combinedLabel);
-			groupRow.set(KEGG_NODE_SHAPE, graphics.getType());
-			groupRow.set(KEGG_NODE_FILL_COLOR, graphics.getBgcolor());
-			groupRow.set(KEGG_NODE_TYPE, entryType);
+			groupRow.set(KeggConstants.KEGG_NODE_X, graphics.getX());
+			groupRow.set(KeggConstants.KEGG_NODE_Y, graphics.getY());
+			groupRow.set(KeggConstants.KEGG_NODE_WIDTH, graphics.getWidth());
+			groupRow.set(KeggConstants.KEGG_NODE_HEIGHT, graphics.getHeight());
+			groupRow.set(KeggConstants.KEGG_NODE_LABEL, combinedLabel);
+			groupRow.set(KeggConstants.KEGG_NODE_SHAPE, graphics.getType());
+			groupRow.set(KeggConstants.KEGG_NODE_FILL_COLOR, graphics.getBgcolor());
+			groupRow.set(KeggConstants.KEGG_NODE_TYPE, entryType);
 			
 		}
 	}
+
 	
-	private void addPlaceholderNode(Entry entry) {
+	private void addPlaceholderNode(final Entry entry) {
 			// Add placeholder node: This is purely for visualization.
 			
 			final Graphics graphics = entry.getGraphics().get(0);
 			final CyNode cyNode = network.addNode();
 			final CyRow row = network.getRow(cyNode);
 			row.set(CyNetwork.NAME, "container");
-			row.set(KEGG_NODE_X, graphics.getX());
-			row.set(KEGG_NODE_Y, graphics.getY());
-			row.set(KEGG_NODE_WIDTH, ((Integer)(Integer.parseInt(graphics.getWidth()) + 2)).toString());
-			row.set(KEGG_NODE_HEIGHT, ((Integer)(Integer.parseInt(graphics.getHeight()) + 2)).toString());
-			row.set(KEGG_NODE_SHAPE, graphics.getType());
-			row.set(KEGG_NODE_FILL_COLOR, graphics.getBgcolor());
-			row.set(KEGG_NODE_TYPE, entry.getType());
+			row.set(KeggConstants.KEGG_NODE_X, graphics.getX());
+			row.set(KeggConstants.KEGG_NODE_Y, graphics.getY());
+			row.set(KeggConstants.KEGG_NODE_WIDTH, ((Integer)(Integer.parseInt(graphics.getWidth()) + 2)).toString());
+			row.set(KeggConstants.KEGG_NODE_HEIGHT, ((Integer)(Integer.parseInt(graphics.getHeight()) + 2)).toString());
+			row.set(KeggConstants.KEGG_NODE_SHAPE, graphics.getType());
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, graphics.getBgcolor());
+			row.set(KeggConstants.KEGG_NODE_TYPE, entry.getType());
 			nodeMap.put(entry.getId(), cyNode);
-		
 	}
 
 	/**
@@ -443,30 +394,33 @@ public class KGMLMapper {
 		// Set text color column.
 		final String fgColor = graphics.getFgcolor();
 		if (fgColor == null || fgColor.equals("none")) {
-			row.set(KEGG_NODE_LABEL_COLOR, DEF_TEXT_COLOR);
+			row.set(KeggConstants.KEGG_NODE_LABEL_COLOR, DEF_TEXT_COLOR);
 		} else {
-			row.set(KEGG_NODE_LABEL_COLOR, fgColor);
+			row.set(KeggConstants.KEGG_NODE_LABEL_COLOR, fgColor);
 		}
 		
 		String fillColor = graphics.getBgcolor();
-		if (fillColor == null || fillColor.equals("none")) {
+		if (fillColor == null || fillColor.equals(EMPTY_COLOR_TAG)) {
 			fillColor = DEF_FILL_COLOR;
 		}
 
 		final String name = graphics.getName();
 		if (name != null && name.startsWith("TITLE")) {
-			row.set(KEGG_NODE_FILL_COLOR, TITLE_COLOR);
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, TITLE_COLOR);
 		} else if (entry.getType().equals(MAP.getTag())) {
-			row.set(KEGG_NODE_FILL_COLOR, MAP_COLOR);
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, MAP_COLOR);
 		} else if (entry.getType().equals(COMPOUND.getTag())) {
-			row.set(KEGG_NODE_LABEL_LIST_FIRST, CPD2NAME.get(row.get(KEGG_ID, List.class).get(0)));
-			row.set(KEGG_NODE_FILL_COLOR, fillColor);
+			row.set(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST, CPD2NAME.get(row.get(KeggConstants.KEGG_ID, List.class).get(0)));
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, fillColor);
 		} else {
-			row.set(KEGG_NODE_FILL_COLOR, fillColor);
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, fillColor);
 		}
 	}
 
-	private void mapGlobalEntries() {
+	/**
+	 * Map nodes in Global Map.
+	 */
+	private final void mapGlobalEntries() {
 		final List<Entry> entries = pathway.getEntry();
 
 		for (final Entry entry : entries) {
@@ -475,41 +429,52 @@ public class KGMLMapper {
 			basicNodeMapping(row, entry);
 
 			final Graphics graphics = entry.getGraphics().get(0);
-			
-			if (entry.getType().equals("map")
-					&& Arrays.asList(lightBlueMap).contains(graphics.getName())) {
-				row.set(KEGG_NODE_LABEL_COLOR, "#99CCFF");
-				row.set(KEGG_NODE_FILL_COLOR, "#FFFFFF");
-			} else if (entry.getType().equals("map")
-					&& Arrays.asList(lightBrownMap).contains(graphics.getName())) {
-				row.set(KEGG_NODE_LABEL_COLOR, "#DA8E82");
-				row.set(KEGG_NODE_FILL_COLOR, "#FFFFFF");
-			} else if (entry.getType().equals("map")
-					&& Arrays.asList(blueMap).contains(graphics.getName())) {
-				row.set(KEGG_NODE_LABEL_COLOR, "#8080F7");
-				row.set(KEGG_NODE_FILL_COLOR, "#FFFFFF");
-			} else if (entry.getType().equals("map")
-					&& Arrays.asList(blueMap).contains(graphics.getName())) {
-				row.set(KEGG_NODE_LABEL_COLOR, "#FFB3CC");
-				row.set(KEGG_NODE_FILL_COLOR, "#FFFFFF");
+			if(entry.getType().equals(KEGGTags.MAP.getTag())) {
+				updateGlobalMaps(row, entry, graphics);
 			} else {
-				String background = graphics.getBgcolor();
-				String textColor = graphics.getFgcolor();
-				
-				if(textColor.equals("none") == false) {
-					row.set(KEGG_NODE_LABEL_COLOR, textColor);
-				}
-				if(background.equals("none") == false) {
-					row.set(KEGG_NODE_FILL_COLOR, background);	
-				}
-				
-				if (entry.getType().equals("compound")) {
-					row.set(KEGG_NODE_LABEL_LIST_FIRST, CPD2NAME.get(row.get(KEGG_ID, List.class).get(0)));
-				}
+				mapGlobalMapColor(row, entry, graphics);
+			}
+			
+			if (entry.getType().equals(KEGGTags.COMPOUND.getTag())) {
+				row.set(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST,
+						CPD2NAME.get(row.get(KeggConstants.KEGG_ID, List.class).get(0)));
 			}
 			nodeMap.put(entry.getId(), cyNode);
 		}
 	}
+	
+	private final void mapGlobalMapColor(final CyRow row, final Entry entry, final Graphics graphics) {
+		String background = graphics.getBgcolor();
+		String textColor = graphics.getFgcolor();
+
+		if (textColor.equals(EMPTY_COLOR_TAG) == false) {
+			row.set(KeggConstants.KEGG_NODE_LABEL_COLOR, textColor);
+		}
+		if (background.equals(EMPTY_COLOR_TAG) == false) {
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, background);
+		}
+	}
+	
+	// TODO: is special handling necessary?
+	private final void updateGlobalMaps(final CyRow row, final Entry entry, final Graphics graphics) {
+		if (Arrays.asList(KeggConstants.lightBlueMap).contains(graphics.getName())) {
+			row.set(KeggConstants.KEGG_NODE_LABEL_COLOR, "#99CCFF");
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, "#FFFFFF");
+		} else if (Arrays.asList(KeggConstants.lightBrownMap).contains(graphics.getName())) {
+			row.set(KeggConstants.KEGG_NODE_LABEL_COLOR, "#DA8E82");
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, "#FFFFFF");
+		} else if (Arrays.asList(KeggConstants.blueMap).contains(graphics.getName())) {
+			row.set(KeggConstants.KEGG_NODE_LABEL_COLOR, "#8080F7");
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, "#FFFFFF");
+		} else if (Arrays.asList(KeggConstants.blueMap).contains(graphics.getName())) {
+			row.set(KeggConstants.KEGG_NODE_LABEL_COLOR, "#FFB3CC");
+			row.set(KeggConstants.KEGG_NODE_FILL_COLOR, "#FFFFFF");
+		} else {
+			// Regular map
+			mapGlobalMapColor(row, entry, graphics);
+		}
+	}
+	
 
 	private final void mapRelations() {
 		final List<Relation> relations = pathway.getRelation();
@@ -581,9 +546,9 @@ public class KGMLMapper {
 			final List<CyEdge> existingEdges = network.getConnectingEdgeList(cpdNode, pathwayNode, CyEdge.Type.ANY);
 			if (existingEdges.isEmpty()) {
 				final CyEdge newEdge = network.addEdge(cpdNode, pathwayNode, false);
-				network.getRow(newEdge).set(KEGG_RELATION_TYPE, relation.getType());
+				network.getRow(newEdge).set(KeggConstants.KEGG_RELATION_TYPE, relation.getType());
 				network.getRow(newEdge).set(CyEdge.INTERACTION, relation.getType());
-				network.getRow(newEdge).set(KEGG_EDGE_SUBTYPES, subtypes);
+				network.getRow(newEdge).set(KeggConstants.KEGG_EDGE_SUBTYPES, subtypes);
 			}
 		}
 	}
@@ -591,7 +556,7 @@ public class KGMLMapper {
 	private void mapRelationTableData(final CyEdge edge, Relation relation) {
 		final CyRow row = network.getRow(edge);
 		final String type = relation.getType();
-		row.set(KEGG_RELATION_TYPE, type);
+		row.set(KeggConstants.KEGG_RELATION_TYPE, type);
 		row.set(CyEdge.INTERACTION, type);
 		final String relationName = getRelationName(relation.getEntry1(), relation.getEntry2(), type);
 		row.set(CyNetwork.NAME, relationName);
@@ -612,8 +577,8 @@ public class KGMLMapper {
 			}
 		}
 	
-		row.set(KEGG_EDGE_SUBTYPES, subtypes);
-		row.set(KEGG_EDGE_LABEL, builder.toString());
+		row.set(KeggConstants.KEGG_EDGE_SUBTYPES, subtypes);
+		row.set(KeggConstants.KEGG_EDGE_LABEL, builder.toString());
 	}
 
 
@@ -644,36 +609,41 @@ public class KGMLMapper {
 	}
 	
 	private final void mapReactionTable(final CyRow row, Reaction reaction, List<String> subtypes) {
-		row.set(KEGG_REACTION_TYPE, reaction.getType());
+		row.set(KeggConstants.KEGG_REACTION_TYPE, reaction.getType());
 		row.set(CyEdge.INTERACTION, reaction.getType());
 		row.set(CyNetwork.NAME, reaction.getName());
-		row.set(KEGG_EDGE_SUBTYPES, subtypes);
+		row.set(KeggConstants.KEGG_EDGE_SUBTYPES, subtypes);
 		final String color = reactionColors.get(reaction.getName());
 		if (color != null) {
-			row.set(KEGG_EDGE_COLOR, color);
+			row.set(KeggConstants.KEGG_EDGE_COLOR, color);
 		}
 	}
 	
 
-	private void mapGlobalReactions() {
+	private final void mapGlobalReactions() {
 		final List<Reaction> reactions = pathway.getReaction();
-		for (Reaction reaction : reactions) {
+		
+		for (final Reaction reaction : reactions) {
 			final List<Substrate> substrates = reaction.getSubstrate();
 			final List<Product> products = reaction.getProduct();
-			for (Substrate substrate : substrates) {
+			
+			for (final Substrate substrate : substrates) {
 				final CyNode substrateNode = nodeMap.get(substrate.getId());
-				for (Product product : products) {
+				for (final Product product : products) {
 					final CyNode productNode = nodeMap.get(product.getId());
 					final CyEdge newEdge = network.addEdge(substrateNode, productNode, true);
-					mapReactionEdgeData(newEdge);
+					mapReactionEdgeData(newEdge, network.getRow(newEdge), reaction);
 				}
 			}
 		}
 	}
 	
-	private final void mapReactionEdgeData(CyEdge edge) {
+	private final void mapReactionEdgeData(final CyEdge edge, final CyRow row, Reaction reaction) {
 		final CyNode source = edge.getSource();
-		network.getRow(edge).set(KEGG_EDGE_COLOR, network.getRow(source).get(KEGG_NODE_FILL_COLOR, String.class));
+		network.getRow(edge).set(KeggConstants.KEGG_EDGE_COLOR, network.getRow(source).get(KeggConstants.KEGG_NODE_FILL_COLOR, String.class));
+		row.set(KeggConstants.KEGG_REACTION_TYPE, reaction.getType());
+		row.set(CyEdge.INTERACTION, reaction.getType());
+		row.set(CyNetwork.NAME, reaction.getName());
 	}
 
 	private final void mapIdList(final String idListText, final String delimiter, final CyRow row,
@@ -689,29 +659,28 @@ public class KGMLMapper {
 		}
 	}
 
-	private final void mapPathwayMetadata(final Pathway pathway, final CyNetwork network) {
+	private final void mapNetworkTable(final Pathway pathway, final CyNetwork network) {
 		final String pathwayName = pathway.getName();
 		final String linkToKegg = pathway.getLink();
 		final String linkToImage = pathway.getImage();
 		final String pathwayTitle = pathway.getTitle();
-		this.pathwayIdString = pathway.getNumber();
 
 		final CyRow networkRow = network.getRow(network);
 		networkRow.set(CyNetwork.NAME, pathwayTitle);
 
 		final CyTable netTable = network.getDefaultNetworkTable();
-		if (netTable.getColumn(KEGG_PATHWAY_ID) == null) {
-			netTable.createColumn(KEGG_PATHWAY_ID, String.class, true);
-			netTable.createColumn(KEGG_PATHWAY_IMAGE, String.class, true);
-			netTable.createColumn(KEGG_PATHWAY_LINK, String.class, true);
+		if (netTable.getColumn(KeggConstants.KEGG_PATHWAY_ID) == null) {
+			netTable.createColumn(KeggConstants.KEGG_PATHWAY_ID, String.class, true);
+			netTable.createColumn(KeggConstants.KEGG_PATHWAY_IMAGE, String.class, true);
+			netTable.createColumn(KeggConstants.KEGG_PATHWAY_LINK, String.class, true);
 		}
 
-		networkRow.set(KEGG_PATHWAY_LINK, linkToKegg);
-		networkRow.set(KEGG_PATHWAY_IMAGE, linkToImage);
-		networkRow.set(KEGG_PATHWAY_ID, pathwayName);
+		networkRow.set(KeggConstants.KEGG_PATHWAY_LINK, linkToKegg);
+		networkRow.set(KeggConstants.KEGG_PATHWAY_IMAGE, linkToImage);
+		networkRow.set(KeggConstants.KEGG_PATHWAY_ID, pathwayName);
 	}
 
-	public String getPathwayId() {
-		return pathwayIdString;
+	protected String getPathwayId() {
+		return pathway.getNumber();
 	}
 }
