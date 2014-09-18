@@ -5,6 +5,8 @@ public class KeggConstants {
 	public static final String KEGG_PATHWAY_ID = "KEGG_PATHWAY_ID";
 	public static final String KEGG_PATHWAY_IMAGE = "KEGG_PATHWAY_IMAGE";
 	public static final String KEGG_PATHWAY_LINK = "KEGG_PATHWAY_LINK";
+	public static final String KEGG_PATHWAY_ORG = "KEGG_PATHWAY_ORG";
+	
 	public static final String KEGG_NODE_X = "KEGG_NODE_X";
 	public static final String KEGG_NODE_Y = "KEGG_NODE_Y";
 	public static final String KEGG_NODE_WIDTH = "KEGG_NODE_WIDTH";

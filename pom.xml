@@ -13,8 +13,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cytoscape</groupId>
 	<artifactId>keggscape</artifactId>
-	<version>0.6.1</version>
-	<name>${bundle.name}</name>
+	<version>0.7.0</version>
+	<name>KEGGScape (${project.artifactId})</name>
 
 	<packaging>bundle</packaging>
 
@@ -237,8 +237,6 @@
 			<version>${cytoscape.api.version}</version>
 			<scope>test</scope>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>viewmodel-impl</artifactId>
@@ -252,8 +250,6 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.cytoscape</groupId>
 			<artifactId>vizmap-impl</artifactId>

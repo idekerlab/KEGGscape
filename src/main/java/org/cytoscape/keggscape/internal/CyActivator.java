@@ -115,7 +115,7 @@ public class CyActivator extends AbstractCyActivator {
 		final Properties openProp = new Properties();
 		openProp.setProperty("preferredTaskManager", "menu");
 		openProp.setProperty(PREFERRED_MENU, "KEGGScape[1]");
-		openProp.setProperty(MENU_GRAVITY, "0.0");
+		openProp.setProperty(MENU_GRAVITY, "10.0");
 		openProp.setProperty(TITLE, "View details in web browser...");
 		registerService(bc, openDetailsInBrowserTaskFactory, NodeViewTaskFactory.class, openProp);
 			//new KeggscapeTaskFactory(), // Implementation

@@ -270,6 +270,7 @@ public class KGMLVisualStyleBuilder {
 				.createVisualMappingFunction(KeggConstants.KEGG_EDGE_COLOR, String.class,
 						BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
 		
+		@SuppressWarnings("unchecked")
 		DiscreteMapping<String, Integer> nodeFontSizeMapping = (DiscreteMapping<String, Integer>) originalStyle.getVisualMappingFunction(BasicVisualLexicon.NODE_LABEL_FONT_SIZE);
 		nodeFontSizeMapping.putMapValue(KEGGTags.MAP.getTag(), 14);
 		

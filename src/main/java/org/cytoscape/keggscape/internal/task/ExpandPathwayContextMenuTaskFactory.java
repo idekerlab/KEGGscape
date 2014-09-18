@@ -50,7 +50,6 @@ public class ExpandPathwayContextMenuTaskFactory extends AbstractNodeViewTaskFac
 			URL resourceURL;
 			try {
 				resourceURL = new URL(urlString);
-				System.out.println("URL = " + resourceURL.toString());
 				return new TaskIterator(new ExpandPathwayTask(loadNetworkURLTaskFactory, resourceURL, pathwayName, mapID, netView, vmm));
 			} catch (IOException e) {
 				throw new IllegalStateException("Could not open connection to KEGG REST API.", e);
