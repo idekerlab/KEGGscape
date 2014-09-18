@@ -6,10 +6,6 @@ import java.awt.Dimension;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JList;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 
 public class PathwaySelectorDialog extends JDialog {
 
@@ -39,15 +35,14 @@ public class PathwaySelectorDialog extends JDialog {
 	}
 
 	private final void getSpeciesNames() {
-		final Client client = ClientBuilder.newClient();
-		WebTarget target = client.target("http://rest.kegg.jp/").path("list/organism");
-		String list = target.request(MediaType.TEXT_PLAIN_TYPE).get(String.class);
-		
-		final String[] entries = list.split("\\n");
-
-		for(String sp:entries) {
-			System.out.println(sp);
-			speciesBox.addItem(sp);
-		}
+//		final Client client = ClientBuilder.newClient();
+//		WebTarget target = client.target("http://rest.kegg.jp/").path("list/organism");
+//		String list = target.request(MediaType.TEXT_PLAIN_TYPE).get(String.class);
+//		
+//		final String[] entries = list.split("\\n");
+//
+//		for(String sp:entries) {
+//			speciesBox.addItem(sp);
+//		}
 	}
 }

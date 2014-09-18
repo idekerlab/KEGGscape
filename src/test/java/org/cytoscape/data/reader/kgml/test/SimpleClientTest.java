@@ -1,14 +1,25 @@
 package org.cytoscape.data.reader.kgml.test;
 
 
+import org.cytoscape.ding.NetworkViewTestSupport;
+import org.cytoscape.keggscape.internal.wsclient.TogowsClient;
+import org.cytoscape.model.CyNetwork;
+import org.cytoscape.model.CyNetworkFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class SimpleClientTest {
+	
+	private NetworkViewTestSupport support = new NetworkViewTestSupport();
+	private final CyNetworkFactory networkFactory = support.getNetworkFactory();
 
+	private CyNetwork network;
+	
 	@Before
 	public void setUp() throws Exception {
+	
+		this.network = networkFactory.createNetwork();
 	}
 
 	@After
@@ -18,15 +29,9 @@ public class SimpleClientTest {
 	
 	@Test
 	public void testClient() throws Exception {
-		// TODO: implement this!
+		TogowsClient client = new TogowsClient();
 		
-//		final HttpGet httpget = new HttpGet("http://taruo.net/e/");
-//		final DefaultHttpClient httpclient = new DefaultHttpClient();
-//		final HttpParams param = httpclient.getParams();
-//		HttpProtocolParams.setUserAgent(param, "Cytoscape ");
-//		final HttpResponse response = httpclient.execute(httpget);
-//		final HttpEntity entity = response.getEntity();
-//
-//		System.out.println(EntityUtils.toString(entity));
+		client.map("hsa00020", network);
+		
 	}
 }
