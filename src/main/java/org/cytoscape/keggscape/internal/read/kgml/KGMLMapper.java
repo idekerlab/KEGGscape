@@ -489,7 +489,6 @@ public class KGMLMapper {
 				final CyNode sourceNode = nodeMap.get(relation.getEntry1());
 				final CyNode targetNode = nodeMap.get(relation.getEntry2());
 				if (sourceNode == null || targetNode == null) {
-					System.out.println("MISSING!!!!!!!!!!!!!!!!!!!!!");
 					continue;
 				} else if (network.getNode(sourceNode.getSUID()) == null
 						|| network.getNode(targetNode.getSUID()) == null) {
@@ -515,7 +514,6 @@ public class KGMLMapper {
 			final CyNode sourceNode = nodeMap.get(relation.getEntry1());
 			final CyNode targetNode = nodeMap.get(relation.getEntry2());
 			if (sourceNode == null || targetNode == null) {
-				System.out.println("MISSING 222222222!!!!!!!!!!!!!!!!!!!!!");
 				continue;
 			}
 			final CyEdge newEdge = network.addEdge(sourceNode, targetNode, true);
@@ -664,20 +662,25 @@ public class KGMLMapper {
 		final String linkToKegg = pathway.getLink();
 		final String linkToImage = pathway.getImage();
 		final String pathwayTitle = pathway.getTitle();
+		final String organism = pathway.getOrg();
 
 		final CyRow networkRow = network.getRow(network);
-		networkRow.set(CyNetwork.NAME, pathwayTitle);
+		
+		// Make more usable name
+		networkRow.set(CyNetwork.NAME, pathwayTitle + " [" + organism + pathway.getNumber() + "]" );
 
 		final CyTable netTable = network.getDefaultNetworkTable();
 		if (netTable.getColumn(KeggConstants.KEGG_PATHWAY_ID) == null) {
 			netTable.createColumn(KeggConstants.KEGG_PATHWAY_ID, String.class, true);
 			netTable.createColumn(KeggConstants.KEGG_PATHWAY_IMAGE, String.class, true);
 			netTable.createColumn(KeggConstants.KEGG_PATHWAY_LINK, String.class, true);
+			netTable.createColumn(KeggConstants.KEGG_PATHWAY_ORG, String.class, true);
 		}
 
 		networkRow.set(KeggConstants.KEGG_PATHWAY_LINK, linkToKegg);
 		networkRow.set(KeggConstants.KEGG_PATHWAY_IMAGE, linkToImage);
 		networkRow.set(KeggConstants.KEGG_PATHWAY_ID, pathwayName);
+		networkRow.set(KeggConstants.KEGG_PATHWAY_ORG, organism);
 	}
 
 	protected String getPathwayId() {

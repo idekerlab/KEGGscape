@@ -40,7 +40,6 @@ public class TogowsClient {
 		String responseBody = null;
 		try {
 			HttpGet httpget = new HttpGet(url);
-			System.out.println("Executing request " + httpget.getRequestLine());
 
 			// Create a custom response handler
 			ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
@@ -67,35 +66,29 @@ public class TogowsClient {
 	}
 
 	private void mapEntries(final JsonNode rootNode, final CyNetwork network) {
-		JsonNode id = rootNode.get("entry_id");
-		JsonNode name = rootNode.get("name");
 		JsonNode description = rootNode.get(DESCRIPTION);
 		JsonNode classes = rootNode.get(CLASSES);
 		JsonNode diseases = rootNode.get(DISEASES);
 		JsonNode modules = rootNode.get(MODULES);
 		JsonNode genes = rootNode.get(GENES);
-//		JsonNode compounds = rootNode.get("compounds");
-		System.out.println("id: " + id.textValue());
-		System.out.println("name: " + name.textValue());
-		System.out.println("desc: " + description.textValue());
 
 		final CyColumn descColumn = network.getDefaultNetworkTable().getColumn(DESCRIPTION);
-		if(descColumn == null) {
+		if (descColumn == null) {
 			createColumns(network);
 		}
-		
+
 		final CyRow networkRow = network.getRow(network);
 
 		networkRow.set(DESCRIPTION, description.textValue());
-		
+
 		mapObjects(modules, MODULES, networkRow);
 		mapObjects(diseases, DISEASES, networkRow);
-		
+
 		mapList(classes, CLASSES, networkRow);
-		
+
 		mapGenes(genes, network);
-	} 
-	
+	}
+
 	private final void createColumns(final CyNetwork network) {
 		network.getDefaultNetworkTable().createColumn(DESCRIPTION, String.class, false);
 		network.getDefaultNodeTable().createColumn(KeggConstants.KEGG_DEFINITION, String.class, false);
@@ -104,34 +97,34 @@ public class TogowsClient {
 		network.getDefaultNetworkTable().createListColumn(DISEASES, String.class, false);
 		network.getDefaultNetworkTable().createListColumn(MODULES + "_id", String.class, false);
 		network.getDefaultNetworkTable().createListColumn(DISEASES + "_id", String.class, false);
-		
+
 		network.getDefaultNetworkTable().createListColumn(CLASSES, String.class, false);
-		
 
 	}
 
 	private final void mapGenes(final JsonNode genes, CyNetwork network) {
 		final List<CyNode> nodes = network.getNodeList();
-		for(final CyNode node: nodes) {
+		for (final CyNode node : nodes) {
 			final CyRow row = network.getRow(node);
 			final String type = row.get(KeggConstants.KEGG_NODE_TYPE, String.class);
-			if(type == null || type.equals(KEGGTags.GENE.getTag()) == false) {
+			if (type == null || type.equals(KEGGTags.GENE.getTag()) == false) {
 				continue;
 			}
-			
+
 			final List<String> nameList = row.getList(KeggConstants.KEGG_ID, String.class);
-			
+
 			JsonNode gene = null;
-			for(final String name: nameList) {
+			for (final String name : nameList) {
 				final String originalId = name.split(":")[1];
 				gene = genes.get(originalId);
-				if(gene != null) {
+				if (gene != null) {
 					break;
 				}
 			}
-			
-			if(gene == null) continue;
-			
+
+			if (gene == null)
+				continue;
+
 			final String geneText = gene.textValue();
 			final String[] parts = geneText.split(";");
 			row.set(KeggConstants.KEGG_DEFINITION, parts[1]);
@@ -139,25 +132,23 @@ public class TogowsClient {
 			row.set(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST, parts[0]);
 		}
 	}
-	
-	
+
 	private final void mapList(final JsonNode listNode, final String columnName, final CyRow row) {
 		final List<String> list = new ArrayList<String>();
-		for(JsonNode node: listNode) {
+		for (JsonNode node : listNode) {
 			list.add(node.textValue());
 		}
 		row.set(columnName, list);
 	}
-	
-	
+
 	private final void mapObjects(final JsonNode listNode, final String columnName, final CyRow row) {
 		final List<String> list = new ArrayList<String>();
 		final List<String> idList = new ArrayList<String>();
-		
+
 		final Iterator<String> fNames = listNode.fieldNames();
 		while (fNames.hasNext()) {
 			final String name = fNames.next();
-//			System.out.println(name);
+			// System.out.println(name);
 			list.add(name);
 			idList.add(listNode.get(name).textValue());
 		}
