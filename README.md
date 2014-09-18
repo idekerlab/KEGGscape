@@ -76,6 +76,13 @@ KEGG pathways have _maplink_ nodes which point to other pathways.  Cytoscape can
 
 - Actual pathway data will be fetched dynamically from KEGG pathway database.
 
+#### View Details in Web Browser
+If you need complete information about compounds, genes, or pathways, you can view details in web browser by selecting right-click menu item.
+
+![](http://cl.ly/XbwG/details1.png)
+
+![](http://cl.ly/Xast/details2.png)
+
 
 #### Network Colleciton Support
 From this version, KEGGScape supports network collection.  You can organize your pathways based on the biological context.
