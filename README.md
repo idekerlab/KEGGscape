@@ -22,7 +22,7 @@ the file format to represent KEGG Pathway data files in XML.  KEGGScape uses tho
 
 
 ## Goals
-* Full support for [KEGG Pathway Da](http://www.genome.jp/kegg/pathway.html), including signaling pathways.
+* Full support for [KEGG Pathway](http://www.genome.jp/kegg/pathway.html), including signaling pathways.
 * On-demand access to [KEGG RESTful API](http://www.kegg.jp/kegg/rest/keggapi.html) to add extra annotations for the pathways.
 * Annotation by [KEGG MEDICUS database](http://www.kegg.jp/kegg/rest/keggapi2.html)
 * Merging multiple pathways in a same network view
