@@ -125,7 +125,7 @@ Lots of bugs are fixed.  Some of the missed edges in the last version are now co
 
 ## Credits
 
-### Publication pPlease cite this for project's sustainability!)
+### Publication (Please cite this for project's sustainability!)
 
 * [KEGGscape: a Cytoscape app for pathway data integration](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4141640/). Nishida K, Ono K, Kanaya S, Takahashi K. F1000Res. 2014 Jul 1;3:144. doi: 10.12688/f1000research.4524.1. eCollection 2014.
 
