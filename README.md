@@ -20,6 +20,10 @@ Formerly known as [KGMLReader](https://github.com/idekerlab/kgmlreader/tree/2.x)
 comprehensive databases of human-curated biological pathways.  [KGML (KEGG Markup Language)](http://www.kegg.jp/kegg/xml/) is 
 the file format to represent KEGG Pathway data files in XML.  KEGGScape uses those KGML files as its primary source of pathway data.
 
+## Tutorials
+ - [Quick start guide](https://github.com/idekerlab/KEGGscape/wiki/Quick-Start-Guide)
+ - [Transcriptome visualization](https://github.com/idekerlab/KEGGscape/wiki/How-to-duplicate-the-process-in-F1000research-article)
+ - [Metabolome visualization](https://github.com/idekerlab/KEGGscape/wiki/Visualizing-Time-Series-Metabolome-Profiles)
 
 ## Goals
 * Full support for [KEGG Pathway](http://www.genome.jp/kegg/pathway.html), including signaling pathways.
