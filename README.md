@@ -1,7 +1,11 @@
 # KEGGscape
-__Comprehensive KEGG Database Support App for Cytoscape 3.x Series__
+**KEGGscape** is a Cytoscape 3.* app for importing KGML(KEGG pathway XML).
 
-Formerly known as [KGMLReader](https://github.com/idekerlab/kgmlreader/tree/2.x)
+**KEGGscape** is formerly known as [KGMLReader](https://github.com/idekerlab/kgmlreader/tree/2.x)
+
+If you use **KEGGscape** in your research, please cite:
+
+* [KEGGscape: a Cytoscape app for pathway data integration](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4141640/). Nishida K, Ono K, Kanaya S, Takahashi K. F1000Res. 2014 Jul 1;3:144. doi: 10.12688/f1000research.4524.1. eCollection 2014.
 
 ![](http://cl.ly/XbCF/kegg_human_global2.png)
 
@@ -129,9 +133,7 @@ Lots of bugs are fixed.  Some of the missed edges in the last version are now co
 
 ## Credits
 
-### Publication (Please cite this for project's sustainability!)
 
-* [KEGGscape: a Cytoscape app for pathway data integration](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4141640/). Nishida K, Ono K, Kanaya S, Takahashi K. F1000Res. 2014 Jul 1;3:144. doi: 10.12688/f1000research.4524.1. eCollection 2014.
 
 ### Design & Development
 * Kozo Nishida (Riken, Japan)
