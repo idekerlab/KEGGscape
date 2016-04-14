@@ -14,7 +14,7 @@ If you use **KEGGscape** in your research, please cite:
 
 
 ## Introduction
-[Cytoscape](http://www.cytoscape.org/) is a de-facto standard bioinformatics software platform for integrating, analyzing, and visualizing biological network data.  __*KEGGscape*__ is a [Cytoscape App](http://apps.cytoscape.org/) to provide comprehensive support for KEGG Pathway database and other resources available in KEGG.  KEGGScape uses only basic data structures in Cytoscape core, and users can use powerful Cytoscape core features to visualize additional (experimental) data sets on top of KEGG pathways. 
+[Cytoscape](http://www.cytoscape.org/) is a de-facto standard bioinformatics software platform for integrating, analyzing, and visualizing biological network data.  __*KEGGscape*__ is a [Cytoscape App](http://apps.cytoscape.org/) to provide comprehensive support for KEGG Pathway database and other resources available in KEGG.  KEGGscape uses only basic data structures in Cytoscape core, and users can use powerful Cytoscape core features to visualize additional (experimental) data sets on top of KEGG pathways. 
 
 ### About KEGG
 
@@ -22,7 +22,12 @@ If you use **KEGGscape** in your research, please cite:
 
 [KEGG Pathway database](http://www.genome.jp/kegg/pathway.html) is one of the most 
 comprehensive databases of human-curated biological pathways.  [KGML (KEGG Markup Language)](http://www.kegg.jp/kegg/xml/) is 
-the file format to represent KEGG Pathway data files in XML.  KEGGScape uses those KGML files as its primary source of pathway data.
+the file format to represent KEGG Pathway data files in XML.  KEGGscape uses those KGML files as its primary source of pathway data.
+
+## Installation
+
+You can install **KEGGscape** with Cytoscape app manager.
+![](http://cl.ly/253o2O2l1X1v/kesscape-appstore.png)
 
 ## Tutorials
  - [Quick start guide](https://github.com/idekerlab/KEGGscape/wiki/Quick-Start-Guide)
