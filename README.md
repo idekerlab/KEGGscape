@@ -7,9 +7,6 @@ If you use **KEGGscape** in your research, please cite:
 
 * [KEGGscape: a Cytoscape app for pathway data integration](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4141640/). Nishida K, Ono K, Kanaya S, Takahashi K. F1000Res. 2014 Jul 1;3:144. doi: 10.12688/f1000research.4524.1. eCollection 2014.
 
-![](http://cl.ly/XbCF/kegg_human_global2.png)
-
-
 ![](http://cl.ly/XbMZ/keggscape.png)
 
 
