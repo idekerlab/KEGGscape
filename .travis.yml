@@ -1,0 +1,14 @@
+language: java
+
+sudo: false
+
+jdk:
+  - oraclejdk8
+
+branches:
+  only:
+    - develop
+    - master
+
+after_success:
+  - mvn clean install
