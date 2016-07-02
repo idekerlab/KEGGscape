@@ -11,4 +11,4 @@ branches:
     - master
 
 after_success:
-  - mvn clean install
+  - mvn clean install -Djavax.xml.accessExternalDTD=all
