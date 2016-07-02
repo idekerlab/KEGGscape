@@ -10,5 +10,5 @@ branches:
     - develop
     - master
 
-after_success:
+script:
   - mvn clean install -Djavax.xml.accessExternalDTD=all
