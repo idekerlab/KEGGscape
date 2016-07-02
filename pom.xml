@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<properties>
-		<cytoscape.api.version>3.1.1</cytoscape.api.version>
-		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<cytoscape.api.version>3.4.0</cytoscape.api.version>
+		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
 		<maven-bundle-plugin.version>2.4.0</maven-bundle-plugin.version>
 		<osgi.api.version>4.2.0</osgi.api.version>
 		<bundle.symbolicName>org.cytoscape.keggscape</bundle.symbolicName>
@@ -24,7 +24,7 @@
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
-				<version>0.8.3</version>
+				<version>0.12.3</version>
 				<executions>
 					<execution>
 						<goals>
@@ -52,8 +52,8 @@
 				<configuration>
 					<!-- These options indicate the source code is Java 1.6-compliant and 
 						the resulting class files should be Java 1.6-compatible. -->
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 
