@@ -1,4 +1,6 @@
 # KEGGscape
+[![Build Status](https://travis-ci.org/idekerlab/KEGGscape.svg?branch=develop)](https://travis-ci.org/idekerlab/KEGGscape)
+
 **KEGGscape** is a Cytoscape 3.* app for importing KGML(KEGG pathway XML).
 
 **KEGGscape** is formerly known as [KGMLReader](https://github.com/idekerlab/kgmlreader/tree/2.x)
