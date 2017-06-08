@@ -2,9 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<properties>
 		<cytoscape.api.version>3.4.0</cytoscape.api.version>
-		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
-		<maven-bundle-plugin.version>2.4.0</maven-bundle-plugin.version>
+		
+		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+		<maven-bundle-plugin.version>3.3.0</maven-bundle-plugin.version>
+		
 		<osgi.api.version>4.2.0</osgi.api.version>
+		
 		<bundle.symbolicName>org.cytoscape.keggscape</bundle.symbolicName>
 		<bundle.namespaece>org.cytoscape.keggscape</bundle.namespaece>
 		<bundle.name>KEGGscape</bundle.name>
@@ -13,7 +16,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cytoscape</groupId>
 	<artifactId>keggscape</artifactId>
-	<version>0.7.0</version>
+	<version>0.7.1</version>
 	<name>KEGGScape (${project.artifactId})</name>
 
 	<packaging>bundle</packaging>
@@ -24,7 +27,7 @@
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
-				<version>0.12.3</version>
+				<version>0.13.2</version>
 				<executions>
 					<execution>
 						<goals>
@@ -56,6 +59,16 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <javax.xml.accessExternalDTD>all</javax.xml.accessExternalDTD>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
 
 			<plugin>
 				<groupId>org.apache.felix</groupId>
