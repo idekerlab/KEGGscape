@@ -24,6 +24,7 @@ public class KeggConstants {
 	public static final String KEGG_RELATION_TYPE = "KEGG_RELATION_TYPE";
 	public static final String KEGG_REACTION_TYPE = "KEGG_REACTION_TYPE";
 	public static final String KEGG_EDGE_COLOR = "KEGG_EDGE_COLOR";
+	public static final String KEGG_EDGE_COLOR_BG = "KEGG_EDGE_COLOR_BG";
 	public static final String KEGG_EDGE_SUBTYPES = "KEGG_EDGE_SUBTYPES";
 	public static final String KEGG_EDGE_LABEL = "KEGG_EDGE_LABEL";
 	

@@ -100,6 +100,7 @@ public class KGMLMapper {
 	private final List<String> maplinkIds = new ArrayList<String>();
 	private final Set<String> relationNames = new HashSet<String>();
 	private final Map<String, String> reactionColors = new HashMap<String, String>();
+	private final Map<String, String> reactionBgColors = new HashMap<String, String>();
 
 	private final Pathway pathway;
 	private final CyNetwork network;
@@ -139,6 +140,7 @@ public class KGMLMapper {
 		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_RELATION_TYPE, String.class, true);
 		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_REACTION_TYPE, String.class, true);
 		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_EDGE_COLOR, String.class, true);
+		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_EDGE_COLOR_BG, String.class, true);
 		network.getDefaultEdgeTable().createListColumn(KeggConstants.KEGG_EDGE_SUBTYPES, String.class, true);
 		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_EDGE_LABEL, String.class, true);
 	}
@@ -438,7 +440,13 @@ public class KGMLMapper {
 						CPD2NAME.get(row.get(KeggConstants.KEGG_ID, List.class).get(0)));
 			}
 			nodeMap.put(entry.getId(), cyNode);
+			
+			if (entry.getType().equals(KEGGTags.GENE.getTag())) {
+				reactionColors.put(entry.getId(), graphics.getFgcolor());
+				reactionBgColors.put(entry.getId(), graphics.getBgcolor());
+			}
 		}
+		//System.out.println(reactionColors);
 	}
 
 	private final void mapGlobalMapColor(final CyRow row, final Entry entry, final Graphics graphics) {
@@ -655,7 +663,7 @@ public class KGMLMapper {
 
 	private final void mapGlobalReactions() {
 		final List<Reaction> reactions = pathway.getReaction();
-
+		
 		for (final Reaction reaction : reactions) {
 			final List<Substrate> substrates = reaction.getSubstrate();
 			final List<Product> products = reaction.getProduct();
@@ -673,8 +681,9 @@ public class KGMLMapper {
 
 	private final void mapReactionEdgeData(final CyEdge edge, final CyRow row, Reaction reaction) {
 		final CyNode source = edge.getSource();
-		network.getRow(edge).set(KeggConstants.KEGG_EDGE_COLOR,
-				network.getRow(source).get(KeggConstants.KEGG_NODE_FILL_COLOR, String.class));
+		//System.out.println(reactionColors.get(reaction.getId()));
+		row.set(KeggConstants.KEGG_EDGE_COLOR,	reactionColors.get(reaction.getId()));
+		row.set(KeggConstants.KEGG_EDGE_COLOR_BG, reactionBgColors.get(reaction.getId()));
 		row.set(KeggConstants.KEGG_REACTION_TYPE, reaction.getType());
 		row.set(CyEdge.INTERACTION, reaction.getType());
 		row.set(CyNetwork.NAME, reaction.getName());

@@ -1,16 +1,19 @@
 # KEGGscape
-__Comprehensive KEGG Database Support App for Cytoscape 3.x Series__
+[![Build Status](https://travis-ci.org/idekerlab/KEGGscape.svg?branch=develop)](https://travis-ci.org/idekerlab/KEGGscape)
 
-Formerly known as [KGMLReader](https://github.com/idekerlab/kgmlreader/tree/2.x)
+**KEGGscape** is a Cytoscape 3.* app for importing KGML(KEGG pathway XML).
 
-![](http://cl.ly/XbCF/kegg_human_global2.png)
+**KEGGscape** is formerly known as [KGMLReader](https://github.com/idekerlab/kgmlreader/tree/2.x)
 
+If you use **KEGGscape** in your research, please cite:
+
+* [KEGGscape: a Cytoscape app for pathway data integration](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4141640/). Nishida K, Ono K, Kanaya S, Takahashi K. F1000Res. 2014 Jul 1;3:144. doi: 10.12688/f1000research.4524.1. eCollection 2014.
 
 ![](http://cl.ly/XbMZ/keggscape.png)
 
 
 ## Introduction
-[Cytoscape](http://www.cytoscape.org/) is a de-facto standard bioinformatics software platform for integrating, analyzing, and visualizing biological network data.  __*KEGGscape*__ is a [Cytoscape App](http://apps.cytoscape.org/) to provide comprehensive support for KEGG Pathway database and other resources available in KEGG.  KEGGScape uses only basic data structures in Cytoscape core, and users can use powerful Cytoscape core features to visualize additional (experimental) data sets on top of KEGG pathways. 
+[Cytoscape](http://www.cytoscape.org/) is a de-facto standard bioinformatics software platform for integrating, analyzing, and visualizing biological network data.  __*KEGGscape*__ is a [Cytoscape App](http://apps.cytoscape.org/) to provide comprehensive support for KEGG Pathway database and other resources available in KEGG.  KEGGscape uses only basic data structures in Cytoscape core, and users can use powerful Cytoscape core features to visualize additional (experimental) data sets on top of KEGG pathways. 
 
 ### About KEGG
 
@@ -18,11 +21,20 @@ Formerly known as [KGMLReader](https://github.com/idekerlab/kgmlreader/tree/2.x)
 
 [KEGG Pathway database](http://www.genome.jp/kegg/pathway.html) is one of the most 
 comprehensive databases of human-curated biological pathways.  [KGML (KEGG Markup Language)](http://www.kegg.jp/kegg/xml/) is 
-the file format to represent KEGG Pathway data files in XML.  KEGGScape uses those KGML files as its primary source of pathway data.
+the file format to represent KEGG Pathway data files in XML.  KEGGscape uses those KGML files as its primary source of pathway data.
 
+## Installation
+
+You can install **KEGGscape** with Cytoscape app manager.
+![](http://cl.ly/253o2O2l1X1v/kesscape-appstore.png)
+
+## Tutorials
+ - [Quick start guide](https://github.com/idekerlab/KEGGscape/wiki/Quick-Start-Guide)
+ - [Transcriptome visualization](https://github.com/idekerlab/KEGGscape/wiki/How-to-duplicate-the-process-in-F1000research-article)
+ - [Metabolome visualization](https://github.com/idekerlab/KEGGscape/wiki/Visualizing-Time-Series-Metabolome-Profiles)
 
 ## Goals
-* Full support for [KEGG Pathway Da](http://www.genome.jp/kegg/pathway.html), including signaling pathways.
+* Full support for [KEGG Pathway](http://www.genome.jp/kegg/pathway.html), including signaling pathways.
 * On-demand access to [KEGG RESTful API](http://www.kegg.jp/kegg/rest/keggapi.html) to add extra annotations for the pathways.
 * Annotation by [KEGG MEDICUS database](http://www.kegg.jp/kegg/rest/keggapi2.html)
 * Merging multiple pathways in a same network view
@@ -125,9 +137,7 @@ Lots of bugs are fixed.  Some of the missed edges in the last version are now co
 
 ## Credits
 
-### Publication pPlease cite this for project's sustainability!)
 
-* [KEGGscape: a Cytoscape app for pathway data integration](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4141640/). Nishida K, Ono K, Kanaya S, Takahashi K. F1000Res. 2014 Jul 1;3:144. doi: 10.12688/f1000research.4524.1. eCollection 2014.
 
 ### Design & Development
 * Kozo Nishida (Riken, Japan)

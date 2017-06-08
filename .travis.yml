@@ -1,0 +1,14 @@
+language: java
+
+sudo: false
+
+jdk:
+  - oraclejdk8
+
+branches:
+  only:
+    - develop
+    - master
+
+script:
+  - mvn clean install -Djavax.xml.accessExternalDTD=all
