@@ -124,6 +124,8 @@ public class CyActivator extends AbstractCyActivator {
 		
 //		final ShowPathwaySelectorAction showPathwaySelectorAction = new ShowPathwaySelectorAction();
 //		registerService(bc, showPathwaySelectorAction, CyAction.class, new Properties());
+
+        registerService(bc, new GreetingResourceImpl(), GreetingResource.class, new Properties());
 		
 	}
 }
