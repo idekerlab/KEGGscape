@@ -32,7 +32,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * {@code CyActivator} is a class that is a starting point for OSGi bundles.
- * 
+ *
  * A quick overview of OSGi: The common currency of OSGi is the <i>service</i>.
  * A service is merely a Java interface, along with objects that implement the
  * interface. OSGi establishes a system of <i>bundles</i>. Most bundles import
@@ -40,12 +40,12 @@ import org.osgi.framework.BundleContext;
  * service, it provides an implementation to the service's interface. Bundles
  * import a service by asking OSGi for an implementation. The implementation is
  * provided by some other bundle.
- * 
+ *
  * When OSGi starts your bundle, it will invoke {@CyActivator}'s
  * {@code start} method. So, the {@code start} method is where
  * you put in all your code that sets up your app. This is where you import and
  * export services.
- * 
+ *
  * Your bundle's {@code Bundle-Activator} manifest entry has a fully-qualified
  * path to this class. It's not necessary to inherit from
  * {@code AbstractCyActivator}. However, we provide this class as a convenience
@@ -76,20 +76,20 @@ public class CyActivator extends AbstractCyActivator {
 		final CyRootNetworkManager cyRootNetworkManager = getService(bc, CyRootNetworkManager.class);
 		final CyGroupFactory groupFactory = getService(bc, CyGroupFactory.class);
 		final OpenBrowser openBrowser = getService(bc, OpenBrowser.class);
-		
+
 		final VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
 
 		LoadNetworkURLTaskFactory loadNetworkURLTaskFactory = getService(bc, LoadNetworkURLTaskFactory.class);
-		
-		VisualStyleFactory vsFactoryServiceRef = getService(bc, VisualStyleFactory.class); 
+
+		VisualStyleFactory vsFactoryServiceRef = getService(bc, VisualStyleFactory.class);
 		VisualMappingFunctionFactory passthroughMappingFactoryRef = getService(bc, VisualMappingFunctionFactory.class,
 				"(mapping.type=passthrough)");
 		VisualMappingFunctionFactory discreteMappingFactoryRef = getService(bc, VisualMappingFunctionFactory.class,
 				"(mapping.type=discrete)");
-		
+
 		KGMLVisualStyleBuilder vsBuilder = new KGMLVisualStyleBuilder(vsFactoryServiceRef,
 				discreteMappingFactoryRef, passthroughMappingFactoryRef, vmm);
-		
+
 		// readers
 		final CyFileFilter keggscapeReaderFilter = new KeggscapeFileFilter(new String[] { "xml", "kgml"},
 				new String[] { "application/xml" }, "KEGG XML Files (KGML)", DataCategory.NETWORK, streamUtil);
@@ -102,7 +102,7 @@ public class CyActivator extends AbstractCyActivator {
 		keggscapeNetworkReaderFactoryProps.put(ID, "keggscapeNetworkReaderFactory");
 
 		registerService(bc, kgmlReaderFactory, InputStreamTaskFactory.class, keggscapeNetworkReaderFactoryProps);
-		
+
 		final ExpandPathwayContextMenuTaskFactory expandPathwayContextMenuTaskFactory = new ExpandPathwayContextMenuTaskFactory(loadNetworkURLTaskFactory, vmm);
 		final Properties nodeProp = new Properties();
 		nodeProp.setProperty("preferredTaskManager", "menu");
@@ -110,7 +110,7 @@ public class CyActivator extends AbstractCyActivator {
 		nodeProp.setProperty(MENU_GRAVITY, "0.0");
 		nodeProp.setProperty(TITLE, "Import selected pathway node from KEGG database...");
 		registerService(bc, expandPathwayContextMenuTaskFactory, NodeViewTaskFactory.class, nodeProp);
-		
+
 		final OpenDetailsInBrowserTaskFactory openDetailsInBrowserTaskFactory = new OpenDetailsInBrowserTaskFactory(openBrowser);
 		final Properties openProp = new Properties();
 		openProp.setProperty("preferredTaskManager", "menu");
@@ -121,12 +121,12 @@ public class CyActivator extends AbstractCyActivator {
 			//new KeggscapeTaskFactory(), // Implementation
 //			TaskFactory.class, // Interface
 //			properties); // Service properties
-		
+
 //		final ShowPathwaySelectorAction showPathwaySelectorAction = new ShowPathwaySelectorAction();
 //		registerService(bc, showPathwaySelectorAction, CyAction.class, new Properties());
 
-        registerService(bc, new GreetingResourceImpl(), GreetingResource.class, new Properties());
-		
+    registerService(bc, new GreetingResourceImpl(), GreetingResource.class, new Properties());
+		registerService(bc, new ClassroomResourceImpl(), ClassroomResource.class, new Properties());
+
 	}
 }
-
