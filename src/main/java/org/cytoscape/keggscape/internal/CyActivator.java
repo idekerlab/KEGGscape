@@ -7,6 +7,7 @@ import static org.cytoscape.work.ServiceProperties.TITLE;
 
 import java.util.Properties;
 
+import org.cytoscape.work.TaskMonitor;
 import org.cytoscape.group.CyGroupFactory;
 import org.cytoscape.io.CyFileFilter;
 import org.cytoscape.io.DataCategory;
@@ -29,6 +30,8 @@ import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.osgi.framework.BundleContext;
+import org.cytoscape.ci.CIResponseFactory;
+import org.cytoscape.keggscape.internal.rest.KeggscapeResource;
 
 /**
  * {@code CyActivator} is a class that is a starting point for OSGi bundles.
@@ -78,6 +81,8 @@ public class CyActivator extends AbstractCyActivator {
 		final OpenBrowser openBrowser = getService(bc, OpenBrowser.class);
 
 		final VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
+		final TaskMonitor tm = getService(bc, TaskMonitor.class);
+		final CIResponseFactory ciResponseFactory = getService(bc, CIResponseFactory.class);
 
 		LoadNetworkURLTaskFactory loadNetworkURLTaskFactory = getService(bc, LoadNetworkURLTaskFactory.class);
 
@@ -125,8 +130,14 @@ public class CyActivator extends AbstractCyActivator {
 //		final ShowPathwaySelectorAction showPathwaySelectorAction = new ShowPathwaySelectorAction();
 //		registerService(bc, showPathwaySelectorAction, CyAction.class, new Properties());
 
-    registerService(bc, new GreetingResourceImpl(), GreetingResource.class, new Properties());
-		registerService(bc, new ClassroomResourceImpl(), ClassroomResource.class, new Properties());
+    // registerService(bc, new GreetingResourceImpl(), GreetingResource.class, new Properties());
+		// registerService(bc, new ClassroomResourceImpl(), ClassroomResource.class, new Properties());
+		// registerService(bc, new KeggscapeResourceImpl(cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory), KeggscapeResource.class, new Properties());
+
+		// KeggscapeResource keggscapeResource = new KeggscapeResource(cyNetworkViewFactory, cyNetworkFactory,
+		// 		cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory, ciResponseFactory);
+		// registerService(bc, keggscapeResource, KeggscapeResource.class, new Properties());
+
 
 	}
 }
