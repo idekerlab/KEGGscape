@@ -26,6 +26,7 @@ import org.cytoscape.task.NodeViewTaskFactory;
 import org.cytoscape.task.read.LoadNetworkURLTaskFactory;
 import org.cytoscape.util.swing.OpenBrowser;
 import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
@@ -77,6 +78,7 @@ public class CyActivator extends AbstractCyActivator {
 		final CyNetworkFactory cyNetworkFactory = getService(bc, CyNetworkFactory.class);
 		final CyNetworkManager cyNetworkManager = getService(bc, CyNetworkManager.class);
 		final CyRootNetworkManager cyRootNetworkManager = getService(bc, CyRootNetworkManager.class);
+		final CyNetworkViewManager cyNetworkViewManager = getService(bc, CyNetworkViewManager.class);
 		final CyGroupFactory groupFactory = getService(bc, CyGroupFactory.class);
 		final OpenBrowser openBrowser = getService(bc, OpenBrowser.class);
 
@@ -135,8 +137,9 @@ public class CyActivator extends AbstractCyActivator {
 
 		// registerService(bc, new KeggscapeResourceImpl(cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory), KeggscapeResource.class, new Properties());
 
-		KeggscapeResource keggscapeResource = new KeggscapeResource(cyNetworkViewFactory, cyNetworkFactory,
-				cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory, ciResponseFactory);
+		KeggscapeResource keggscapeResource = new KeggscapeResource(cyNetworkViewFactory,
+		cyNetworkFactory,	cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm,
+		groupFactory, ciResponseFactory, cyNetworkViewManager);
 		registerService(bc, keggscapeResource, KeggscapeResource.class, new Properties());
 
 

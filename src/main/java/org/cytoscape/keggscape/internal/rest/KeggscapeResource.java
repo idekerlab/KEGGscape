@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -30,6 +31,7 @@ import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.work.TaskIterator;
 import org.cytoscape.work.TaskMonitor;
@@ -67,12 +69,13 @@ public class KeggscapeResource {
 	private final CIResponseFactory ciResponseFactory;
 
 	private final TaskMonitor tm;
+	private final CyNetworkViewManager cyNetworkViewManager;
 
 	public KeggscapeResource(final CyNetworkViewFactory cyNetworkViewFactory,
       final CyNetworkFactory cyNetworkFactory, final CyNetworkManager cyNetworkManager,
       final CyRootNetworkManager cyRootNetworkManager, final KGMLVisualStyleBuilder vsBuilder,
       final VisualMappingManager vmm, final CyGroupFactory groupFactory,
-			final CIResponseFactory ciResponseFactory)
+			final CIResponseFactory ciResponseFactory, final CyNetworkViewManager cyNetworkViewManager)
   {
         this.cyNetworkViewFactory = cyNetworkViewFactory;
         this.cyNetworkFactory = cyNetworkFactory;
@@ -83,6 +86,7 @@ public class KeggscapeResource {
         this.groupFactory = groupFactory;
 				this.ciResponseFactory = ciResponseFactory;
 				this.tm = new HeadlessTaskMonitor();
+				this.cyNetworkViewManager = cyNetworkViewManager;
   }
 
 	// public CyNetworkView loadKGML(final String collectionName, final String fileName) throws Exception
@@ -128,24 +132,29 @@ public class KeggscapeResource {
 	// 				@ApiResponse(code = 404, message = "failed to import KEGG pathway",
 	// 					response = CIResponse.class), })
 
-	@POST
-	@Produces("application/json")
-	@Consumes("application/json")
-	@Path("/{pathwayid}")
+	// @POST
+	// @Produces("application/json")
+	// @Consumes("application/json")
+	// @Path("/{pathwayid}")
 	// @ApiOperation(value = "Import network from KEGG", notes = "Import network from KEGG", response = KeggscapeAppResponse.class)
 	// @ApiResponses(value = {
 	// 		@ApiResponse(code = 404, message = "Network does not exist", response = KeggscapeAppResponse.class), })
+	@GET
+  @Produces(MediaType.APPLICATION_JSON)
 	public void createNetworkFromKegg(
-					 @ApiParam(value = "Properties required to import network from NDEx.", required = true) KeggImportParams params){
+					 // @ApiParam(value = "Properties required to import network from NDEx.", required = true) KeggImportParams params){
+					 ){
+						 // System.out.println("---------------------hogepiyomoge==========================");
 						 ImportKGMLTask importer;
-						 if(params.pathwayid == null) {
-							 final String message = "Must provide a KEGG pathwayID to import a network";
-							 logger.error(message);
-						 }
+						 // if(params.pathwayid == null) {
+							//  final String message = "Must provide a KEGG pathwayID to import a network";
+							//  logger.error(message);
+						 // }
 						 try{
 						 	importer = new ImportKGMLTask(cyNetworkViewFactory, cyNetworkFactory,
 								cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm,
-								groupFactory, params.pathwayid);
+								groupFactory, "hsa01100", cyNetworkViewManager);
+							// System.out.println("===before importer.run===");
 							importer.run(tm);
 						} catch (Exception e) {
 			          System.out.println("ERROR: " + e.toString());
