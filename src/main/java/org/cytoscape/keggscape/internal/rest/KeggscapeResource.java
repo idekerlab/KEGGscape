@@ -19,11 +19,12 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.*;
 
-import org.cytoscape.keggscape.internal.task.ExpandPathwayTask;
+import org.cytoscape.keggscape.internal.task.ImportKGMLTask;
 
 import org.cytoscape.group.CyGroupFactory;
 import org.cytoscape.io.read.CyNetworkReader;
 import org.cytoscape.keggscape.internal.style.KGMLVisualStyleBuilder;
+import org.cytoscape.keggscape.internal.rest.HeadlessTaskMonitor;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
@@ -65,6 +66,8 @@ public class KeggscapeResource {
 	private final CyGroupFactory groupFactory;
 	private final CIResponseFactory ciResponseFactory;
 
+	private final TaskMonitor tm;
+
 	public KeggscapeResource(final CyNetworkViewFactory cyNetworkViewFactory,
       final CyNetworkFactory cyNetworkFactory, final CyNetworkManager cyNetworkManager,
       final CyRootNetworkManager cyRootNetworkManager, final KGMLVisualStyleBuilder vsBuilder,
@@ -79,6 +82,7 @@ public class KeggscapeResource {
         this.vmm = vmm;
         this.groupFactory = groupFactory;
 				this.ciResponseFactory = ciResponseFactory;
+				this.tm = new HeadlessTaskMonitor();
   }
 
 	// public CyNetworkView loadKGML(final String collectionName, final String fileName) throws Exception
@@ -104,7 +108,7 @@ public class KeggscapeResource {
 					value="Keggscape App Response",
 					description="Kegg pathway import Results in CI Format",
 					parent=CIResponse.class)
-	public static class KeggscapeAppResponse extends CIResponse<KeggscapeBaseResponse>{
+	public static class KeggscapeAppResponse extends CIResponse<KeggscapeImportResult>{
 
 	}
 
@@ -124,28 +128,41 @@ public class KeggscapeResource {
 	// 				@ApiResponse(code = 404, message = "failed to import KEGG pathway",
 	// 					response = CIResponse.class), })
 
-// 	@POST
-// 	@Produces("application/json")
-// 	@Consumes("application/json")
-// 	@Path("/{pathwayid}")
-// 	@ApiOperation(value = "Import network from KEGG", notes = "Import network from KEGG", response = KeggscapeAppResponse.class)
-// 	@ApiResponses(value = {
-// 			@ApiResponse(code = 404, message = "Network does not exist", response = KeggscapeAppResponse.class), })
-// 	public KeggscapeAppResponse createNetworkFromKegg(
-// 					 @ApiParam(value = "Properties required to import network from NDEx.", required = true) KeggImportParams params){
-// 						 ExpandPathwayTask importer;
-// 						 if(params.pathwayid == null) {
-// 							 final String message = "Must provide a KEGG pathwayID to import a network";
-// 							 logger.error(message);
-// 						 }
-// 						 try{
-// 						 	importer = new ExpandPathwayTask(param)
-//
-// 						 }
-//
-//
-// 					 }
-// }
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	@Path("/{pathwayid}")
+	// @ApiOperation(value = "Import network from KEGG", notes = "Import network from KEGG", response = KeggscapeAppResponse.class)
+	// @ApiResponses(value = {
+	// 		@ApiResponse(code = 404, message = "Network does not exist", response = KeggscapeAppResponse.class), })
+	public void createNetworkFromKegg(
+					 @ApiParam(value = "Properties required to import network from NDEx.", required = true) KeggImportParams params){
+						 ImportKGMLTask importer;
+						 if(params.pathwayid == null) {
+							 final String message = "Must provide a KEGG pathwayID to import a network";
+							 logger.error(message);
+						 }
+						 try{
+						 	importer = new ImportKGMLTask(cyNetworkViewFactory, cyNetworkFactory,
+								cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm,
+								groupFactory, params.pathwayid);
+							importer.run(tm);
+						} catch (Exception e) {
+			          System.out.println("ERROR: " + e.toString());
+			      }
+
+
+						// try {
+						// 	return ciResponseFactory.getCIResponse(new Object());
+						// } catch (InstantiationException | IllegalAccessException e) {
+						// 	final String message = "Could not create wrapped CI JSON. Error: " + e.getMessage();
+						// 	logger.error(message);
+						//
+						// }
+
+
+					}
+				}
 
 // 	public void getloadKGML(
 // 					@ApiParam(value = "Collection name") @PathParam("collectionName") String collectionName,
@@ -191,5 +208,3 @@ public class KeggscapeResource {
 // 	// public int loadKGML("KEGG Metabolic Pathways", "hsa00020");
 //
 // }
-
-}

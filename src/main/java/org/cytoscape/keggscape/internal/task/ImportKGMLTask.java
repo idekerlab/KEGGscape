@@ -33,6 +33,8 @@ public class ImportKGMLTask extends AbstractTask {
 	private final String pathwayID;
   // private final CyNetworkView parentView;
 
+  private Long suid = null;
+
   public ImportKGMLTask(final CyNetworkViewFactory cyNetworkViewFactory,
       final CyNetworkFactory cyNetworkFactory, final CyNetworkManager cyNetworkManager,
       final CyRootNetworkManager cyRootNetworkManager, final KGMLVisualStyleBuilder vsBuilder,
@@ -45,6 +47,10 @@ public class ImportKGMLTask extends AbstractTask {
           this.vmm = vmm;
           this.pathwayID = pathwayID;
           this.groupFactory = groupFactory;
+    }
+
+    public Long getSUID() {
+      return suid;
     }
 
     @Override
@@ -60,6 +66,9 @@ public class ImportKGMLTask extends AbstractTask {
             cyNetworkViewFactory, cyNetworkFactory,	cyNetworkManager, cyRootNetworkManager,
             vsBuilder, vmm, groupFactory);
         reader.run(taskMonitor);
+        final CyNetwork[] networks = reader.getNetworks();
+        final CyNetwork network = networks[0];
+        suid = network.getSUID();
       } catch (MalformedURLException male) {
           System.out.println("ERROR: WRONG URL " + male.toString());
       } catch (IOException ioe) {
@@ -67,6 +76,8 @@ public class ImportKGMLTask extends AbstractTask {
       } catch (Exception e) {
           System.out.println("ERROR: " + e.toString());
       }
+
+
 
     }
 }
