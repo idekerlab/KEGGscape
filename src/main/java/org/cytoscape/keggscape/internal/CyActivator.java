@@ -81,7 +81,7 @@ public class CyActivator extends AbstractCyActivator {
 		final OpenBrowser openBrowser = getService(bc, OpenBrowser.class);
 
 		final VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
-		final TaskMonitor tm = getService(bc, TaskMonitor.class);
+		// final TaskMonitor tm = getService(bc, TaskMonitor.class);
 		final CIResponseFactory ciResponseFactory = getService(bc, CIResponseFactory.class);
 
 		LoadNetworkURLTaskFactory loadNetworkURLTaskFactory = getService(bc, LoadNetworkURLTaskFactory.class);
@@ -135,7 +135,7 @@ public class CyActivator extends AbstractCyActivator {
 		// registerService(bc, new KeggscapeResourceImpl(cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory), KeggscapeResource.class, new Properties());
 
 		// KeggscapeResource keggscapeResource = new KeggscapeResource(cyNetworkViewFactory, cyNetworkFactory,
-		// 		cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory, ciResponseFactory);
+		// 		cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory, tm, ciResponseFactory);
 		// registerService(bc, keggscapeResource, KeggscapeResource.class, new Properties());
 
 
