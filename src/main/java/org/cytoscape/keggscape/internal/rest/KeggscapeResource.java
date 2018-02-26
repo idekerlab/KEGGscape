@@ -140,10 +140,12 @@ public class KeggscapeResource {
 	// @ApiResponses(value = {
 	// 		@ApiResponse(code = 404, message = "Network does not exist", response = KeggscapeAppResponse.class), })
 	@GET
-  @Produces(MediaType.APPLICATION_JSON)
+	@Path("/{pathid}")
+  	@Produces(MediaType.APPLICATION_JSON)
 	public void createNetworkFromKegg(
-					 // @ApiParam(value = "Properties required to import network from NDEx.", required = true) KeggImportParams params){
+					 @ApiParam(value = "KEGG pathway ID") @PathParam("pathid")final String pathid
 					 ){
+						 System.out.println(pathid);
 						 // System.out.println("---------------------hogepiyomoge==========================");
 						 ImportKGMLTask importer;
 						 // if(params.pathwayid == null) {
@@ -153,7 +155,7 @@ public class KeggscapeResource {
 						 try{
 						 	importer = new ImportKGMLTask(cyNetworkViewFactory, cyNetworkFactory,
 								cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm,
-								groupFactory, "hsa01100", cyNetworkViewManager);
+								groupFactory, pathid, cyNetworkViewManager);
 							// System.out.println("===before importer.run===");
 							importer.run(tm);
 						} catch (Exception e) {
