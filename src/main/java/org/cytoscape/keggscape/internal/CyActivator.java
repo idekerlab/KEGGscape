@@ -132,9 +132,6 @@ public class CyActivator extends AbstractCyActivator {
 //		final ShowPathwaySelectorAction showPathwaySelectorAction = new ShowPathwaySelectorAction();
 //		registerService(bc, showPathwaySelectorAction, CyAction.class, new Properties());
 
-    registerService(bc, new GreetingResourceImpl(), GreetingResource.class, new Properties());
-		registerService(bc, new ClassroomResourceImpl(), ClassroomResource.class, new Properties());
-
 		// registerService(bc, new KeggscapeResourceImpl(cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory), KeggscapeResource.class, new Properties());
 
 		KeggscapeResource keggscapeResource = new KeggscapeResource(cyNetworkViewFactory,
