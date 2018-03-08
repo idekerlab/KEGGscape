@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<properties>
-		<cytoscape.api.version>3.4.0</cytoscape.api.version>
-		
+		<cytoscape.api.version>3.6.0</cytoscape.api.version>
+
 		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
 		<maven-bundle-plugin.version>3.3.0</maven-bundle-plugin.version>
-		
+
 		<osgi.api.version>4.2.0</osgi.api.version>
-		
+
 		<bundle.symbolicName>org.cytoscape.keggscape</bundle.symbolicName>
 		<bundle.namespaece>org.cytoscape.keggscape</bundle.namespaece>
 		<bundle.name>KEGGscape</bundle.name>
@@ -16,8 +16,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cytoscape</groupId>
 	<artifactId>keggscape</artifactId>
-	<version>0.7.1</version>
-	<name>KEGGScape (${project.artifactId})</name>
+	<version>0.7.3</version>
+	<name>KEGGScape</name>
 
 	<packaging>bundle</packaging>
 
@@ -53,13 +53,13 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
-					<!-- These options indicate the source code is Java 1.8-compliant and 
+					<!-- These options indicate the source code is Java 1.8-compliant and
 						the resulting class files should be Java 1.8-compatible. -->
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -172,6 +172,12 @@
 			<version>${cytoscape.api.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+		 	<groupId>org.cytoscape</groupId>
+  			<artifactId>ci-api</artifactId>
+  			<version>${cytoscape.api.version}</version>
+  			<scope>provided</scope>
+		</dependency>
 
 		<!-- Logger -->
 		<dependency>
@@ -199,6 +205,22 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.4.2</version>
+		</dependency>
+
+		<!-- osgi jax-rs bundles -->
+
+         <dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>1.5.7</version>
+			<scope>provided</scope>
 		</dependency>
 
 
