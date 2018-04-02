@@ -9,6 +9,14 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Note about this RMarkdown
+This RMarkdown uses **Python**, and needs R "reticulate" package.
+Please run
+```
+install.packages("reticulate")
+```
+in your R shell before running this RMarkdown.
+
 ## Overview
 
 This is an automation application of KEGGscape REST API to top-down systems biology approach.
