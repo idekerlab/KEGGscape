@@ -1,4 +1,5 @@
 # KEGGscape
+[![DOI](https://zenodo.org/badge/3998431.svg)](https://zenodo.org/badge/latestdoi/3998431)
 [![Build Status](https://travis-ci.org/idekerlab/KEGGscape.svg?branch=develop)](https://travis-ci.org/idekerlab/KEGGscape)
 
 **KEGGscape** is a Cytoscape 3.* app for importing KGML(KEGG pathway XML).
