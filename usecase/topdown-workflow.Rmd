@@ -27,7 +27,9 @@ FigureXXX is the workflow.
 ## Step0 (Installing dependent packages)
 First of all we install the R and Python packages for this workflow.
 
-```{r}
+### Installing R packages
+
+```
 source("https://bioconductor.org/biocLite.R")
 
 biocLite("ecoliLeucine")
@@ -35,9 +37,23 @@ biocLite("affy")
 biocLite("limma")
 ```
 
-```{python}
+### Installing Python packages
+
+#### Mac or Linux
+
+```
 import os
-os.system('pip install py2cytoscape')
+os.system('python -m pip install py2cytoscape')
+```
+
+#### Windows
+
+Windows users need to download and install the python-igraph whl from [Christoph’s site](http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph).
+Please install python-igraph before you install py2cytoscape, otherwise pip will try to **build** python-igraph (and will fail). 
+
+```
+python -m pip install ".\python_igraph-0.7.1.post6-cp36-cp36m-win_amd64.whl"
+python -m pip install py2cytoscape
 ```
 
 ## Step1 (Microarray preprocessing)
@@ -45,7 +61,7 @@ We use bioconductor **ecoliLeucine and affy** packages for the dataset preproces
 **ecoliLeucine** package is ...
 eset is ...
 
-```{r}
+```
 library(ecoliLeucine)
 library(affy)
 
@@ -58,7 +74,7 @@ pData(eset)
 
 We use bioconductor **limma** package for statistical analysis of ...
 
-```{r}
+```
 library(limma)
 strain <- c("lrp-","lrp-","lrp-","lrp-","lrp+","lrp+","lrp+","lrp+")
 design <- model.matrix(~factor(strain))
@@ -77,7 +93,7 @@ write.csv(result, file = "result.csv")
 
 ### Importing all Escherichia coli K-12 MG1655 KEGG pathways with KEGGscape REST API
 
-```{python}
+```
 import requests
 import pandas as pd
 from io import SrtingIO
@@ -88,6 +104,27 @@ for pathid in ecopathways[0]:
     requests.get('http://localhost:1234/keggscape/v1/' + i[5:])
 ```
 
+### Importing the limma result table with py2cytoscape
 
+```
+from py2cytoscape.data.cyrest_client import CyRestClient
+cy = CyRestClient()
+all_suid = cy.network.get_all()
+
+limma = pd.read_csv("./result.csv", index_col=0)
+new_index = limma.index.str.extract('(b[0-9]{4})', expand=None)
+limma = limma.set_index(new_index)
+limma = limma[limma.index.notna()]
+
+for i in all_suid:
+    net = cy.network.create(i)
+    table = net.get_node_table()
+    keggids = table['KEGG_ID']
+    genes = keggids.str.extractall('(b[0-9]{4})')
+    table4cy = pd.merge(genes, limma, left_on=0, right_index=True)
+    if(table4cy.shape[0] != 0):
+        print(net.get_network_table())
+        print(table4cy)
+```
 
 ## Step4 (Data integration and knowledge discovery)
