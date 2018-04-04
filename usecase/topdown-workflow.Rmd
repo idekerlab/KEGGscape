@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Note about this RMarkdown
-This RMarkdown uses **Python**, and needs R "reticulate" package.
+This RMarkdown uses **Python3**, and needs R "reticulate" package.
 Please run
 ```
 install.packages("reticulate")
@@ -41,8 +41,9 @@ os.system('pip install py2cytoscape')
 ```
 
 ## Step1 (Microarray preprocessing)
-We use bioconductor **ecoliLeucine and affy** package for the dataset of this workflow.
+We use bioconductor **ecoliLeucine and affy** packages for the dataset preprocessing of this workflow.
 **ecoliLeucine** package is ...
+eset is ...
 
 ```{r}
 library(ecoliLeucine)
@@ -67,14 +68,26 @@ design
 fit <- lmFit(eset, design)
 fit <- eBayes(fit)
 options(digits=2)
-write.csv(topTable(fit, coef=2, n=40, adjust="BH"), file="../results/result.csv")
-
+result <- topTable(fit, coef = 2, number = 40, adjust.method = "BH")
+result
+write.csv(result, file = "result.csv")
 ```
 
 ## Step3 (Visualization with Cytoscape)
 
+### Importing all Escherichia coli K-12 MG1655 KEGG pathways with KEGGscape REST API
+
 ```{python}
+import requests
+import pandas as pd
+from io import SrtingIO
+
+r = requests.get('http://rest.kegg.jp/list/pathway/eco')
+ecopathways = pd.read_table(StringIO(r.text), header=None)
+for pathid in ecopathways[0]:
+    requests.get('http://localhost:1234/keggscape/v1/' + i[5:])
 ```
+
 
 
 ## Step4 (Data integration and knowledge discovery)
