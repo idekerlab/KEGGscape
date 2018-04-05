@@ -24,7 +24,7 @@ FigureXXX is the workflow.
 
 ![top-down systems biology approach workflow](figures/fig1.png)
 
-## Step0 (Installing dependent packages)
+## Step 0 (Installing dependent packages)
 First of all we install the R and Python packages for this workflow.
 
 ### Installing R packages
@@ -56,7 +56,7 @@ python -m pip install ".\python_igraph-0.7.1.post6-cp36-cp36m-win_amd64.whl"
 python -m pip install py2cytoscape
 ```
 
-## Step1 (Microarray preprocessing)
+## Step 1 (Microarray preprocessing)
 We use bioconductor **ecoliLeucine and affy** packages for the dataset preprocessing of this workflow.
 **ecoliLeucine** package is ...
 eset is ...
@@ -70,7 +70,7 @@ eset <- rma(ecoliLeucine)
 pData(eset)
 ```
 
-## Step2 (Statistical analysis)
+## Step 2 (Statistical analysis)
 
 We use bioconductor **limma** package for statistical analysis of ...
 
@@ -89,7 +89,7 @@ result
 write.csv(result, file = "result.csv")
 ```
 
-## Step3 (Visualization with Cytoscape)
+## Step 3 (Visualization with Cytoscape)
 
 ### Importing all Escherichia coli K-12 MG1655 KEGG pathways with KEGGscape REST API
 
@@ -106,15 +106,21 @@ for pathid in ecopathways[0]:
 
 ### Importing the limma result table with py2cytoscape
 
-```
-from py2cytoscape.data.cyrest_client import CyRestClient
-cy = CyRestClient()
-all_suid = cy.network.get_all()
+#### Preprocessing of the limma statistical analysis result
 
+```
 limma = pd.read_csv("./result.csv", index_col=0)
 new_index = limma.index.str.extract('(b[0-9]{4})', expand=None)
 limma = limma.set_index(new_index)
 limma = limma[limma.index.notna()]
+```
+
+#### Merge the limma result in Cytoscape
+
+```
+from py2cytoscape.data.cyrest_client import CyRestClient
+cy = CyRestClient()
+all_suid = cy.network.get_all()
 
 for i in all_suid:
     net = cy.network.create(i)
@@ -123,8 +129,13 @@ for i in all_suid:
     genes = keggids.str.extractall('(b[0-9]{4})')
     table4cy = pd.merge(genes, limma, left_on=0, right_index=True)
     if(table4cy.shape[0] != 0):
-        print(net.get_network_table())
-        print(table4cy)
+        #pathwayinfo = net.get_network_table()['KEGG_PATHWAY_ID']
+        meantable4cy = table4cy.groupby('SUID').mean()
+        net.update_node_table(df=meantable4cy, network_key_col='SUID')
+
 ```
 
-## Step4 (Data integration and knowledge discovery)
+#### Vizual Mapping of the limma result in Cytocape
+
+
+## Step 4 (Data integration and knowledge discovery)
