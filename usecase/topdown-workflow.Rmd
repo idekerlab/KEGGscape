@@ -96,12 +96,12 @@ write.csv(result, file = "result.csv")
 ```
 import requests
 import pandas as pd
-from io import SrtingIO
+from io import StringIO
 
 r = requests.get('http://rest.kegg.jp/list/pathway/eco')
 ecopathways = pd.read_table(StringIO(r.text), header=None)
 for pathid in ecopathways[0]:
-    requests.get('http://localhost:1234/keggscape/v1/' + i[5:])
+    requests.get('http://localhost:1234/keggscape/v1/' + pathid[5:])
 ```
 
 ### Importing the limma result table with py2cytoscape
