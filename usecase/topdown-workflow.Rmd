@@ -139,5 +139,11 @@ for i in all_suid:
 
 #### Vizual Mapping of the limma result in Cytocape
 
+```
+my_kegg_style = cy.style.create('KEGG Style')
+from py2cytoscape.data.style import StyleUtil
+color_gradient = StyleUtil.create_2_color_gradient(min=limma['adj.P.Val'].min(), max=limma['adj.P.Val'].max(), colors=('red', 'white'))
+my_kegg_style.create_continuous_mapping(column='adj.P.Val', vp='NODE_FILL_COLOR', col_type='Double', points=color_gradient)
+```
 
 ## Step 4 (Data integration and knowledge discovery)
