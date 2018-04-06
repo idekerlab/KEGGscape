@@ -132,6 +132,8 @@ for i in all_suid:
         #pathwayinfo = net.get_network_table()['KEGG_PATHWAY_ID']
         meantable4cy = table4cy.groupby('SUID').mean()
         net.update_node_table(df=meantable4cy, network_key_col='SUID')
+    else:
+        cy.network.delete(net)
 
 ```
 
