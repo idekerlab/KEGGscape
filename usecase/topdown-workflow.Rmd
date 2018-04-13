@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Note about this RMarkdown
 This RMarkdown uses **Python3**, and needs R "reticulate" package.
 Please run
-```
+```{r}
 install.packages("reticulate")
 ```
 in your R shell before running this RMarkdown.
@@ -29,7 +29,7 @@ First of all we install the R and Python packages for this workflow.
 
 ### Installing R packages
 
-```
+```{r}
 source("https://bioconductor.org/biocLite.R")
 
 biocLite("ecoliLeucine")
@@ -41,7 +41,7 @@ biocLite("limma")
 
 #### Mac or Linux
 
-```
+```{python}
 import os
 os.system('python -m pip install py2cytoscape')
 ```
@@ -61,7 +61,7 @@ We use bioconductor **ecoliLeucine and affy** packages for the dataset preproces
 **ecoliLeucine** package is ...
 eset is ...
 
-```
+```{r}
 library(ecoliLeucine)
 library(affy)
 
@@ -74,7 +74,7 @@ pData(eset)
 
 We use bioconductor **limma** package for statistical analysis of ...
 
-```
+```{r}
 library(limma)
 strain <- c("lrp-","lrp-","lrp-","lrp-","lrp+","lrp+","lrp+","lrp+")
 design <- model.matrix(~factor(strain))
@@ -93,7 +93,7 @@ write.csv(result, file = "result.csv")
 
 ### Importing all Escherichia coli K-12 MG1655 KEGG pathways with KEGGscape REST API
 
-```
+```{python}
 import requests
 import pandas as pd
 from io import StringIO
@@ -106,18 +106,15 @@ for pathid in ecopathways[0]:
 
 ### Importing the limma result table with py2cytoscape
 
-#### Preprocessing of the limma statistical analysis result
-
-```
+```{python}
+import pandas as pd
+# Preprocessing
 limma = pd.read_csv("./result.csv", index_col=0)
 new_index = limma.index.str.extract('(b[0-9]{4})', expand=None)
 limma = limma.set_index(new_index)
 limma = limma[limma.index.notna()]
-```
 
-#### Merge the limma result in Cytoscape
-
-```
+# Merging with Cytoscape node table
 from py2cytoscape.data.cyrest_client import CyRestClient
 cy = CyRestClient()
 all_suid = cy.network.get_all()
@@ -135,15 +132,12 @@ for i in all_suid:
     else:
         cy.network.delete(net)
 
-```
-
-#### Vizual Mapping of the limma result in Cytocape
-
-```
+# Vizual mapping
 my_kegg_style = cy.style.create('KEGG Style')
 from py2cytoscape.data.style import StyleUtil
 color_gradient = StyleUtil.create_2_color_gradient(min=limma['adj.P.Val'].min(), max=limma['adj.P.Val'].max(), colors=('red', 'white'))
 my_kegg_style.create_continuous_mapping(column='adj.P.Val', vp='NODE_FILL_COLOR', col_type='Double', points=color_gradient)
+
 ```
 
 ## Step 4 (Data integration and knowledge discovery)
