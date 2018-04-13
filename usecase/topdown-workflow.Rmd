@@ -43,7 +43,7 @@ biocLite("limma")
 
 ```{python}
 import os
-os.system('python -m pip install py2cytoscape')
+os.system('python -m pip install py2cytoscape requests pandas')
 ```
 
 #### Windows
@@ -126,7 +126,6 @@ for i in all_suid:
     genes = keggids.str.extractall('(b[0-9]{4})')
     table4cy = pd.merge(genes, limma, left_on=0, right_index=True)
     if(table4cy.shape[0] != 0):
-        #pathwayinfo = net.get_network_table()['KEGG_PATHWAY_ID']
         meantable4cy = table4cy.groupby('SUID').mean()
         net.update_node_table(df=meantable4cy, network_key_col='SUID')
     else:
@@ -140,4 +139,18 @@ my_kegg_style.create_continuous_mapping(column='adj.P.Val', vp='NODE_FILL_COLOR'
 
 ```
 
-## Step 4 (Data integration and knowledge discovery)
+## Step 4 (Data interpretation and knowledge discovery)
+
+```{python}
+# Saving all networks as images
+from py2cytoscape.data.cyrest_client import CyRestClient
+cy = CyRestClient()
+all_suid = cy.network.get_all()
+for i in all_suid:
+    net = cy.network.create(i)
+    path = net.get_network_table()['KEGG_PATHWAY_ID']
+    pathid = path.values[0][5:]
+    file = open(pathid + ".svg", 'wb')
+    file.write(net.get_svg())
+    file.close()
+```
