@@ -1,5 +1,5 @@
 ---
-title: "Top-down systems biology workflow automation with KEGGscape and py2cytoscape"
+title: "KEGGscape REST API workflow combining with the py2cytoscape package"
 author: "Kozo Nishida and Keiichiro Ono"
 date: "April 3, 2018"
 output: html_document
@@ -28,13 +28,16 @@ Please run
 install.packages("reticulate")
 ```
 in your R shell before running this RMarkdown.
+And add the path to Python to your PATH environment variable (on Windows).
+
 
 ## Overview
 
-This is an automation application of KEGGscape REST API to top-down systems biology approach.
-FigureXXX is the workflow.
+The following image represents KEGGscape REST API workflow combining with the py2cytoscape package. The left panel shows
+our workflow of the gene expression analysis to the KEGGscape visualization. The right panel represents how
+omics data and pathway information are actually merged in the workflow.
 
-![top-down systems biology approach workflow](figures/fig1.png)
+![](figures/fig1.png)
 
 ## Step 0 (Installing dependent packages)
 First of all we install the R and Python packages for this workflow.
@@ -70,8 +73,6 @@ python -m pip install py2cytoscape
 
 ## Step 1 (Microarray preprocessing)
 We use bioconductor **ecoliLeucine and affy** packages for the dataset preprocessing of this workflow.
-**ecoliLeucine** package is ...
-eset is ...
 
 ```{r}
 library(ecoliLeucine)
@@ -84,7 +85,7 @@ pData(eset)
 
 ## Step 2 (Statistical analysis)
 
-We use bioconductor **limma** package for statistical analysis of ...
+We use bioconductor **limma** package to calculate the statistical quantities like fold change ratio between two E. coli strains and the adjusted p-values for probe set information.
 
 ```{r}
 library(limma)
@@ -101,9 +102,11 @@ result
 write.csv(result, file = "result.csv")
 ```
 
-## Step 3 (Visualization with Cytoscape)
+## Step 3 (Integration of statistical quantities with pathways)
 
 ### Importing all Escherichia coli K-12 MG1655 KEGG pathways with KEGGscape REST API
+
+This code chunk automates batch pathway import. 
 
 ```{python}
 import requests
@@ -115,6 +118,16 @@ ecopathways = pd.read_table(StringIO(r.text), header=None)
 for pathid in ecopathways[0]:
     requests.get('http://localhost:1234/keggscape/v1/' + pathid[5:])
 ```
+
+The following image is the schematic illustration.
+
+![](figures/fig2.png)
+
+KEGGscape REST API uses KEGG API.
+Academic users are permitted to use the KEGG API for individual downloads. KEGG FTP subscription and
+license agreement are, however, required for non-academic usage (http://www.kegg.jp/kegg/legal.
+html).
+
 
 ### Importing the limma result table with py2cytoscape
 
@@ -142,21 +155,22 @@ for i in all_suid:
         net.update_node_table(df=meantable4cy, network_key_col='SUID')
     else:
         cy.network.delete(net)
+```
+
+## Step 4 (Visualization with Cytoscape)
+
+```{python}
+from py2cytoscape.data.cyrest_client import CyRestClient
+from py2cytoscape.data.style import StyleUtil
+
+cy = CyRestClient()
 
 # Vizual mapping
 my_kegg_style = cy.style.create('KEGG Style')
-from py2cytoscape.data.style import StyleUtil
 color_gradient = StyleUtil.create_2_color_gradient(min=limma['adj.P.Val'].min(), max=limma['adj.P.Val'].max(), colors=('red', 'white'))
 my_kegg_style.create_continuous_mapping(column='adj.P.Val', vp='NODE_FILL_COLOR', col_type='Double', points=color_gradient)
 
-```
-
-## Step 4 (Data interpretation and knowledge discovery)
-
-```{python}
 # Saving all networks as images
-from py2cytoscape.data.cyrest_client import CyRestClient
-cy = CyRestClient()
 all_suid = cy.network.get_all()
 for i in all_suid:
     net = cy.network.create(i)
