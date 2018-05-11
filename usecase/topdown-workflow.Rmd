@@ -9,6 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Prerequisites
+
+You will need:
+
+- Cytoscape 3.6.1 or greater, which can be downloaded from http://www.cytoscape.org/download.php. Simply follow the installation instructions on screen.
+- KEGGscape 0.8.0 or greater, which can be instelled from Cytoscape App Manager.
+
+![](https://github.com/idekerlab/KEGGscape/blob/master/usecase/figures/keggscape-in-appmanager.PNG)
+
 ## Note about this RMarkdown
 This RMarkdown uses **Python3**, and needs R "reticulate" package.
 Please run
