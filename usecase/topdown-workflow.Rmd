@@ -18,6 +18,9 @@ You will need:
 
 ![](https://github.com/idekerlab/KEGGscape/blob/master/usecase/figures/keggscape-in-appmanager.PNG)
 
+In the following workflow, it is necessary for Cytoscape to be running on the PC that executes RMarkdown.
+First make sure that Cytoscape which installed KEGGscape is up.
+
 ## Note about this RMarkdown
 This RMarkdown uses **Python3**, and needs R "reticulate" package.
 Please run
