@@ -131,6 +131,11 @@ html).
 
 ### Importing the limma result table with py2cytoscape
 
+Here we integrate the limma statistical quantities with the E. coli (K-12 MG1655) KEGG pathway.
+We use Python pandas package (https://pandas.pydata.org) to integrate each quantities and probe sets into enzyme nodes of KEGG pathway. If there exists multiple probe set for the one KEGG enzyme node, then average of the statistical quantities would be embedded into the node.
+If none of the statistics are integrated in the enzyme node in the pathway, the pathway has been removed from cytoscape.
+
+
 ```{python}
 import pandas as pd
 # Preprocessing
@@ -158,6 +163,10 @@ for i in all_suid:
 ```
 
 ## Step 4 (Visualization with Cytoscape)
+
+This code chunk automates Cytoscape VizMap GUI operation.
+Here we highlight the KEGG enzyme node with integrated limma statistics in red.
+Finally we save all the network visualization result in svg images.
 
 ```{python}
 from py2cytoscape.data.cyrest_client import CyRestClient
