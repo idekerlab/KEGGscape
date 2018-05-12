@@ -162,6 +162,12 @@ for i in all_suid:
 ```{python}
 from py2cytoscape.data.cyrest_client import CyRestClient
 from py2cytoscape.data.style import StyleUtil
+import pandas as pd
+# Preprocessing
+limma = pd.read_csv("./result.csv", index_col=0)
+new_index = limma.index.str.extract('(b[0-9]{4})', expand=None)
+limma = limma.set_index(new_index)
+limma = limma[limma.index.notna()]
 
 cy = CyRestClient()
 
