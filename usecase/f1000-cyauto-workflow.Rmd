@@ -58,7 +58,7 @@ biocLite("limma")
 
 ```{python}
 import os
-os.system('python -m pip install py2cytoscape requests pandas')
+os.system('python -m pip install --upgrade py2cytoscape requests pandas')
 ```
 
 #### Windows
