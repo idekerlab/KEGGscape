@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Prerequisites
+## Prerequisites and tested environment
 
 You will need:
 
@@ -20,6 +20,18 @@ You will need:
 
 In the following workflow, it is necessary for Cytoscape to be running on the PC that executes RMarkdown.
 First make sure that Cytoscape which installed KEGGscape is up.
+
+### Tested environment
+
+- Windows 10
+- Cytoscape 3.6.1
+- KEGGscape 0.8.0
+- R 3.5.0
+- R Markdown 1.9
+- Bioconductor 3.7
+- Python 3.6.5
+- py2cytoscape 0.6.2
+- pandas 0.22.0
 
 ## Note about this RMarkdown
 This RMarkdown uses **Python3**, and needs R "reticulate" package.
@@ -47,9 +59,9 @@ First of all we install the R and Python packages for this workflow.
 ```{r}
 source("https://bioconductor.org/biocLite.R")
 
-biocLite("ecoliLeucine")
-biocLite("affy")
-biocLite("limma")
+biocLite("ecoliLeucine", ask = FALSE)
+biocLite("affy", ask = FALSE)
+biocLite("limma", ask = FALSE)
 ```
 
 ### Installing Python packages
@@ -102,11 +114,14 @@ result
 write.csv(result, file = "result.csv")
 ```
 
+ 
 ## Step 3 (Integration of statistical quantities with pathways)
 
 ### Importing all Escherichia coli K-12 MG1655 KEGG pathways with KEGGscape REST API
 
-This code chunk automates batch pathway import. 
+This code chunk automates the batch pathway import.
+This code chunk import the all *E. coli* pathways in KEGG. 
+Before running this code, please make sure that Cytoscape (with KEGGscape installed) is running on your local machine.
 
 ```{python}
 import requests
@@ -138,9 +153,9 @@ If none of the statistics are integrated in the enzyme node in the pathway, the 
 
 ```{python}
 import pandas as pd
-# Preprocessing
+# Removing intergenic probe sets
 limma = pd.read_csv("./result.csv", index_col=0)
-new_index = limma.index.str.extract('(b[0-9]{4})', expand=None)
+new_index = limma.index.str.extract('(b[0-9]{4})')
 limma = limma.set_index(new_index)
 limma = limma[limma.index.notna()]
 
@@ -172,9 +187,9 @@ Finally we save all the network visualization result in svg images.
 from py2cytoscape.data.cyrest_client import CyRestClient
 from py2cytoscape.data.style import StyleUtil
 import pandas as pd
-# Preprocessing
+# Removing intergenic probe sets
 limma = pd.read_csv("./result.csv", index_col=0)
-new_index = limma.index.str.extract('(b[0-9]{4})', expand=None)
+new_index = limma.index.str.extract('(b[0-9]{4})')
 limma = limma.set_index(new_index)
 limma = limma[limma.index.notna()]
 
@@ -182,6 +197,12 @@ cy = CyRestClient()
 
 # Vizual mapping
 my_kegg_style = cy.style.create('KEGG Style')
+new_defaults = {
+    # Node defaults
+    'NODE_FILL_COLOR': '#ffffff',
+    'NODE_BORDER_WIDTH' : '1.0',
+}
+my_kegg_style.update_defaults(new_defaults)
 color_gradient = StyleUtil.create_2_color_gradient(min=limma['adj.P.Val'].min(), max=limma['adj.P.Val'].max(), colors=('red', 'white'))
 my_kegg_style.create_continuous_mapping(column='adj.P.Val', vp='NODE_FILL_COLOR', col_type='Double', points=color_gradient)
 
