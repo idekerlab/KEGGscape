@@ -23,6 +23,7 @@ First make sure that Cytoscape which installed KEGGscape is up.
 
 ### Tested environment
 
+#### Windows
 - Windows 10
 - Cytoscape 3.6.1
 - KEGGscape 0.8.0
@@ -33,15 +34,27 @@ First make sure that Cytoscape which installed KEGGscape is up.
 - py2cytoscape 0.6.2
 - pandas 0.22.0
 
+#### Mac
+- MacOS 10.13.4
+- Cytoscape 3.6.1 (w/embedded Java 8 u162)
+- KEGGscape 0.8.0
+- R 3.5.0
+- RStudio (Version 1.1.453)
+- R Markdown 1.9
+- Bioconductor 3.7
+- Python 3.6.5 (Installed via Anaconda)
+- py2cytoscape 0.6.2
+- pandas 0.22.0
+
 ## Note about this RMarkdown
-This RMarkdown uses **Python3**, and needs R "reticulate" package.
-Please run
+This R Markdown document uses **Python3**, and you need to install "reticulate" package.
+Please run the following command from your terminal to install the package **before** running this document:
+
 ```{r}
 install.packages("reticulate")
 ```
-in your R shell before running this RMarkdown.
-And add the path to Python to your PATH environment variable (on Windows).
 
+And add the path to Python to your PATH environment variable (on Windows).
 
 ## Overview
 
@@ -51,7 +64,7 @@ omics data and pathway information are actually merged in the workflow.
 
 ![](figures/fig1.png)
 
-## Step 0 (Installing dependent packages)
+## Step 0 (Installing dependencies)
 First of all we install the R and Python packages for this workflow.
 
 ### Installing R packages
@@ -67,7 +80,14 @@ biocLite("limma", ask = FALSE)
 ### Installing Python packages
 
 #### Mac or Linux
+There are two ways to do this:
 
+##### From terminal
+```
+pip install --upgrade py2cytoscape requests pandas
+```
+
+##### From Python code
 ```{python}
 import os
 os.system('python -m pip install --upgrade py2cytoscape requests pandas')
@@ -114,7 +134,6 @@ result
 write.csv(result, file = "result.csv")
 ```
 
- 
 ## Step 3 (Integration of statistical quantities with pathways)
 
 ### Importing all Escherichia coli K-12 MG1655 KEGG pathways with KEGGscape REST API
