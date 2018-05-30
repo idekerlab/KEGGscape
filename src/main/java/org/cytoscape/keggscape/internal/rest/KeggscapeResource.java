@@ -9,6 +9,7 @@ import org.cytoscape.keggscape.internal.task.ImportKGMLTask;
 import org.cytoscape.group.CyGroupFactory;
 import org.cytoscape.keggscape.internal.style.KGMLVisualStyleBuilder;
 import org.cytoscape.keggscape.internal.rest.HeadlessTaskMonitor;
+import org.cytoscape.keggscape.internal.KeggscapeDocumentation;
 import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
@@ -21,6 +22,7 @@ import org.cytoscape.ci.CIResponseFactory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiOperation;
 
 @Api(tags = {"Apps: KEGGscape"})
 @Path("/keggscape/v1")
@@ -61,6 +63,9 @@ public class KeggscapeResource {
 	@GET
 	@Path("/{pathid}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(
+		value = "Import a KEGG pathway and create the network view",
+		notes = KeggscapeDocumentation.GENERIC_SWAGGER_NOTES)
 	public void createNetworkFromKegg(@ApiParam(value = "KEGG pathway ID") @PathParam("pathid") final String pathid) {
 		System.out.println(pathid);
 
