@@ -28,6 +28,7 @@ First make sure that Cytoscape which installed KEGGscape is up.
 - Cytoscape 3.6.1
 - KEGGscape 0.8.0
 - R 3.5.0
+- RStudio 1.1.453
 - R Markdown 1.9
 - Bioconductor 3.7
 - Python 3.6.5
@@ -39,7 +40,7 @@ First make sure that Cytoscape which installed KEGGscape is up.
 - Cytoscape 3.6.1 (w/embedded Java 8 u162)
 - KEGGscape 0.8.0
 - R 3.5.0
-- RStudio (Version 1.1.453)
+- RStudio 1.1.453
 - R Markdown 1.9
 - Bioconductor 3.7
 - Python 3.6.5 (Installed via Anaconda)
