@@ -1,7 +1,7 @@
 ---
 title: "KEGGscape REST API workflow combining with the py2cytoscape package"
 author: "Kozo Nishida and Keiichiro Ono"
-date: "April 3, 2018"
+date: "June 24, 2018"
 output: html_document
 ---
 
@@ -18,44 +18,39 @@ You will need:
 
 ![](https://github.com/idekerlab/KEGGscape/blob/master/usecase/figures/keggscape-in-appmanager.PNG)
 
-In the following workflow, it is necessary for Cytoscape to be running on the PC that executes RMarkdown.
+In the following workflow, it is necessary for Cytoscape to be running on the PC that executes R Markdown.
 First make sure that Cytoscape which installed KEGGscape is up.
 
 ### Tested environment
 
 #### Windows
 - Windows 10
-- Cytoscape 3.6.1
-- KEGGscape 0.8.0
+- Cytoscape 3.6.1 (w/Java 8 u172)
+- KEGGscape 0.8.1
 - R 3.5.0
 - RStudio 1.1.453
-- R Markdown 1.9
+- R Markdown 1.10
 - Bioconductor 3.7
-- Python 3.6.5
-- py2cytoscape 0.6.2
-- pandas 0.22.0
+- Python 3.6.5 (Installed via miniconda)
+- py2cytoscape 0.7.0
+- pandas 0.23.1
 
 #### Mac
 - MacOS 10.13.4
 - Cytoscape 3.6.1 (w/embedded Java 8 u162)
-- KEGGscape 0.8.0
+- KEGGscape 0.8.1
 - R 3.5.0
 - RStudio 1.1.453
-- R Markdown 1.9
+- R Markdown 1.10
 - Bioconductor 3.7
-- Python 3.6.5 (Installed via Anaconda)
-- py2cytoscape 0.6.2
-- pandas 0.22.0
+- Python 3.6.5 (Installed via miniconda)
+- py2cytoscape 0.7.0
+- pandas 0.23.1
 
 ## Note about this RMarkdown
-This R Markdown document uses **Python3**, and you need to install "reticulate" package.
-Please run the following command from your terminal to install the package **before** running this document:
-
-```{r}
-install.packages("reticulate")
-```
-
-And add the path to Python to your PATH environment variable (on Windows).
+This R Markdown document uses **Python3**, and you need to install it.
+(We recommend to install Python3 using [Miniconda](https://conda.io/miniconda.html).)
+And add the path to Python to your PATH environment variable.
 
 ## Overview
 
@@ -80,12 +75,11 @@ biocLite("limma", ask = FALSE)
 
 ### Installing Python packages
 
-#### Mac or Linux
 There are two ways to do this:
 
 ##### From terminal
 ```
-pip install --upgrade py2cytoscape requests pandas
+python -m pip install --upgrade py2cytoscape requests pandas
 ```
 
 ##### From Python code
@@ -94,7 +88,7 @@ import os
 os.system('python -m pip install --upgrade py2cytoscape requests pandas')
 ```
 
-#### Windows
+#### Note on Windows
 
 Windows users need to download and install the python-igraph whl from [Christoph’s site](http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph).
 Please install python-igraph before you install py2cytoscape, otherwise pip will try to **build** python-igraph (and will fail). 
@@ -176,7 +170,7 @@ import pandas as pd
 # Removing intergenic probe sets
 limma = pd.read_csv("./result.csv", index_col=0)
 new_index = limma.index.str.extract('(b[0-9]{4})')
-limma = limma.set_index(new_index)
+limma = limma.set_index(new_index[0])
 limma = limma[limma.index.notna()]
 
 # Merging with Cytoscape node table
@@ -184,11 +178,15 @@ from py2cytoscape.data.cyrest_client import CyRestClient
 cy = CyRestClient()
 all_suid = cy.network.get_all()
 
+def concat(x):
+    if isinstance(x, (list,)):
+        return " ".join(x)
+
 for i in all_suid:
     net = cy.network.create(i)
     table = net.get_node_table()
-    keggids = table['KEGG_ID']
-    genes = keggids.str.extractall('(b[0-9]{4})')
+    keggids = table.set_index('SUID')['KEGG_ID']
+    genes = keggids.apply(concat).str.extractall('(b[0-9]{4})')
     table4cy = pd.merge(genes, limma, left_on=0, right_index=True)
     if(table4cy.shape[0] != 0):
         meantable4cy = table4cy.groupby('SUID').mean()
@@ -210,7 +208,7 @@ import pandas as pd
 # Removing intergenic probe sets
 limma = pd.read_csv("./result.csv", index_col=0)
 new_index = limma.index.str.extract('(b[0-9]{4})')
-limma = limma.set_index(new_index)
+limma = limma.set_index(new_index[0])
 limma = limma[limma.index.notna()]
 
 cy = CyRestClient()
