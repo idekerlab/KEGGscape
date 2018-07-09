@@ -43,9 +43,9 @@ File -> Import -> Network -> File
 
 and open eco00020.xml.
 
-.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/import.png
+.. image:: https://raw.github.com/idekerlab/KEGGscape/master/docs/images/import.png
 
-.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/tcacycle.png
+.. image:: https://raw.github.com/idekerlab/KEGGscape/master/docs/images/tcacycle.png
 
 
 How to bundle edges
@@ -55,7 +55,7 @@ KEGGscape creates two edges for a reversible reaction, if you want to
 bundle these reversible reactions like KEGG, please select "Bundle
 edges" from "Layout" menu.
 
-.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/bundlemenu.png
+.. image:: https://raw.github.com/idekerlab/KEGGscape/master/docs/images/bundlemenu.png
 
-.. image:: https://raw.github.com/idekerlab/KEGGscape/develop/docs/images/edgeBandledNetwork.png
+.. image:: https://raw.github.com/idekerlab/KEGGscape/master/docs/images/edgeBandledNetwork.png
 
