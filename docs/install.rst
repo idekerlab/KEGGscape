@@ -7,7 +7,7 @@ Apache License, Version 2.0 and is available at GitHub.
 
 https://github.com/idekerlab/KEGGscape
 
-KEGGscape requires Cytoscape version 3.1.
+KEGGscape requires Cytoscape version 3.6.
 First you need to download Cytoscape from
 
 http://cytoscape.org/download.html

@@ -11,8 +11,8 @@ master_doc = 'index'
 project = 'KEGGscape'
 copyright = 'Kozo Nishida, Keiichiro Ono'
 
-version = '0.5.0'
-release = '0.5.0'
+version = '0.8.1'
+release = '0.8.1'
 
 exclude_trees = ['_build']
 
