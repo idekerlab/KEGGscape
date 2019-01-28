@@ -18,11 +18,15 @@ import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.work.TaskMonitor;
 import org.cytoscape.ci.model.CIResponse;
-import org.cytoscape.ci.CIResponseFactory;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiOperation;
+import org.osgi.util.tracker.ServiceTracker;
+import org.cytoscape.ci.CIErrorFactory;
+import org.cytoscape.ci.CIExceptionFactory;
+import org.cytoscape.ci.CIResponseFactory;
 
 @Api(tags = {"Apps: KEGGscape"})
 @Path("/keggscape/v1")
@@ -41,10 +45,31 @@ public class KeggscapeResource {
 	private final TaskMonitor tm;
 	private final CyNetworkViewManager cyNetworkViewManager;
 
+
+	private final ServiceTracker ciResponseFactoryTracker;
+
+	private CIResponseFactory getCIResponseFactory() {
+		return (CIResponseFactory) ciResponseFactoryTracker.getService();
+	}
+	//private final CIResponseFactory ciResponseFactory;
+
+	private final ServiceTracker ciExceptionFactoryTracker;
+	private CIExceptionFactory getCIExceptionFactory() {
+		return (CIExceptionFactory) ciExceptionFactoryTracker.getService();
+	}
+	//private final CIExceptionFactory ciExceptionFactory;
+
+	private final ServiceTracker ciErrorFactoryTracker;
+	private CIErrorFactory getCIErrorFactory() {
+		return (CIErrorFactory) ciErrorFactoryTracker.getService();
+	}
+	//private final CIErrorFactory ciErrorFactory;
+
 	public KeggscapeResource(final CyNetworkViewFactory cyNetworkViewFactory, final CyNetworkFactory cyNetworkFactory,
 			final CyNetworkManager cyNetworkManager, final CyRootNetworkManager cyRootNetworkManager,
 			final KGMLVisualStyleBuilder vsBuilder, final VisualMappingManager vmm, final CyGroupFactory groupFactory,
-			final CIResponseFactory ciResponseFactory, final CyNetworkViewManager cyNetworkViewManager) {
+			final ServiceTracker ciResponseFactoryTracker, final ServiceTracker ciExceptionFactoryTracker, final ServiceTracker ciErrorFactoryTracker,
+			final CyNetworkViewManager cyNetworkViewManager) {
 		this.cyNetworkViewFactory = cyNetworkViewFactory;
 		this.cyNetworkFactory = cyNetworkFactory;
 		this.cyNetworkManager = cyNetworkManager;
@@ -54,6 +79,10 @@ public class KeggscapeResource {
 		this.groupFactory = groupFactory;
 		this.tm = new HeadlessTaskMonitor();
 		this.cyNetworkViewManager = cyNetworkViewManager;
+
+		this.ciResponseFactoryTracker = ciResponseFactoryTracker;
+		this.ciExceptionFactoryTracker = ciExceptionFactoryTracker;
+		this.ciErrorFactoryTracker = ciErrorFactoryTracker;
 	}
 
 	@ApiModel(value = "Keggscape App Response", description = "Kegg pathway import Results in CI Format", parent = CIResponse.class)

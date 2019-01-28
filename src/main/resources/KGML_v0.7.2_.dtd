@@ -1,4 +1,4 @@
-<!-- DTD for KEGG Markup Language v0.7.1 -->
+<!-- DTD for KEGG Markup Language v0.7.2 -->
 
 <!-- Positive number type -->
 <!ENTITY % number.type    "NMTOKEN">
@@ -31,7 +31,7 @@
 <!ENTITY % mapnumber.type "%string.type;">
 
 <!-- Type of Entry -->
-<!ENTITY % entry-type.type "(ortholog|enzyme|gene|group|compound|map)">
+<!ENTITY % entry-type.type "(ortholog|enzyme|reaction|gene|group|compound|map|brite|other)">
 
 <!-- Type of graphics shape -->
 <!ENTITY % graphics-type.type "(rectangle|circle|roundrectangle|line)">

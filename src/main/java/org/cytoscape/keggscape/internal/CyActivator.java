@@ -33,6 +33,7 @@ import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.osgi.framework.BundleContext;
 import org.cytoscape.ci.CIResponseFactory;
 import org.cytoscape.keggscape.internal.rest.KeggscapeResource;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * {@code CyActivator} is a class that is a starting point for OSGi bundles.
@@ -59,6 +60,11 @@ import org.cytoscape.keggscape.internal.rest.KeggscapeResource;
  * {@code unget}s any services we fetch using getService().
  */
 public class CyActivator extends AbstractCyActivator {
+
+	private ServiceTracker ciResponseFactoryTracker = null;
+	private ServiceTracker ciExceptionFactoryTracker = null;
+	private ServiceTracker ciErrorFactoryTracker = null;
+
 	/**
 	 * This is the {@code start} method, which sets up your app. The
 	 * {@code BundleContext} object allows you to communicate with the OSGi
@@ -84,7 +90,18 @@ public class CyActivator extends AbstractCyActivator {
 
 		final VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
 		// final TaskMonitor tm = getService(bc, TaskMonitor.class);
-		final CIResponseFactory ciResponseFactory = getService(bc, CIResponseFactory.class);
+		// final CIResponseFactory ciResponseFactory = getService(bc, CIResponseFactory.class);
+		ciResponseFactoryTracker = new ServiceTracker(bc, bc.createFilter("(objectClass=org.cytoscape.ci.CIResponseFactory)"), null);
+		ciResponseFactoryTracker.open();
+
+		ciResponseFactoryTracker = new ServiceTracker(bc, bc.createFilter("(objectClass=org.cytoscape.ci.CIResponseFactory)"), null);
+		ciResponseFactoryTracker.open();
+		
+		ciExceptionFactoryTracker = new ServiceTracker(bc, bc.createFilter("(objectClass=org.cytoscape.ci.CIExceptionFactory)"), null);
+		ciExceptionFactoryTracker.open();
+		
+		ciErrorFactoryTracker = new ServiceTracker(bc, bc.createFilter("(objectClass=org.cytoscape.ci.CIErrorFactory)"), null);
+		ciErrorFactoryTracker.open();
 
 		LoadNetworkURLTaskFactory loadNetworkURLTaskFactory = getService(bc, LoadNetworkURLTaskFactory.class);
 
@@ -136,7 +153,7 @@ public class CyActivator extends AbstractCyActivator {
 
 		KeggscapeResource keggscapeResource = new KeggscapeResource(cyNetworkViewFactory,
 		cyNetworkFactory,	cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm,
-		groupFactory, ciResponseFactory, cyNetworkViewManager);
+		groupFactory, ciResponseFactoryTracker, ciExceptionFactoryTracker, ciErrorFactoryTracker, cyNetworkViewManager);
 		registerService(bc, keggscapeResource, KeggscapeResource.class, new Properties());
 
 

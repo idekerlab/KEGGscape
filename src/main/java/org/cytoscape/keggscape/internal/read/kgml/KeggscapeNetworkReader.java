@@ -2,6 +2,7 @@ package org.cytoscape.keggscape.internal.read.kgml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -27,6 +28,7 @@ import org.cytoscape.work.Tunable;
 import org.cytoscape.work.util.ListSingleSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Scanner;
 
 public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 
@@ -70,6 +72,9 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		this.vmm = vmm;
 		this.vsBuilder = vsBuilder;
 		this.groupFactory = groupFactory;
+
+		// String tmp = new Scanner(is).useDelimiter("\\Z").next();
+        // System.out.println(tmp);
 	}
 
 	@Override
@@ -107,10 +112,30 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		}
 
 		try {
+
+			// JAXBContext jc = JAXBContext.newInstance( "com.acme.foo" );
+			// Unmarshaller u = jc.createUnmarshaller();
+			// URL url = new URL( "http://beaker.east/nosferatu.xml" );
+			// Object o = u.unmarshal( url );
+			// System.out.println(o);
+
 			final JAXBContext jaxbContext = JAXBContext.newInstance(PACKAGE_NAME, this.getClass().getClassLoader());
+			// System.out.println(jaxbContext.toString());
 			final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			//unmarshaller.setProperty(javax.xml.XMLConstants.ACCESS_EXTERNAL_DTD, "all");
+			//unmarshaller.setProperty(javax.xml.XMLConstants.ACCESS_EXTERNAL_DTD, Boolean.TRUE);
+			System.setProperty("javax.xml.accessExternalDTD", "all");
+			
+			// String tmp = new Scanner(is).useDelimiter("\\Z").next();
+			// System.out.println(tmp);
+			// System.out.println("netreader118");
 			pathway = (Pathway) unmarshaller.unmarshal(is);
+
+			// if (pathway == null) {
+			// 	System.out.println("why this pathway is null?");
+			// }
 		} catch (Exception e) {
+			System.out.println("In Exception===============");
 			logger.error("Could not ummarshall KGML.", e);
 			throw new IOException("Could not unmarshall KGML file.", e);
 		} finally {
