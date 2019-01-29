@@ -13,5 +13,5 @@ RUN apt-get update && apt-get install -y python3-dev git apt-transport-https lib
 USER seluser
 RUN cd && wget http://chianti.ucsd.edu/cytoscape-3.6.1/cytoscape-3.6.1.tar.gz && tar xf cytoscape-3.6.1.tar.gz && \
     mkdir -p CytoscapeConfiguration/3/apps/installed && cd CytoscapeConfiguration/3/apps/installed && \
-    wget https://github.com/idekerlab/KEGGscape/releases/download/v0.8.1/KEGGscape-0.8.1.jar && \
+    wget https://github.com/idekerlab/KEGGscape/releases/download/v0.8.2/KEGGscape-0.8.2.jar && \
     cd && git clone git://github.com/idekerlab/KEGGscape && rm cytoscape-3.6.1.tar.gz
