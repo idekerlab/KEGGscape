@@ -1,6 +1,6 @@
 # KEGGscape
 [![DOI](https://zenodo.org/badge/3998431.svg)](https://zenodo.org/badge/latestdoi/3998431)
-[![Build Status](https://travis-ci.org/idekerlab/KEGGscape.svg?branch=develop)](https://travis-ci.org/idekerlab/KEGGscape)
+[![Build Status](https://travis-ci.org/idekerlab/KEGGscape.svg?branch=master)](https://travis-ci.org/idekerlab/KEGGscape)
 
 **KEGGscape** is a Cytoscape 3.* app for importing KGML(KEGG pathway XML).
 
@@ -14,15 +14,17 @@ If you use **KEGGscape** in your research, please cite:
 
 
 ## Introduction
-[Cytoscape](http://www.cytoscape.org/) is a de-facto standard bioinformatics software platform for integrating, analyzing, and visualizing biological network data.  __*KEGGscape*__ is a [Cytoscape App](http://apps.cytoscape.org/) to provide comprehensive support for KEGG Pathway database and other resources available in KEGG.  KEGGscape uses only basic data structures in Cytoscape core, and users can use powerful Cytoscape core features to visualize additional (experimental) data sets on top of KEGG pathways. 
+[Cytoscape](http://www.cytoscape.org/) is a de-facto standard bioinformatics software platform for integrating, analyzing, and visualizing biological network data.
+__*KEGGscape*__ is a [Cytoscape App](http://apps.cytoscape.org/apps/keggscape) to import KEGG Pathway data to Cytoscape.
+KEGGscape users can use powerful Cytoscape core features to visualize additional (experimental) data sets on top of KEGG pathways. 
 
 ### About KEGG
 
 ![](http://cl.ly/XbS7/kegg_sugar1.png)
 
-[KEGG Pathway database](http://www.genome.jp/kegg/pathway.html) is one of the most 
-comprehensive databases of human-curated biological pathways.  [KGML (KEGG Markup Language)](http://www.kegg.jp/kegg/xml/) is 
-the file format to represent KEGG Pathway data files in XML.  KEGGscape uses those KGML files as its primary source of pathway data.
+[KEGG Pathway database](http://www.genome.jp/kegg/pathway.html) is one of the most comprehensive databases of human-curated biological pathways.
+[KGML (KEGG Markup Language)](http://www.kegg.jp/kegg/xml/) is the file format to represent KEGG Pathway data files in XML.
+KEGGscape uses those KGML files as its source of pathway data.
 
 ## Installation
 
@@ -36,24 +38,9 @@ You can install **KEGGscape** with Cytoscape app manager.
 
 ## Goals
 * Full support for [KEGG Pathway](http://www.genome.jp/kegg/pathway.html), including signaling pathways.
-* On-demand access to [KEGG RESTful API](http://www.kegg.jp/kegg/rest/keggapi.html) to add extra annotations for the pathways.
-* Annotation by [KEGG MEDICUS database](http://www.kegg.jp/kegg/rest/keggapi2.html)
+* ~~On-demand access to [KEGG RESTful API](http://www.kegg.jp/kegg/rest/keggapi.html) to add extra annotations for the pathways.~~ (Due to restrictions in the KEGG API, we stopped supporting KEGG API. For more information, please check https://www.kegg.jp/kegg/rest/ .)
+* ~~Annotation by [KEGG MEDICUS database](http://www.kegg.jp/kegg/rest/keggapi2.html)~~ (Due to restrictions in the KEGG API, we stopped supporting KEGG API. For more information, please check https://www.kegg.jp/kegg/rest/ .)
 * Merging multiple pathways in a same network view
-
-## Design
-(Available soon...)
-
-
-## Release Notes
-### 0.5.x (9/4/2013)
-Basic support for KEGG metabolic pathways.
-
-
-### 0.7.0 (9/17/2014)
-This is a __major__ version up and has lots of new features!
-
-![](http://cl.ly/Xbq9/kegg_biosysthesis.png)
-
 
 #### Full support for KEGG Pathway Database
 
