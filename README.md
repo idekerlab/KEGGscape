@@ -12,24 +12,24 @@ If you use **KEGGscape** in your research, please cite:
 
 ![](http://cl.ly/XbMZ/keggscape.png)
 
+## Quick Start
+
+1. Install **KEGGscape** with Cytoscape app manager. ![](./docs/images/appmanagerKEGGscape.png)
+2. Get a kgml file. For example, to get the kgml of E.coli TCA cycle pathway (**eco00020**), open https://www.genome.jp/kegg-bin/show_pathway?eco00020 with web browser and click the **Download KGML** link ![](./docs/images/downloadKGML.png)
+3. Click the "**Import Network from File System**" icon in Cytoscape, select the eco00020.xml file, and click the open button. ![](./docs/images/icon2select2open.png)
+
+That's all. Now you should see ![](./docs/images/ecoliTCA.png)
 
 ## Introduction
 [Cytoscape](http://www.cytoscape.org/) is a de-facto standard bioinformatics software platform for integrating, analyzing, and visualizing biological network data.
 __*KEGGscape*__ is a [Cytoscape App](http://apps.cytoscape.org/apps/keggscape) to import KEGG Pathway data to Cytoscape.
-KEGGscape users can use powerful Cytoscape core features to visualize additional (experimental) data sets on top of KEGG pathways. 
+KEGGscape users can use powerful Cytoscape core features to visualize additional (experimental) data sets on top of KEGG pathways.
 
 ### About KEGG
-
-![](http://cl.ly/XbS7/kegg_sugar1.png)
 
 [KEGG Pathway database](http://www.genome.jp/kegg/pathway.html) is one of the most comprehensive databases of human-curated biological pathways.
 [KGML (KEGG Markup Language)](http://www.kegg.jp/kegg/xml/) is the file format to represent KEGG Pathway data files in XML.
 KEGGscape uses those KGML files as its source of pathway data.
-
-## Installation
-
-You can install **KEGGscape** with Cytoscape app manager.
-![](http://cl.ly/253o2O2l1X1v/kesscape-appstore.png)
 
 ## Tutorials
  - [Quick start guide](https://github.com/idekerlab/KEGGscape/wiki/Quick-Start-Guide)
@@ -38,98 +38,13 @@ You can install **KEGGscape** with Cytoscape app manager.
 
 ## Goals
 * Full support for [KEGG Pathway](http://www.genome.jp/kegg/pathway.html), including signaling pathways.
-* ~~On-demand access to [KEGG RESTful API](http://www.kegg.jp/kegg/rest/keggapi.html) to add extra annotations for the pathways.~~ (Due to restrictions in the KEGG API, we stopped supporting KEGG API. For more information, please check https://www.kegg.jp/kegg/rest/ .)
-* ~~Annotation by [KEGG MEDICUS database](http://www.kegg.jp/kegg/rest/keggapi2.html)~~ (Due to restrictions in the KEGG API, we stopped supporting KEGG API. For more information, please check https://www.kegg.jp/kegg/rest/ .)
-* Merging multiple pathways in a same network view
+* ~~On-demand access to [KEGG RESTful API](http://www.kegg.jp/kegg/rest/keggapi.html) to add extra annotations for the pathways.~~ (Due to the restriction of KEGG API, we stopped supporting KEGG API. For more information, please check https://www.kegg.jp/kegg/rest/#main:~:text=Restriction .)
+* ~~Annotation by [KEGG MEDICUS database](http://www.kegg.jp/kegg/rest/keggapi2.html)~~ (Due to the restriction of KEGG API, we stopped supporting KEGG API. For more information, please check https://www.kegg.jp/kegg/rest/#main:~:text=Restriction .)
+* Merging multiple pathways in a same network view.
 
-#### Full support for KEGG Pathway Database
-
-![](http://cl.ly/XbiV/kegg_human2.png)
-
-![](http://cl.ly/Xbha/kegg_cell_cycle.png)
-
-
-Now KEGGScape supports all pathway data available in KGML format, including:
-
-* Metabolic Pathways
-* Global Map for Metabolic Pathways
-* Overview Maps
-* Signaling Pathways
-* Organismal Systems
-* Human Disease Pathways
-
-
-#### Better Visual Styles
-We have tweaked custom _Visual Style_ to present as mush information as possible out of the original KGML files.  Directionality and type of reactions/relations are mapped to human understandable visual properties.
-
-![](http://cl.ly/XbmY/kegg_human_cancer.png)
-
-
-#### Maplink Expansion from Context Menu
-KEGG pathways have _maplink_ nodes which point to other pathways.  Cytoscape can automatically import those pathways by selecting a context menu:
-
-![](http://cl.ly/Xbri/kegg_expand.png) 
-
-- Select a maplink node and right-click to expand!
-
-![](http://cl.ly/XbAd/kegg_mapk.png)
-
-- Actual pathway data will be fetched dynamically from KEGG pathway database.
-
-#### View Details in Web Browser
-If you need complete information about compounds, genes, or pathways, you can view details in web browser by selecting right-click menu item.
-
-![](http://cl.ly/XbwG/details1.png)
-
-![](http://cl.ly/Xast/details2.png)
-
-
-#### Network Colleciton Support
-From this version, KEGGScape supports network collection.  You can organize your pathways based on the biological context.
-
-![](http://cl.ly/Xbca/kegg_organized.png)
-
-
-#### Import Extra Annotations from KEGG
-By checking options in import window, you can add extra information from KEGG:
-
-* KEGG Modules
-* Diseases
-* Pathway classes
-
-#### Group Support
-Group information in KGML is now mapped to Cytoscape's CyGroup.  This means intrnally, grouped nodes are handled as CyGroup, instead of set of nodes.
-
-- Default representation (set of individdual nodes):
-
-![](http://cl.ly/XbO6/group1.png)
-
-- Collapsed to a single group node:
-
-![](http://cl.ly/Xbt6/group2.png)
-
-#### Bug Fixes
-Lots of bugs are fixed.  Some of the missed edges in the last version are now correctly mapped in the view.
-
-----
-## Future Plan
-#### TODO
-* Advanced example workflow written with [cy-rest](https://github.com/keiono/cy-rest/wiki) and IPython Notebook
-* Automatic import from list of pathway IDs
-* Import additional annotation on-demand:
-	* KEGG Modules
-	* Drug targets
-	* etc.
-* Expanding pathways in existing network view
-
-
-## Credits
-
-
-
-### Design & Development
+## Design & Development
 * Kozo Nishida (Riken, Japan)
 * Keiichiro Ono (Cytoscape Consortium / UC, San Diego, USA)
 
-### Questions?
+## Questions?
 Please send them to [cytoscape-helpdesk](https://groups.google.com/forum/#!forum/cytoscape-helpdesk).
