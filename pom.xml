@@ -52,11 +52,18 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin.version}</version>
+				<extensions>true</extensions>
 				<configuration>
-					<!-- These options indicate the source code is Java 1.8-compliant and
-						the resulting class files should be Java 1.8-compatible. -->
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
+					<!-- <encoding>UTF-8</encoding> -->
+					<optimize>true</optimize>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+					<compilerArguments>
+						<Xmaxwarns>10000</Xmaxwarns>
+						<Xmaxerrs>10000</Xmaxerrs>
+					</compilerArguments>
 				</configuration>
 			</plugin>
 
