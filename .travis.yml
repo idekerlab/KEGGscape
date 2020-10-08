@@ -3,12 +3,7 @@ language: java
 sudo: false
 
 jdk:
-  - oraclejdk8
-
-branches:
-  only:
-    - develop
-    - master
+  - openjdk11
 
 script:
   - mvn clean install -Djavax.xml.accessExternalDTD=all
