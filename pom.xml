@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<properties>
-		<cytoscape.api.version>3.6.0</cytoscape.api.version>
+		<cytoscape.api.version>3.8.0</cytoscape.api.version>
 
-		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
-		<maven-bundle-plugin.version>3.3.0</maven-bundle-plugin.version>
+		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+		<maven-bundle-plugin.version>4.1.0</maven-bundle-plugin.version>
 
-		<osgi.api.version>4.2.0</osgi.api.version>
+		<osgi.api.version>6.0.0</osgi.api.version>
 
 		<bundle.symbolicName>org.cytoscape.keggscape</bundle.symbolicName>
 		<bundle.namespaece>org.cytoscape.keggscape</bundle.namespaece>
@@ -94,24 +94,37 @@
 
 	<repositories>
 		<repository>
-			<id>cytoscape_snapshots</id>
-			<snapshots>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<name>Cytoscape Snapshots</name>
-			<url>http://code.cytoscape.org/nexus/content/repositories/snapshots/</url>
-		</repository>
-		<repository>
 			<id>cytoscape_releases</id>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 			<releases>
+				<enabled>true</enabled>
 			</releases>
 			<name>Cytoscape Releases</name>
-			<url>http://code.cytoscape.org/nexus/content/repositories/releases/</url>
+			<url>http://nrnb-nexus.ucsd.edu/repository/cytoscape_releases/</url>
+		</repository>
+		<repository>
+			<id>cytoscape_snapshots</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<name>Cytoscape Snapshots</name>
+			<url>http://nrnb-nexus.ucsd.edu/repository/cytoscape_snapshots/</url>
+		</repository>
+		<repository>
+			<id>cytoscape_thirdparty</id>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<name>Cytoscape Third Party</name>
+			<url>http://nrnb-nexus.ucsd.edu/repository/cytoscape_thirdparty/</url>
 		</repository>
 	</repositories>
 
@@ -209,12 +222,12 @@
 
 		<!-- osgi jax-rs bundles -->
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
 			<version>${osgi.api.version}</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency> -->
 
          <dependency>
 			<groupId>javax.ws.rs</groupId>
