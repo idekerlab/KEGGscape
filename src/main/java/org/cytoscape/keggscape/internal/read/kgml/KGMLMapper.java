@@ -424,26 +424,28 @@ public class KGMLMapper {
 		final List<Entry> entries = pathway.getEntry();
 
 		for (final Entry entry : entries) {
-			final CyNode cyNode = network.addNode();
-			final CyRow row = network.getRow(cyNode);
-			basicNodeMapping(row, entry);
+			if (entry.getType().equals("compound")) {
+				final CyNode cyNode = network.addNode();
+				final CyRow row = network.getRow(cyNode);
+				basicNodeMapping(row, entry);
 
-			final Graphics graphics = entry.getGraphics().get(0);
-			if (entry.getType().equals(KEGGTags.MAP.getTag())) {
-				updateGlobalMaps(row, entry, graphics);
-			} else {
-				mapGlobalMapColor(row, entry, graphics);
-			}
+				final Graphics graphics = entry.getGraphics().get(0);
+				if (entry.getType().equals(KEGGTags.MAP.getTag())) {
+					updateGlobalMaps(row, entry, graphics);
+				} else {
+					mapGlobalMapColor(row, entry, graphics);
+				}
 
-			if (entry.getType().equals(KEGGTags.COMPOUND.getTag())) {
-				row.set(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST,
-						CPD2NAME.get(row.get(KeggConstants.KEGG_ID, List.class).get(0)));
-			}
-			nodeMap.put(entry.getId(), cyNode);
-			
-			if (entry.getType().equals(KEGGTags.GENE.getTag())) {
-				reactionColors.put(entry.getId(), graphics.getFgcolor());
-				reactionBgColors.put(entry.getId(), graphics.getBgcolor());
+				if (entry.getType().equals(KEGGTags.COMPOUND.getTag())) {
+					row.set(KeggConstants.KEGG_NODE_LABEL_LIST_FIRST,
+							CPD2NAME.get(row.get(KeggConstants.KEGG_ID, List.class).get(0)));
+				}
+				nodeMap.put(entry.getId(), cyNode);
+				
+				if (entry.getType().equals(KEGGTags.GENE.getTag())) {
+					reactionColors.put(entry.getId(), graphics.getFgcolor());
+					reactionBgColors.put(entry.getId(), graphics.getBgcolor());
+				}
 			}
 		}
 		//System.out.println(reactionColors);
