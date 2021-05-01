@@ -27,6 +27,8 @@ public class KeggConstants {
 	public static final String KEGG_EDGE_COLOR_BG = "KEGG_EDGE_COLOR_BG";
 	public static final String KEGG_EDGE_SUBTYPES = "KEGG_EDGE_SUBTYPES";
 	public static final String KEGG_EDGE_LABEL = "KEGG_EDGE_LABEL";
+
+	public static final String KEGG_REACTION_GENE = "KEGG_REACTION_GENE";
 	
 	public static final String KEGG_LINK = "KEGG_LINK";
 	
