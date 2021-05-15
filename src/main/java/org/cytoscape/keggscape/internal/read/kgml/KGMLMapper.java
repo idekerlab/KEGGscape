@@ -101,6 +101,7 @@ public class KGMLMapper {
 	private final Set<String> relationNames = new HashSet<String>();
 	private final Map<String, String> reactionColors = new HashMap<String, String>();
 	private final Map<String, String> reactionBgColors = new HashMap<String, String>();
+	private final Map<String, String> globalEdgeNames = new HashMap<String, String>();
 
 	private final Pathway pathway;
 	private final CyNetwork network;
@@ -139,6 +140,7 @@ public class KGMLMapper {
 	private void createKeggEdgeTable() {
 		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_RELATION_TYPE, String.class, true);
 		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_REACTION_TYPE, String.class, true);
+		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_REACTION_GENE, String.class, true);
 		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_EDGE_COLOR, String.class, true);
 		network.getDefaultEdgeTable().createColumn(KeggConstants.KEGG_EDGE_COLOR_BG, String.class, true);
 		network.getDefaultEdgeTable().createListColumn(KeggConstants.KEGG_EDGE_SUBTYPES, String.class, true);
@@ -441,11 +443,8 @@ public class KGMLMapper {
 							CPD2NAME.get(row.get(KeggConstants.KEGG_ID, List.class).get(0)));
 				}
 				nodeMap.put(entry.getId(), cyNode);
-				
-				if (entry.getType().equals(KEGGTags.GENE.getTag())) {
-					reactionColors.put(entry.getId(), graphics.getFgcolor());
-					reactionBgColors.put(entry.getId(), graphics.getBgcolor());
-				}
+			} else if (entry.getType().equals("gene")) {
+				globalEdgeNames.put(entry.getId(), entry.getName());
 			}
 		}
 		//System.out.println(reactionColors);
@@ -687,6 +686,7 @@ public class KGMLMapper {
 		row.set(KeggConstants.KEGG_EDGE_COLOR,	reactionColors.get(reaction.getId()));
 		row.set(KeggConstants.KEGG_EDGE_COLOR_BG, reactionBgColors.get(reaction.getId()));
 		row.set(KeggConstants.KEGG_REACTION_TYPE, reaction.getType());
+		row.set(KeggConstants.KEGG_REACTION_GENE, globalEdgeNames.get(reaction.getId()));
 		row.set(CyEdge.INTERACTION, reaction.getType());
 		row.set(CyNetwork.NAME, reaction.getName());
 	}
