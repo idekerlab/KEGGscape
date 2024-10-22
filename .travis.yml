@@ -1,9 +1,0 @@
-language: java
-
-sudo: false
-
-jdk:
-  - openjdk11
-
-script:
-  - mvn clean install -Djavax.xml.accessExternalDTD=all
