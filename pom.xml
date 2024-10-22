@@ -17,7 +17,7 @@
 	<groupId>org.cytoscape</groupId>
 	<artifactId>keggscape</artifactId>
 	<version>0.9.2</version>
-	<name>KEGGScape</name>
+	<name>KEGGscape</name>
 
 	<packaging>bundle</packaging>
 
