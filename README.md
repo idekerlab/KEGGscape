@@ -14,7 +14,7 @@ If you use **KEGGscape** in your research, please cite:
 ## Quick Start
 
 1. Install **KEGGscape** with Cytoscape app manager. ![](./docs/images/appmanagerKEGGscape.png)
-2. Get a kgml file. For example, to get the kgml of E.coli TCA cycle pathway (**eco00020**), open https://www.genome.jp/kegg-bin/show_pathway?eco00020 with web browser and click the **Download KGML** link ![](./docs/images/downloadKGML.png)
+2. Get a kgml file. For example, to get the kgml of E.coli TCA cycle pathway (**eco00020**), open https://www.genome.jp/kegg-bin/show_pathway?eco00020 with web browser and click the **KGML** link ![KGML link](https://github.com/user-attachments/assets/cc8e482f-e353-49fd-a356-6cf73556f584).
 3. Click the "**Import Network from File System**" icon in Cytoscape, select the eco00020.xml file, and click the open button. ![](./docs/images/icon2select2open.png)
 
 That's all. Now you should see ![](./docs/images/ecoliTCA.png)
