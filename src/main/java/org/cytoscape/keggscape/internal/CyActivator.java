@@ -119,7 +119,7 @@ public class CyActivator extends AbstractCyActivator {
 				new String[] { "application/xml" }, "KEGG XML Files (KGML)", DataCategory.NETWORK, streamUtil);
 		final KeggscapeNetworkReaderFactory kgmlReaderFactory = new KeggscapeNetworkReaderFactory(
 				keggscapeReaderFilter, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager,
-				vsBuilder, vmm, groupFactory);
+				vsBuilder, vmm, groupFactory, cyNetworkViewManager);
 		final Properties keggscapeNetworkReaderFactoryProps = new Properties();
 
 

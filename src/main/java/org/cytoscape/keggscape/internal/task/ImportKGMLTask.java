@@ -71,7 +71,7 @@ public class ImportKGMLTask extends AbstractTask {
         final URLConnection yc = foo.openConnection();
         final CyNetworkReader reader = new KeggscapeNetworkReader("foobar", yc.getInputStream(),
             cyNetworkViewFactory, cyNetworkFactory,	cyNetworkManager, cyRootNetworkManager,
-            vsBuilder, vmm, groupFactory);
+            vsBuilder, vmm, groupFactory, cyNetworkViewManager);
         // System.out.println("====before reader.run(taskMonitor)====");
         reader.run(taskMonitor);
         // System.out.println(reader.getNetworks().length);

@@ -2,7 +2,6 @@ package org.cytoscape.keggscape.internal.read.kgml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -20,6 +19,7 @@ import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.model.subnetwork.CySubNetwork;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
 import org.cytoscape.work.ProvidesTitle;
@@ -28,7 +28,6 @@ import org.cytoscape.work.Tunable;
 import org.cytoscape.work.util.ListSingleSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Scanner;
 
 public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 
@@ -45,6 +44,9 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	private final VisualMappingManager vmm;
 	private final KGMLVisualStyleBuilder vsBuilder;
 	private final CyGroupFactory groupFactory;
+	private final CyNetworkManager cyNetworkManager;
+	private final CyNetworkViewFactory cyNetworkViewFactory;
+	private final CyNetworkViewManager cyNetworkViewManager;
 	
 	private VisualStyle keggStyle = null;
 	
@@ -60,7 +62,8 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 	public KeggscapeNetworkReader(final String collectionName, InputStream is,
 			CyNetworkViewFactory cyNetworkViewFactory, CyNetworkFactory cyNetworkFactory,
 			CyNetworkManager cyNetworkManager, CyRootNetworkManager cyRootNetworkManager,
-			final KGMLVisualStyleBuilder vsBuilder, final VisualMappingManager vmm, final CyGroupFactory groupFactory) {
+			final KGMLVisualStyleBuilder vsBuilder, final VisualMappingManager vmm,
+			final CyGroupFactory groupFactory, final CyNetworkViewManager cyNetworkViewManager) {
 		super(is, cyNetworkViewFactory, cyNetworkFactory, cyNetworkManager, cyRootNetworkManager);
 
 		if (is == null) {
@@ -72,6 +75,9 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 		this.vmm = vmm;
 		this.vsBuilder = vsBuilder;
 		this.groupFactory = groupFactory;
+		this.cyNetworkManager = cyNetworkManager;
+		this.cyNetworkViewFactory = cyNetworkViewFactory;
+		this.cyNetworkViewManager = cyNetworkViewManager;
 
 		// String tmp = new Scanner(is).useDelimiter("\\Z").next();
         // System.out.println(tmp);
@@ -177,7 +183,14 @@ public class KeggscapeNetworkReader extends AbstractCyNetworkReader {
 			vmm.addVisualStyle(keggStyle);
 		}
 		
-		vmm.setCurrentVisualStyle(keggStyle);
+		// vmm.setCurrentVisualStyle(keggStyle);
+		logger.debug("Applying visual style: " + keggStyle.getTitle());
+
+		cyNetworkManager.addNetwork(network);
+		final CyNetworkView myView = cyNetworkViewFactory.createNetworkView(network);
+		cyNetworkViewManager.addNetworkView(myView);
+		vmm.setVisualStyle(keggStyle, myView);
+		keggStyle.apply(myView);
 		
 		if (taskMonitor != null) {
 			taskMonitor.setStatusMessage("KEGG Pathway successfully loaded.");

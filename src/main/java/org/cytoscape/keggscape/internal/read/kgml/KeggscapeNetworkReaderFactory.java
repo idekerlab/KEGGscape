@@ -9,6 +9,7 @@ import org.cytoscape.model.CyNetworkFactory;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.work.TaskIterator;
 
@@ -21,11 +22,12 @@ public class KeggscapeNetworkReaderFactory extends AbstractReaderFactory {
 	private final VisualMappingManager vmm;
 
 	private final CyGroupFactory groupFactory;
+	private final CyNetworkViewManager cyNetworkViewManager;
 
 	public KeggscapeNetworkReaderFactory(final CyFileFilter filter, final CyNetworkViewFactory cyNetworkViewFactory,
 			final CyNetworkFactory cyNetworkFactory, final CyNetworkManager cyNetworkManager,
 			final CyRootNetworkManager cyRootNetworkManager, KGMLVisualStyleBuilder vsBuilder,
-			VisualMappingManager vmm, final CyGroupFactory groupFactory) {
+			VisualMappingManager vmm, final CyGroupFactory groupFactory, final CyNetworkViewManager cyNetworkViewManager) {
 		super(filter, cyNetworkViewFactory, cyNetworkFactory);
 
 		this.cyNetworkManager = cyNetworkManager;
@@ -33,11 +35,12 @@ public class KeggscapeNetworkReaderFactory extends AbstractReaderFactory {
 		this.vsBuilder = vsBuilder;
 		this.vmm = vmm;
 		this.groupFactory = groupFactory;
+		this.cyNetworkViewManager = cyNetworkViewManager;
 	}
 
 	@Override
 	public TaskIterator createTaskIterator(InputStream is, String collectionName) {
 		return new TaskIterator(new KeggscapeNetworkReader(collectionName, is, cyNetworkViewFactory, cyNetworkFactory,
-				cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory));
+				cyNetworkManager, cyRootNetworkManager, vsBuilder, vmm, groupFactory, cyNetworkViewManager));
 	}
 }

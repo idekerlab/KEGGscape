@@ -18,6 +18,7 @@ import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.work.TaskMonitor;
 import org.junit.After;
@@ -31,6 +32,7 @@ public abstract class AbstractKeggReaderTest {
 	private final CyNetworkViewFactory viewFactory = support.getNetworkViewFactory();
 	private final CyRootNetworkManager rootNetworkManager = mock(CyRootNetworkManager.class);
 	private final CyNetworkManager networkManager = support.getNetworkManager();
+	private final CyNetworkViewManager networkViewManager = mock(CyNetworkViewManager.class);
 
 	// Mocks
 	private VisualMappingManager vmm;
@@ -53,7 +55,7 @@ public abstract class AbstractKeggReaderTest {
 	protected final CyNetworkView loadKGML(final String collectionName, final String fileName) throws Exception {
 		final InputStream is = new FileInputStream(fileName);
 		final CyNetworkReader reader = new KeggscapeNetworkReader(collectionName, is, viewFactory, networkFactory,
-				networkManager, rootNetworkManager, builder, vmm, groupFactory);
+				networkManager, rootNetworkManager, builder, vmm, groupFactory, networkViewManager);
 		reader.run(tm);
 		is.close();
 		final CyNetwork[] networks = reader.getNetworks();
