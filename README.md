@@ -19,6 +19,29 @@ If you use **KEGGscape** in your research, please cite:
 
 That's all. Now you should see ![](./docs/images/ecoliTCA.png)
 
+## Build from source
+
+To build the KEGGscape app from this repository:
+
+1. Install a JDK (version 11 or later is recommended).
+2. Install [Apache Maven](https://maven.apache.org/).
+3. Clone this repository and run:
+
+   ```bash
+   mvn clean package
+   ```
+
+4. After the build finishes, the Cytoscape app bundle (`KEGGscape.jar` or `KEGGscape-<version>.jar`) will be created under the `target` directory.
+5. In Cytoscape, install the built app via **Apps → App Manager → Install from file…** and select the generated JAR file.
+
+## Run tests
+
+To run the unit tests for this project (including the KGML reader tests under `src/test/java`), execute:
+
+```bash
+mvn test
+```
+
 ## Introduction
 [Cytoscape](http://www.cytoscape.org/) is a de-facto standard bioinformatics software platform for integrating, analyzing, and visualizing biological network data.
 __*KEGGscape*__ is a [Cytoscape App](http://apps.cytoscape.org/apps/keggscape) to import KEGG Pathway data to Cytoscape.
